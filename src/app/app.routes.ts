@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { MainLayout } from '@layouts/main-layout/main-layout';
 
 export const routes: Routes = [
   {
@@ -9,8 +10,14 @@ export const routes: Routes = [
   {
     path: 'warehouses',
     title: 'Bodegas - SecureSpace',
-    loadComponent: () =>
-      import('./features/warehouses/warehouses').then((m) => m.Warehouses),
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        title: 'Lista de Bodegas',
+        loadComponent: () => import('./features/warehouses/warehouses').then((m) => m.Warehouses),
+      },
+    ]
   },
   {
     path: '',
