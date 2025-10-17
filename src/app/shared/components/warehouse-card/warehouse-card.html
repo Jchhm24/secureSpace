@@ -1,0 +1,50 @@
+<div
+  class="bg-secondary border border-border rounded-20px p-5 w-full flex flex-row justify-between items-start
+    transition-all duration-300 ease-in-out
+  "
+  [ngClass]="{
+      'hover:border-primary/50': icon() == 'warehouse',
+      'hover:border-warning/50': icon() == 'lock',
+      'hover:border-success/50': icon() == 'lock-open',
+    }"
+>
+  <div class="max-w-[134px]">
+    <h4 class="text-text-secondary!">{{ title() }}</h4>
+    <span>{{ total() }}</span>
+  </div>
+
+  <div
+    class="p-2.5 rounded-10px w-min"
+    [ngClass]="{
+      'bg-primary/10': icon() == 'warehouse',
+      'bg-warning/10': icon() == 'lock',
+      'bg-success/10': icon() == 'lock-open',
+    }"
+  >
+    @if (icon() == "warehouse") {
+      <lucide-icon
+        [img]="icons.warehouse"
+        class="icon-class"
+        [size]="34"
+        color="#14b8a6"
+        name="warehouse"
+      ></lucide-icon>
+    } @else if (icon() == "lock") {
+      <lucide-icon
+        [img]="icons.lock"
+        class="icon-class"
+        [size]="34"
+        color="#F59E0B"
+        name="lock"
+      ></lucide-icon>
+    } @else if (icon() == "lock-open") {
+      <lucide-icon
+        [img]="icons.lockOpen"
+        class="icon-class"
+        [size]="34"
+        color="#10B981"
+        name="lock-open"
+      ></lucide-icon>
+    }
+  </div>
+</div>
