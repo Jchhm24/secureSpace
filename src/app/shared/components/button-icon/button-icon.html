@@ -1,0 +1,29 @@
+<button
+  class="p-2 rounded-10px outline-hidden"
+  (click)="function_action()()"
+  [ngClass]="{
+    'hover:bg-primary/10 hover:text-primary!': type_button() !== 'delete',
+    'hover:bg-red-600/10 hover:text-red-600!': type_button() === 'delete',
+  }"
+>
+  @switch (type_button()) {
+    @case ("add_user") {
+      <lucide-icon [img]="icons.personAdd" name="user-round-plus"></lucide-icon>
+    }
+    @case ("history") {
+      <lucide-icon [img]="icons.history" name="history"></lucide-icon>
+    }
+    @case ("qr_code") {
+      <lucide-icon [img]="icons.qrCode" name="qr-code"></lucide-icon>
+    }
+    @case ("edit") {
+      <lucide-icon [img]="icons.edit" name="square-pen"></lucide-icon>
+    }
+    @case ("delete") {
+      <lucide-icon [img]="icons.trash" name="trash-2"></lucide-icon>
+    }
+    @default {
+      <lucide-icon [img]="icons.history" name="history"></lucide-icon>
+    }
+  }
+</button>
