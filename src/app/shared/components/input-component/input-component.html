@@ -1,0 +1,15 @@
+<div>
+  <input
+    [type]="type()"
+    [name]="name()"
+    [id]="id()"
+    [placeholder]="placeholder()"
+    [formControl]="control()"
+    [required]="required()"
+    class="bg-background border-border rounded-full py-2.5 px-5 focus:outline-primary focus-visible:ring-primary focus-visible:border-primary"
+  />
+  @if (showError && control().hasError("required")) {
+    <p class="!text-red-500 text-sm! mt-1 ml-5">This field is required</p>
+  }
+</div>
+.
