@@ -1,2 +1,75 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #14b8a6;
+  --color-secondary: #1a1d29;
+  --color-border: #2a2e3d;
+  --color-background: #0f1117;
+  --color-text: #fafafa;
+  --color-text-secondary: #9ca0b4;
+
+  /* font size */
+  --text-base: clamp(1rem, calc(0.9rem + 0.2vw), 1.125rem);
+
+  /* font family */
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+}
+
+/* Only the titles  */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+/* The default font */
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+h1 {
+  font-size: clamp(2.5rem, calc(2rem + 3vw), 3.5rem);
+  font-weight: 700; /* Bold */
+}
+
+h2 {
+  font-size: clamp(1.875rem, calc(1.5rem + 2vw), 2.5rem);
+  font-weight: 600; /* Semi-bold */
+}
+
+h3 {
+  font-size: clamp(1.5rem, calc(1.2rem + 1.5vw), 2rem);
+  font-weight: 500; /* Medium */
+}
+
+h4 {
+  font-size: clamp(1.125rem, calc(1rem + 0.5vw), 1.375rem);
+  font-weight: 500; /* Medium */
+}
+
+p, input {
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+
+input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+button, span{
+  font-weight: 500; /* Medium */
+  font-size: var(--text-base);
+}
+
+button {
+  cursor: pointer;
+  &&:hover {
+    box-shadow: 0 0 25px #00000050;
+    transform: scale(1.05);
+    transition: all 0.2s ease-in-out;
+  }
+}
