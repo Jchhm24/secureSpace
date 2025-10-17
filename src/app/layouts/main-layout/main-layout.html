@@ -1,0 +1,27 @@
+<div class="flex flex-row h-screen">
+  <app-sidebar></app-sidebar>
+  <div class="flex flex-col p-5 w-full">
+    <span class="greeting-text text-base text-text-secondary">
+      Hola, {{ username() }} 👋
+    </span>
+    <div class="flex flex-row justify-between items-center">
+      <h1>
+        {{ title() }}
+      </h1>
+      <app-button-component
+        [label]="button.label()"
+        [ariaLabel]="button.ariaLabel()"
+        (click)="button.functionAction()"
+      >
+        <lucide-icon
+          [img]="plusIcon"
+          name="plus"
+          color="#0f1117"
+          class="my-icon"
+        ></lucide-icon>
+      </app-button-component>
+    </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+.
