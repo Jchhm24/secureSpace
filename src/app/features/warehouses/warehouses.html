@@ -1,0 +1,141 @@
+<main class="flex flex-col gap-5">
+  <section class="grid grid-cols-3 gap-5">
+    <app-warehouse-card
+      [title]="'Total de bodegas:'"
+      [total]="5"
+      [icon]="'warehouse'"
+    ></app-warehouse-card>
+    <app-warehouse-card
+      [title]="'Bodegas ocupadas:'"
+      [total]="3"
+      [icon]="'lock'"
+    ></app-warehouse-card>
+    <app-warehouse-card
+      [title]="'Bodegas disponibles:'"
+      [total]="2"
+      [icon]="'lock-open'"
+    ></app-warehouse-card>
+  </section>
+  <!-- before, I had made convert this table to a component -->
+  <div class="bg-secondary border border-border rounded-20px overflow-hidden">
+    <table class="flex flex-col w-full">
+      <caption class="p-5 flex flex-row justify-between items-center">
+        <!-- Here wil be the title and input search -->
+        <div class="flex flex-row gap-2.5">
+          <div class="bg-primary/10 rounded-10px p-2.5 w-min">
+            <lucide-icon
+              [img]="icons.chartBar"
+              name="chart-bar"
+              color="#14B8A6"
+            ></lucide-icon>
+          </div>
+          <h3 class="text-text-secondary">Listado de bodegas</h3>
+        </div>
+        <app-input-component
+            [type]="'search'"
+            [placeholder]="'Buscar bodega...'"
+            [control]="searchControl"
+            [style.--width]="'520px'"
+          ></app-input-component>
+      </caption>
+      <thead class="p-5 bg-text/10 flex flex-row justify-between items-center border-b border-primary">
+        <tr class="flex flex-row gap-5">
+          <th scope="col">Id</th>
+          <th scope="col">Ubicación</th>
+          <th scope="col">Ultimo registro</th>
+          <th scope="col">Bodega</th>
+          <th scope="col">Persona asignada</th>
+        </tr>
+        <tr class="ml-auto flex flex-row w-min">
+          <th class="w-full min-w-[102px]">Estado</th>
+          <th class="w-full min-w-[204px]">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- date 1 -->
+        <tr class="flex flex-row gap-5 items-center p-5 custom-dashed-border  w-full">
+          <td class="font-medium text-text!">1</td>
+          <td>Merida</td>
+          <td>23-10-2025</td>
+          <td class="font-medium text-text!">Bodega 1</td>
+          <td>Nombre de la persona</td>
+
+          <!-- separate columns -->
+          <td class="ml-auto min-w-[102px]">
+            <app-badge-enable></app-badge-enable>
+          </td>
+          <td class="flex flex-row gap-2.5 min-w-[204px]">
+            <app-button-icon
+              [type_button]="'add_user'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+            <app-button-icon
+              [type_button]="'history'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+            <app-button-icon
+              [type_button]="'qr_code'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+            <app-button-icon
+              [type_button]="'edit'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+            <app-button-icon
+              [type_button]="'delete'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+          </td>
+        </tr>
+        <!-- date 2 -->
+        <tr class="flex flex-row gap-5 items-center p-5 custom-dashed-border  w-full">
+          <td class="font-medium text-text!">2</td>
+          <td>Merida</td>
+          <td>23-10-2025</td>
+          <td class="font-medium text-text!">Bodega 2</td>
+          <td>Nombre de la persona</td>
+
+          <!-- separate columns -->
+          <td class="ml-auto min-w-[102px]">
+            <app-badge-enable [enabled]="false"></app-badge-enable>
+          </td>
+          <td class="flex flex-row gap-2.5 min-w-[204px]">
+            <app-button-icon
+              [type_button]="'add_user'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+            <app-button-icon
+              [type_button]="'history'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+            <app-button-icon
+              [type_button]="'qr_code'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+            <app-button-icon
+              [type_button]="'edit'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+            <app-button-icon
+              [type_button]="'delete'"
+              [function_action]="functionButton"
+            >
+            </app-button-icon>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <!-- Here will be the pagination controls -->
+      </tfoot>
+    </table>
+  </div>
+</main>
