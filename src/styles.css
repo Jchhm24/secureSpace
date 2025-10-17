@@ -8,6 +8,8 @@
   --color-background: #0f1117;
   --color-text: #fafafa;
   --color-text-secondary: #9ca0b4;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
 
   /* font size */
   --text-base: clamp(1rem, calc(0.9rem + 0.2vw), 1.125rem);
@@ -15,6 +17,10 @@
   /* font family */
   --font-montserrat: "Montserrat", sans-serif;
   --font-roboto: "Roboto", sans-serif;
+
+  /* border radius */
+  --radius-10px: 10px;
+  --radius-20px: 20px;
 }
 
 /* Only the titles  */
@@ -24,6 +30,7 @@ h3,
 h4,
 h5 {
   font-family: "Montserrat", sans-serif !important;
+  color: var(--color-text);
 }
 
 /* The default font */
@@ -51,7 +58,7 @@ h4 {
   font-weight: 500; /* Medium */
 }
 
-p, input {
+p, input, th, td {
   font-size: var(--text-base);
   color: var(--color-text);
 }
@@ -60,7 +67,7 @@ input::placeholder {
   color: var(--color-text-secondary);
 }
 
-button, span{
+button, span, th {
   font-weight: 500; /* Medium */
   font-size: var(--text-base);
 }
@@ -72,4 +79,18 @@ button {
     transform: scale(1.05);
     transition: all 0.2s ease-in-out;
   }
+}
+
+td {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+}
+
+.custom-dashed-border {
+  border-bottom: none;
+  background-image: linear-gradient(to right, #2A2E3D 0%, #2A2E3D 33%, transparent 33%, transparent 100%);
+  background-size: 24px 1px;
+  background-repeat: repeat-x;
+  background-position: bottom;
+  padding-bottom: calc(1.25rem - 1px);
 }
