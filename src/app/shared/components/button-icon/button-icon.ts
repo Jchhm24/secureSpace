@@ -14,6 +14,7 @@ export class ButtonIcon {
     'add_user' | 'history' | 'qr_code' | 'edit' | 'delete'
   >();
   function_action = input.required<() => void>();
+  title_button = input.required<string>();
 
   icons = {
     personAdd: UserRoundPlus,
