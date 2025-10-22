@@ -1,3 +1,57 @@
-<nav class="bg-secondary h-screen w-60 p-4">
-  <p>sidebar works!</p>
+<nav
+  class="fixed bg-secondary h-screen w-60 p-5 border-l border-border flex flex-col justify-between items-center"
+>
+  <div class="flex flex-col gap-4 w-full items-center">
+    <img
+      ngSrc="logo-completo.png"
+      alt="SecureSpace Logo"
+      width="136"
+      height="98"
+      priority
+    />
+
+    <div class="flex flex-col gap-1 w-full">
+      @for (path of paths; track $index) {
+        <a
+          class="flex flex-row items-start gap-1 p-2 rounded-10px select-none"
+          [ngClass]="{
+            'bg-primary/10! text-primary! font-medium':
+              path.route == currentRoute(),
+            'text-text/80! hover:bg-text/5': path.route != currentRoute(),
+          }"
+          [routerLink]="'/' + path.route"
+        >
+          <lucide-icon [img]="path.icon" [size]="24"></lucide-icon>
+          {{ path.label }}
+        </a>
+      }
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-1 py-5 border-t border-border w-full">
+    <a
+      class="p-2.5 flex flex-row gap-2.5 items-center justify-start bg-[#0F1117]/30 rounded-10px"
+      [routerLink]="'/profile'"
+    >
+      <img
+        ngSrc="profile.jpg"
+        alt="Foto de perfil"
+        width="40"
+        height="40"
+        class="rounded-full object-cover"
+      />
+      <div class="flex flex-col w-full overflow-x-hidden">
+        <span class="text-base font-normal!">Julio Cesar</span>
+        <a href="#" class="text-xs text-text/80! underline">admin@securespace.com</a>
+      </div>
+    </a>
+    <a
+      class="flex flex-row items-start gap-1 p-2 rounded-10px text-text/80! font-normal! hover:bg-text/5"
+      [routerLink]="'/login'"
+      (click)="logout()"
+    >
+      <lucide-icon [img]="logOutIcon" [size]="24"></lucide-icon>
+      Cerrar sesión
+    </a>
+  </div>
 </nav>
