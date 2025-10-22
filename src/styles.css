@@ -58,7 +58,7 @@ h4 {
   font-weight: 500; /* Medium */
 }
 
-p, input, th, td {
+p, input, th, td, a {
   font-size: var(--text-base);
   color: var(--color-text);
 }
