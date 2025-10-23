@@ -24,6 +24,19 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'locations',
+    title: 'Ubicaciones - SecureSpace',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        title: 'Lista de Ubicaciones',
+        loadComponent: () => import('./features/locations/locations').then((m) => m.Locations),
+      },
+    ],
+    canActivate: [authGuard],
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full',
