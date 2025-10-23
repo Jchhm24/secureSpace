@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { LucideAngularModule, ChartBar, Search } from 'lucide-angular';
@@ -11,17 +6,22 @@ import { BadgeEnable } from '../badge-enable/badge-enable';
 import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { WarehouseService } from '@core/services/warehouse-service';
 import { Warehouse } from '@features/warehouses/interfaces/warehouse-interface';
-import { paginateTable } from '@shared/pipes/paginateTable';
+import { paginateTable } from '@shared/utils/helpers/paginateTable';
 import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-warehouses-table',
-  imports: [LucideAngularModule, InputComponent, BadgeEnable, ButtonIcon, NgClass],
+  imports: [
+    LucideAngularModule,
+    InputComponent,
+    BadgeEnable,
+    ButtonIcon,
+    NgClass,
+  ],
   templateUrl: './warehouses-table.html',
   styleUrl: './warehouses-table.css',
 })
 export class WarehousesTable implements OnInit {
-
   private readonly ITEMS_PER_PAGE = 5;
 
   icons = {
@@ -36,7 +36,10 @@ export class WarehousesTable implements OnInit {
   index_page = signal(0);
 
   ngOnInit(): void {
-    this.getPaginatedData(this.ITEMS_PER_PAGE, this.warehouseService.getFormattedWarehouses());
+    this.getPaginatedData(
+      this.ITEMS_PER_PAGE,
+      this.warehouseService.getFormattedWarehouses(),
+    );
   }
 
   getPaginatedData(limit: number, data: Warehouse[] | undefined): void {
@@ -45,7 +48,7 @@ export class WarehousesTable implements OnInit {
     this.warehouses.set(tableIndications.paginatedData);
   }
 
-  changePage(page: number) : void {
+  changePage(page: number): void {
     this.index_page.set(page);
     this.warehouses.set(this.groupedWarehouses()[page] || []);
   }
