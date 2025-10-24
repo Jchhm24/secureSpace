@@ -1,7 +1,21 @@
 import { Injectable } from '@angular/core';
 import {
   ChartBar,
+  CircleAlert,
+  CircleCheck,
+  History,
+  Lock,
+  LockOpen,
+  LogOut,
+  MapPin,
+  Plus,
+  QrCode,
   Search,
+  SquarePen,
+  Trash2,
+  UserRound,
+  UserRoundPlus,
+  Warehouse,
 } from 'lucide-angular';
 
 @Injectable({
@@ -11,6 +25,20 @@ export class IconService {
   readonly icons = {
     chartBar: ChartBar,
     search: Search,
+    personAdd: UserRoundPlus,
+    history: History,
+    qrCode: QrCode,
+    edit: SquarePen,
+    trash: Trash2,
+    warehouse: Warehouse,
+    mapPin: MapPin,
+    userRound: UserRound,
+    logOut: LogOut,
+    lockOpen: LockOpen,
+    lock: Lock,
+    plus: Plus,
+    circleCheck: CircleCheck,
+    circleAlert: CircleAlert,
   } as const;
 
   // TODO: It´s important to use LucideAngularModule in the module imports where this service is going to be used
