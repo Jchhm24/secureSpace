@@ -1,0 +1,67 @@
+<div class="bg-secondary border border-border rounded-20px overflow-hidden">
+  <div class="p-5 flex flex-row justify-end">
+    <app-input-component
+      [type]="'search'"
+      [placeholder]="'Buscar persona...'"
+      [control]="searchControl"
+      [style.--width]="'520px'"
+    ></app-input-component>
+  </div>
+  <table class="w-full table-fixed">
+    <thead class="bg-text/10 border-b border-primary">
+      <tr>
+        <th class="py-5 px-8 text-left w-[80px]">Id</th>
+        <th class="py-5 px-8 text-left">Nombre de la persona</th>
+        <th class="py-5 px-8 text-right w-[204px]">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (people of peoples(); track $index) {
+        <tr class="border-b border-dashed border-border">
+          <td class="py-5 px-8 font-medium text-text">{{ people.id }}</td>
+          <td class="py-5 px-8">{{ people.name }} {{ people.lastName }}</td>
+          <td class="py-5 px-8">
+            <div class="flex flex-row justify-end gap-2.5">
+              <app-button-icon
+                [type_button]="'edit'"
+                [title_button]="'Editar persona'"
+                [function_action]="functionButton"
+              ></app-button-icon>
+              <app-button-icon
+                [type_button]="'delete'"
+                [title_button]="'Eliminar persona'"
+                [function_action]="functionButton"
+              ></app-button-icon>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="3" class="py-10 px-8 text-center">
+            Ninguna persona ha sido registrada por el momento.
+          </td>
+        </tr>
+      }
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" class="p-5">
+          <div class="flex flex-row justify-center items-center gap-2.5">
+            @for (page of groupedPeoples(); track $index) {
+              <button
+                (click)="changePage($index)"
+                class="px-4 py-2 rounded text-text! outline-none"
+                [ngClass]="{
+                  'bg-primary' : $index === index_page(),
+                  'hover:bg-primary/10': $index !== index_page()
+                }"
+              >
+                {{ $index + 1 }}
+              </button>
+            }
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
