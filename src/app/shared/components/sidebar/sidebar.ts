@@ -1,7 +1,8 @@
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { LogOut, LucideAngularModule, MapPin, UserRound, Warehouse } from 'lucide-angular';
+import { IconService } from '@core/services/icon-service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,23 +15,23 @@ export class Sidebar {
   route = inject(ActivatedRoute);
   currentRoute = computed(() => this.route.snapshot.url[0].path);
 
-  logOutIcon = LogOut;
+  icons = inject(IconService).icons;
 
   paths = [
     {
       route: 'warehouses',
       label: 'Bodegas',
-      icon: Warehouse,
+      icon: this.icons.warehouse,
     },
     {
       route: 'locations',
       label: 'Ubicaciones',
-      icon: MapPin,
+      icon: this.icons.mapPin,
     },
     {
       route: 'people',
       label: 'Personas',
-      icon: UserRound,
+      icon: this.icons.userRound,
     },
   ];
 

@@ -1,8 +1,9 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { InputType } from './input-types';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgClass } from '@angular/common';
-import { LucideAngularModule, Search } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
+import { IconService } from '@core/services/icon-service';
 
 @Component({
   selector: 'app-input-component',
@@ -22,7 +23,7 @@ export class InputComponent {
   required = input<boolean>(false);
 
   width = 'auto';
-  searchIcon = Search;
+  icons = inject(IconService).icons;
 
   get showError():boolean{
     const ctrl = this.control();

@@ -1,6 +1,7 @@
 import { NgClass } from '@angular/common';
-import { Component, input } from '@angular/core';
-import { History, LucideAngularModule, QrCode, SquarePen, Trash2, UserRoundPlus } from 'lucide-angular';
+import { Component, inject, input } from '@angular/core';
+import { IconService } from '@core/services/icon-service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-button-icon',
@@ -16,11 +17,5 @@ export class ButtonIcon {
   function_action = input.required<() => void>();
   title_button = input.required<string>();
 
-  icons = {
-    personAdd: UserRoundPlus,
-    history: History,
-    qrCode: QrCode,
-    edit: SquarePen,
-    trash: Trash2,
-  }
+  icons = inject(IconService).icons;
 }

@@ -4,6 +4,7 @@ import { LayoutService } from '@core/services/layout-service';
 import { Sidebar } from '@shared/components/sidebar/sidebar';
 import { ButtonComponent } from '@shared/components/button-component/button-component';
 import { LucideAngularModule, Plus } from 'lucide-angular';
+import { IconService } from '@core/services/icon-service';
 
 
 @Component({
@@ -22,6 +23,5 @@ export class MainLayout {
   showAction = this.layoutService.showAction;
   button = this.layoutService.button;
 
-  // Icons
-  plusIcon = Plus;
+  icons = inject(IconService).icons;
 }

@@ -1,7 +1,8 @@
 import { NgClass } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
+import { IconService } from '@core/services/icon-service';
 import { WarehouseCardIconsType } from '@shared/types/warehouse-card-icons-type';
-import { LucideAngularModule, Warehouse, LockOpen, Lock } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 
 
 @Component({
@@ -15,9 +16,5 @@ export class WarehouseCard {
   total = input.required<number>();
   icon = input.required<WarehouseCardIconsType>();
 
-  icons = {
-    warehouse: Warehouse,
-    lockOpen: LockOpen,
-    lock: Lock,
-  }
+  icons = inject(IconService).icons;
 }

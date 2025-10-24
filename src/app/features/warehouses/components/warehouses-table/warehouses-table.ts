@@ -1,13 +1,14 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InputComponent } from '@shared/components/input-component/input-component';
-import { LucideAngularModule, ChartBar, Search } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 import { BadgeEnable } from '../badge-enable/badge-enable';
 import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { WarehouseService } from '@core/services/warehouse-service';
 import { Warehouse } from '@features/warehouses/interfaces/warehouse-interface';
 import { paginateTable } from '@shared/utils/helpers/paginateTable';
 import { NgClass } from '@angular/common';
+import { IconService } from '@core/services/icon-service';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -24,10 +25,7 @@ import { NgClass } from '@angular/common';
 export class WarehousesTable implements OnInit {
   private readonly ITEMS_PER_PAGE = 5;
 
-  icons = {
-    chartBar: ChartBar,
-    search: Search,
-  };
+  icons = inject(IconService).icons;
 
   searchControl = new FormControl('');
   warehouseService = inject(WarehouseService);

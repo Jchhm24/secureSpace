@@ -1,6 +1,7 @@
 import { NgClass } from '@angular/common';
-import { Component, input } from '@angular/core';
-import { CircleAlert, CircleCheck, LucideAngularModule } from 'lucide-angular';
+import { Component, inject, input } from '@angular/core';
+import { IconService } from '@core/services/icon-service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-badge-enable',
@@ -11,8 +12,5 @@ import { CircleAlert, CircleCheck, LucideAngularModule } from 'lucide-angular';
 export class BadgeEnable {
   enabled = input<boolean>(true);
 
-  icons = {
-    circleCheck: CircleCheck,
-    circleAlert: CircleAlert
-  }
+  icons = inject(IconService).icons;
 }
