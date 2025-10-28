@@ -1,0 +1,10 @@
+@media screen and (width <= 706px) {
+  .container-main-layout {
+    flex-direction: column-reverse;
+    height: auto !important;
+  }
+
+  .container-content {
+    margin-left: 0 !important;
+  }
+}

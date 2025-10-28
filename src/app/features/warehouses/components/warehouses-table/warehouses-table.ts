@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { LucideAngularModule } from 'lucide-angular';
@@ -9,6 +9,8 @@ import { Warehouse } from '@features/warehouses/interfaces/warehouse-interface';
 import { paginateTable } from '@shared/utils/helpers/paginateTable';
 import { NgClass } from '@angular/common';
 import { IconService } from '@core/services/icon-service';
+import { DateFormatPipe } from '@shared/pipes/date-format-pipe';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -18,6 +20,7 @@ import { IconService } from '@core/services/icon-service';
     BadgeEnable,
     ButtonIcon,
     NgClass,
+    DateFormatPipe,
   ],
   templateUrl: './warehouses-table.html',
   styleUrl: './warehouses-table.css',
@@ -39,6 +42,20 @@ export class WarehousesTable implements OnInit {
       this.warehouseService.getFormattedWarehouses(),
     );
   }
+
+  protected inputSize = signal('520px');
+
+  private breakpointObserver = inject(BreakpointObserver);
+
+  private breakpointLogic = effect(() => {
+    this.breakpointObserver.observe('(width <= 604px)').subscribe((result) => {
+      if (result.matches) {
+        this.inputSize.set('100%');
+      } else {
+        this.inputSize.set('520px');
+      }
+    });
+  });
 
   getPaginatedData(limit: number, data: Warehouse[] | undefined): void {
     const tableIndications = paginateTable(limit, data);

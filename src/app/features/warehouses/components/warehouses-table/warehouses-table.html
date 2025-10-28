@@ -1,6 +1,6 @@
 <div class="bg-secondary border border-border rounded-20px overflow-hidden">
-  <div class="p-5 flex flex-row justify-between items-center">
-    <div class="flex flex-row gap-2.5">
+  <div class="p-5 flex flex-row flex-wrap gap-2.5 justify-between items-center">
+    <div class="flex flex-row gap-2.5 max-[605px]:w-full">
       <div class="bg-primary/10 rounded-10px p-2.5 w-min">
         <lucide-icon
           [img]="icons.chartBar"
@@ -10,39 +10,41 @@
       </div>
       <h3 class="text-text-secondary">Listado de bodegas</h3>
     </div>
-    <app-input-component
-      [type]="'search'"
-      [placeholder]="'Buscar bodega...'"
-      [control]="searchControl"
-      [style.--width]="'520px'"
-    ></app-input-component>
+    <div class="flex justify-end flex-1 max-[605px]:w-full">
+      <app-input-component
+        [type]="'search'"
+        [placeholder]="'Buscar bodega...'"
+        [control]="searchControl"
+        [style.--width]="inputSize()"
+      ></app-input-component>
+    </div>
   </div>
 
   <table class="w-full">
     <thead class="bg-text/10 border-b border-primary">
       <tr>
         <th class="p-5 text-left">Id</th>
-        <th class="p-5 text-left">Ubicación</th>
-        <th class="p-5 text-left">Ultimo registro</th>
+        <th class="p-5 text-left max-[710px]:hidden">Ubicación</th>
+        <th class="p-5 text-left max-[770px]:hidden">Ultimo registro</th>
         <th class="p-5 text-left">Bodega</th>
-        <th class="p-5 text-left">Persona asignada</th>
-        <th class="p-5 text-center w-[140px]">Estado</th>
-        <th class="p-5 text-center w-[202px]">Acciones</th>
+        <th class="p-5 text-left max-[876px]:hidden">Persona asignada</th>
+        <th class="p-5 text-center w-[140px] max-[876px]:w-26">Estado</th>
+        <th class="p-5 text-center w-[202px] max-[1040px]:w-[68px]">Acciones</th>
       </tr>
     </thead>
     <tbody>
       @for (warehouse of warehouses(); track warehouse.id) {
         <tr class="border-b border-dashed border-border">
           <td class="p-5 font-medium text-text">{{ warehouse.id }}</td>
-          <td class="p-5">{{ warehouse.location }}</td>
-          <td class="p-5">23-10-2025</td>
+          <td class="p-5 max-[710px]:hidden">{{ warehouse.location }}</td>
+          <td class="p-5 max-[770px]:hidden">{{ warehouse.register | dateFormat }}</td>
           <td class="p-5 font-medium text-text">{{ warehouse.name }}</td>
-          <td class="p-5">{{ warehouse.owner }}</td>
-          <td class="p-5">
+          <td class="p-5 max-[876px]:hidden">{{ warehouse.owner }}</td>
+          <td class="p-5 max-[876px]:w-26">
             <app-badge-enable [enabled]="warehouse.status"></app-badge-enable>
           </td>
           <td class="p-5">
-            <div class="flex flex-row gap-2.5">
+            <div class="flex flex-row gap-2.5 max-[1040px]:hidden">
               <app-button-icon
                 [type_button]="'add_user'"
                 [title_button]="'Añadir usuario'"
@@ -88,8 +90,8 @@
                 (click)="changePage($index)"
                 class="px-4 py-2 rounded text-text! outline-none"
                 [ngClass]="{
-                  'bg-primary' : $index === index_page(),
-                  'hover:bg-primary/10': $index !== index_page()
+                  'bg-primary': $index === index_page(),
+                  'hover:bg-primary/10': $index !== index_page(),
                 }"
               >
                 {{ $index + 1 }}

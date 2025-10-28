@@ -1,5 +1,4 @@
 span {
   font-size: clamp(2rem, calc(1.5rem + 5vw), 4rem);
   color: var(--color-text);
-
 }

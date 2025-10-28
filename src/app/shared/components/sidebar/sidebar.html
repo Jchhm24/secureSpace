@@ -1,19 +1,44 @@
 <nav
-  class="fixed bg-secondary h-screen w-60 p-5 border-l border-border flex flex-col justify-between items-center"
+  class="fixed bg-secondary h-screen p-5 border-l border-border flex flex-col justify-between items-center"
+  [ngClass]="{
+    'w-60':isExpanded(),
+    'w-min':!isExpanded(),
+  }"
 >
   <div class="flex flex-col gap-4 w-full items-center">
-    <img
-      ngSrc="logo-completo.png"
-      alt="SecureSpace Logo"
-      width="136"
-      height="98"
-      priority
-    />
+    <lucide-icon
+      [img]="icons.chevronRight"
+      name="chevron-right"
+      [size]="34"
+      class="text-text ml-auto mr-0 transition-transform duration-400 cursor-pointer max-[605px]:hidden"
+      [ngClass]="{
+        'rotate-180': !isExpanded()
+      }"
+      (click)="isExpanded.set(!isExpanded())"
+    ></lucide-icon>
 
-    <div class="flex flex-col gap-1 w-full">
+    @if(isExpanded()) {
+      <img
+        ngSrc="logo-completo.png"
+        alt="SecureSpace Logo"
+        width="136"
+        height="98"
+        priority
+      />
+    } @else {
+      <img
+        ngSrc="icon-logo.png"
+        alt="SecureSpace Logo"
+        width="58"
+        height="58"
+        priority
+      />
+    }
+
+    <div class="flex flex-col gap-1 w-full container-links">
       @for (path of paths; track $index) {
         <a
-          class="flex flex-row items-start gap-1 p-2 rounded-10px select-none"
+          class="flex flex-row items-start gap-1 p-2 rounded-10px select-none group relative outline-hidden"
           [ngClass]="{
             'bg-primary/10! text-primary! font-medium':
               path.route == currentRoute(),
@@ -22,13 +47,21 @@
           [routerLink]="'/' + path.route"
         >
           <lucide-icon [img]="path.icon" [size]="24"></lucide-icon>
-          {{ path.label }}
+          @if(isExpanded()){
+            {{ path.label }}
+          } @else {
+            <app-label-indicator [label]="path.label"></app-label-indicator>
+          }
+
+          @if(isMobile() && path.route === currentRoute()){
+            {{ path.label }}
+          }
         </a>
       }
     </div>
   </div>
 
-  <div class="flex flex-col gap-1 py-5 border-t border-border w-full">
+  <div class="flex flex-col gap-1 py-5 border-t border-border w-full container-user-info">
     <a
       class="p-2.5 flex flex-row gap-2.5 items-center justify-start bg-[#0F1117]/30 rounded-10px"
       [routerLink]="'/profile'"
@@ -40,18 +73,24 @@
         height="40"
         class="rounded-full object-cover"
       />
-      <div class="flex flex-col w-full overflow-x-hidden">
-        <span class="text-base font-normal!">Julio Cesar</span>
-        <span class="text-xs text-text/80! underline">admin@securespace.com</span>
-      </div>
+      @if(isExpanded()){
+        <div class="flex flex-col w-full overflow-x-hidden">
+          <span class="text-base font-normal!">Julio Cesar</span>
+          <span class="text-xs text-text/80! underline">admin@securespace.com</span>
+        </div>
+      }
     </a>
     <a
-      class="flex flex-row items-start gap-1 p-2 rounded-10px text-text/80! font-normal! hover:bg-text/5"
+      class="flex flex-row items-start gap-1 p-2 rounded-10px text-text/80! font-normal! group relative hover:bg-text/5"
       [routerLink]="'/login'"
       (click)="logout()"
     >
       <lucide-icon [img]="icons.logOut" [size]="24"></lucide-icon>
-      Cerrar sesión
+      @if(isExpanded()){
+        Cerrar sesión
+      } @else {
+        <app-label-indicator [label]="'Cerrar sesión'"></app-label-indicator>
+      }
     </a>
   </div>
 </nav>

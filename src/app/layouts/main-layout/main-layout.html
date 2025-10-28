@@ -1,6 +1,12 @@
-<div class="flex flex-row h-screen">
-  <app-sidebar></app-sidebar>
-  <div class="flex flex-col p-5 w-full ml-60">
+<div class="flex flex-row h-screen container-main-layout">
+  <app-sidebar [(isExpanded)]="isExpanded" [isMobile]="isMobile()" ></app-sidebar>
+  <!-- container of the main content -->
+  <div class="flex flex-col p-5 w-full container-content"
+    [ngClass]="{
+      'ml-60': isDesktop() && isExpanded(),
+      'ml-21': !isDesktop()
+    }"
+  >
     <span class="greeting-text text-base text-text-secondary">
       Hola, {{ username() }} 👋
     </span>
@@ -24,4 +30,3 @@
     <router-outlet></router-outlet>
   </div>
 </div>
-.

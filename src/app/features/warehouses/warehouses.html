@@ -1,20 +1,26 @@
 <main class="flex flex-col gap-5">
   <section class="grid grid-cols-3 gap-5">
-    <app-warehouse-card
-      [title]="'Total de bodegas:'"
-      [total]="5"
-      [icon]="'warehouse'"
-    ></app-warehouse-card>
-    <app-warehouse-card
-      [title]="'Bodegas ocupadas:'"
-      [total]="3"
-      [icon]="'lock'"
-    ></app-warehouse-card>
-    <app-warehouse-card
-      [title]="'Bodegas disponibles:'"
-      [total]="2"
-      [icon]="'lock-open'"
-    ></app-warehouse-card>
+    <div>
+      <app-warehouse-card
+        [title]="'Total de bodegas:'"
+        [total]="5"
+        [icon]="'warehouse'"
+      ></app-warehouse-card>
+    </div>
+    <div>
+      <app-warehouse-card
+        [title]="'Bodegas ocupadas:'"
+        [total]="3"
+        [icon]="'lock'"
+      ></app-warehouse-card>
+    </div>
+    <div>
+      <app-warehouse-card
+        [title]="'Bodegas disponibles:'"
+        [total]="2"
+        [icon]="'lock-open'"
+      ></app-warehouse-card>
+    </div>
   </section>
 
   <app-warehouses-table></app-warehouses-table>

@@ -1,0 +1,26 @@
+@media screen and (width <= 604px) {
+  nav {
+    flex-direction: row;
+    height: min-content;
+    width: 100% !important;
+    bottom: 0;
+    box-shadow: 0 -40px 60px #0F1117;
+    z-index: 10;
+    border-top: 1px solid var(--color-border);
+    border-bottom: none;
+  }
+
+  .container-user-info {
+    display: none;
+  }
+
+  .container-links {
+    flex-direction: row;
+    gap: 0;
+    justify-content: space-between;
+  }
+
+  img {
+    display: none;
+  }
+}

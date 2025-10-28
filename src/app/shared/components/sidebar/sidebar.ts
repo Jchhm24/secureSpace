@@ -1,12 +1,19 @@
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, input, model } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IconService } from '@core/services/icon-service';
 import { LucideAngularModule } from 'lucide-angular';
+import { LabelIndicator } from './components/label-indicator/label-indicator';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [NgOptimizedImage, RouterLink, LucideAngularModule, NgClass],
+  imports: [
+    NgOptimizedImage,
+    RouterLink,
+    LucideAngularModule,
+    NgClass,
+    LabelIndicator,
+  ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
@@ -35,10 +42,11 @@ export class Sidebar {
     },
   ];
 
+  isExpanded = model.required<boolean>();
+  isMobile = input.required<boolean>();
 
-  logout(){
+  logout() {
     localStorage.setItem('isAuthenticated', 'false');
     this.router.navigate(['/login']);
   }
-
 }

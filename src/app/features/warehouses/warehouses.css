@@ -1,0 +1,18 @@
+@media screen and (width <= 852px) {
+  section {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+
+  section > div:last-child {
+    grid-column: span 2;
+  }
+}
+
+@media screen and (width <= 604px) {
+   section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+   }
+}
