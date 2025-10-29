@@ -1,5 +1,5 @@
 {
-  "name": "secure-space",
+  "name": "securespace",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:secureSpace": "node dist/secureSpace/server/server.mjs"
+    "serve:ssr:securespace": "node dist/securespace/server/server.mjs"
   },
   "prettier": {
     "overrides": [
@@ -25,6 +25,7 @@
     "@angular/common": "^20.1.0",
     "@angular/compiler": "^20.1.0",
     "@angular/core": "^20.1.0",
+    "@angular/fire": "20.0.1",
     "@angular/forms": "^20.1.0",
     "@angular/platform-browser": "^20.1.0",
     "@angular/platform-server": "^20.1.0",

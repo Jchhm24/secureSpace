@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "secureSpace": {
+    "securespace": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -61,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "secureSpace:build:production"
+              "buildTarget": "securespace:build:production"
             },
             "development": {
-              "buildTarget": "secureSpace:build:development"
+              "buildTarget": "securespace:build:development"
             }
           },
           "defaultConfiguration": "development"
