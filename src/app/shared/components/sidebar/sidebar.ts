@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IconService } from '@core/services/icon-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { LabelIndicator } from './components/label-indicator/label-indicator';
+import { AuthService } from '@core/services/auth-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,6 +22,8 @@ export class Sidebar {
   router = inject(Router);
   route = inject(ActivatedRoute);
   currentRoute = computed(() => this.route.snapshot.url[0].path);
+
+  private authService = inject(AuthService);
 
   icons = inject(IconService).icons;
 
@@ -46,7 +49,13 @@ export class Sidebar {
   isMobile = input.required<boolean>();
 
   logout() {
-    localStorage.setItem('isAuthenticated', 'false');
-    this.router.navigate(['/login']);
+    this.authService.signOut().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Sign out error:', error);
+      }
+    })
   }
 }
