@@ -20,7 +20,8 @@
       "@layouts/*": ["./src/app/layouts/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@assets/*": ["./src/assets/*"],
-      "@environment/*": ["./src/environments/*"]
+      "@environment/*": ["./src/environments/*"],
+      "@interfaces/*": ["./src/app/shared/interfaces/*"]
     }
   },
   "angularCompilerOptions": {
