@@ -1,43 +1,75 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '@core/services/auth-service';
 import { ButtonComponent } from '@shared/components/button-component/button-component';
 import { InputComponent } from '@shared/components/input-component/input-component';
 
 @Component({
   selector: 'app-login',
-  imports: [InputComponent, ButtonComponent ,ReactiveFormsModule, NgOptimizedImage],
+  imports: [
+    InputComponent,
+    ButtonComponent,
+    ReactiveFormsModule,
+    NgOptimizedImage,
+  ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
-  userControl = new FormGroup({
-    username: new FormControl(''),
+  protected userControl = new FormGroup({
+    email: new FormControl(''),
     password: new FormControl(''),
-  })
-  submitted = false;
+  });
+  protected submitted = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  private authService = inject(AuthService);
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+  ) {
     this.userControl = this.fb.group({
-      username: ['', [Validators.required]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required]],
-    })
+    });
   }
 
   onSubmit() {
-    this.submitted = true;
-
     this.userControl.markAllAsTouched();
-    // If only form value isn't valid, the submit action is not performed
-    if(this.userControl.valid){
-      localStorage.setItem('isAuthenticated', 'true');
-      this.router.navigate(['/warehouses']);
+    if (this.userControl.valid) {
+      this.submitted = true;
+      this.authService
+        .signIn(this.userControl.value.email!, this.userControl.value.password!)
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/warehouses']);
+          },
+          error: (error) => {
+            console.error('Sign in error:', error);
+          },
+          complete: () => {
+            this.submitted = false;
+          },
+        });
     }
   }
 
   googleLogin() {
-    localStorage.setItem('isAuthenticated', 'true');
-    this.router.navigate(['/warehouses']);
+    this.authService.signInWithGoogle().subscribe({
+      next: () => {
+        this.router.navigate(['/warehouses']);
+      },
+      error: (error) => {
+        console.error('Sign in error:', error);
+      },
+    });
   }
 }
