@@ -10,10 +10,10 @@
   />
   <form [formGroup]="userControl" (ngSubmit)="onSubmit()" class="flex flex-col gap-5 w-full">
     <app-input-component
-      [type]="'text'"
-      [name]="'username'"
+      [type]="'email'"
+      [name]="'email'"
       [placeholder]="'Nombre de usuario'"
-      [control]="userControl.controls.username"
+      [control]="userControl.controls.email"
       [required]="true"
       [style.--width]="'100%'"
     ></app-input-component>
