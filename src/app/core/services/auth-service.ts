@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   Auth,
   GoogleAuthProvider,
@@ -19,6 +19,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
+import { UserService } from './user-service';
 
 export interface AuthResponse {
   user: UserInterface;
@@ -32,10 +33,10 @@ export class AuthService {
   private http = inject(HttpClient);
   private auth = inject(Auth);
   private apiUrl = environment.API_URL;
+  private userService = inject(UserService);
 
   // **Auth methods with Google ** //
   signInWithGoogle(): Observable<UserInterface> {
-
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
 
@@ -56,18 +57,16 @@ export class AuthService {
           'Authorization',
           `Bearer ${token}`,
         );
-        return this.http.post<UserInterface>(
-          `${this.apiUrl}/auth/me`,
-          {},
-          { headers },
-        ).pipe(
-          tap((meResponse) => {
-            let user = meResponse;
-            user.role = user.role !== 'admin' ? 'user' : 'admin'; // Ensure role is either 'admin' or 'user'
+        return this.http
+          .post<UserInterface>(`${this.apiUrl}/auth/me`, {}, { headers })
+          .pipe(
+            tap((meResponse) => {
+              let user = meResponse;
+              user.role = user.role !== 'admin' ? 'user' : 'admin'; // Ensure role is either 'admin' or 'user'
 
-            this.setSession({ token: token, user: user });
-          })
-        )
+              this.setSession({ token: token, user: user });
+            }),
+          );
       }),
       catchError((error) => this.handleError(error)),
     );
@@ -75,41 +74,40 @@ export class AuthService {
 
   // ** Auth methods with email and password ** //
   signIn(email: string, password: string): Observable<UserInterface> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, {
-      email: email,
-      password: password,
-    }).pipe(
-      switchMap((loginResponse) => {
-        const token = loginResponse.token;
-        // Then call /auth/me with the token
-        const headers = new HttpHeaders().set(
-          'Authorization',
-          `Bearer ${token}`
-        );
+    return this.http
+      .post<AuthResponse>(`${this.apiUrl}/auth/login`, {
+        email: email,
+        password: password,
+      })
+      .pipe(
+        switchMap((loginResponse) => {
+          const token = loginResponse.token;
+          // Then call /auth/me with the token
+          const headers = new HttpHeaders().set(
+            'Authorization',
+            `Bearer ${token}`,
+          );
 
-        return this.http.post<UserInterface>(
-          `${this.apiUrl}/auth/me`,
-          {},
-          { headers }
-        ).pipe(
-          tap((meResponse) => {
-            let user = meResponse;
-            user.role = user.role !== 'admin' ? 'user' : 'admin'; // Ensure role is either 'admin' or 'user'
+          return this.http
+            .post<UserInterface>(`${this.apiUrl}/auth/me`, {}, { headers })
+            .pipe(
+              tap((meResponse) => {
+                let user = meResponse;
+                user.role = user.role !== 'admin' ? 'user' : 'admin'; // Ensure role is either 'admin' or 'user'
 
-            this.setSession({ token: token, user: user });
-          })
-        )
-      }),
-      catchError((error) => this.handleError(error))
-    );
+                this.setSession({ token: token, user: user });
+              }),
+            );
+        }),
+        catchError((error) => this.handleError(error)),
+      );
   }
 
   signOut(): Observable<void> {
     return from(signOut(this.auth)).pipe(
       catchError((error) => this.handleError(error)),
       finalize(() => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        this.clearSession();
       }),
     );
   }
@@ -124,9 +122,18 @@ export class AuthService {
     });
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
   private setSession(response: AuthResponse) {
     localStorage.setItem('token', response.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
+    this.userService.setUser(response.user);
+  }
+
+  private clearSession() {
+    localStorage.removeItem('token');
+    this.userService.clearUser();
   }
 
   private handleError(error: any) {
