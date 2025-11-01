@@ -8,7 +8,7 @@ import { of } from 'rxjs';
 })
 export class WarehouseService {
   state = signal({
-    warehouses: new Map<number, Warehouse>(),
+    warehouses: new Map<string, Warehouse>(),
   });
 
   constructor() {
