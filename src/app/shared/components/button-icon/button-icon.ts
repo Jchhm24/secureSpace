@@ -12,7 +12,7 @@ import { LucideAngularModule } from 'lucide-angular';
 export class ButtonIcon {
 
   type_button = input.required<
-    'add_user' | 'history' | 'qr_code' | 'edit' | 'delete'
+    'add_user' | 'history' | 'qr_code' | 'edit' | 'delete' | 'close'
   >();
   function_action = input.required<() => void>();
   title_button = input.required<string>();
