@@ -58,7 +58,7 @@
               <app-button-icon
                 [type_button]="'qr_code'"
                 [title_button]="'Ver código QR'"
-                [function_action]="functionButton"
+                [function_action]="openQrGenerate.bind(this, warehouse.id)"
               ></app-button-icon>
               <app-button-icon
                 [type_button]="'edit'"
@@ -103,3 +103,8 @@
     </tfoot>
   </table>
 </div>
+
+<app-qr-generate
+  [(qrData)]="qrGenerate().id"
+  [(opened)]="qrGenerate().opened"
+></app-qr-generate>

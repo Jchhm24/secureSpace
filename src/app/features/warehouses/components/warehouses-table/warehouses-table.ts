@@ -1,4 +1,11 @@
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  model,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { LucideAngularModule } from 'lucide-angular';
@@ -11,6 +18,7 @@ import { NgClass } from '@angular/common';
 import { IconService } from '@core/services/icon-service';
 import { DateFormatPipe } from '@shared/pipes/date-format-pipe';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { QrGenerate } from '@shared/components/qr-generate/qr-generate';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -21,6 +29,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
     ButtonIcon,
     NgClass,
     DateFormatPipe,
+    QrGenerate,
   ],
   templateUrl: './warehouses-table.html',
   styleUrl: './warehouses-table.css',
@@ -30,11 +39,19 @@ export class WarehousesTable implements OnInit {
 
   icons = inject(IconService).icons;
 
-  searchControl = new FormControl('');
-  warehouseService = inject(WarehouseService);
-  warehouses = signal<Warehouse[]>([]);
-  groupedWarehouses = signal<Warehouse[][]>([]);
-  index_page = signal(0);
+  protected searchControl = new FormControl('');
+  protected warehouseService = inject(WarehouseService);
+  protected warehouses = signal<Warehouse[]>([]);
+  protected groupedWarehouses = signal<Warehouse[][]>([]);
+  protected index_page = signal(0);
+
+  protected qrGenerate = model<{
+    id: string;
+    opened: boolean;
+  }>({
+    id: '',
+    opened: false,
+  });
 
   ngOnInit(): void {
     this.getPaginatedData(
@@ -70,5 +87,9 @@ export class WarehousesTable implements OnInit {
 
   functionButton() {
     alert('solo para representar el boton');
+  }
+
+  openQrGenerate = (id: string) => {
+    this.qrGenerate.set({ id: id, opened: true });
   }
 }
