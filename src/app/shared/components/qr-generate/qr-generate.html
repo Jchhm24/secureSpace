@@ -1,0 +1,24 @@
+<dialog
+  [open]="opened()"
+  class="fixed inset-0 shadow-lg outline-hidden w-screen h-screen bg-black/50 backdrop-blur-[6px]"
+>
+  <div
+    class="p-5 bg-secondary border border-border rounded-10px flex flex-col gap-2 w-min mx-auto -translate-y-1/2 top-1/2 relative"
+  >
+    <div class="flex flex-row justify-between">
+      <h4>Código QR de acceso</h4>
+      <app-button-icon
+        [type_button]="'close'"
+        [function_action]="closedQrGenerate"
+        [title_button]="'Cerrar código QR'"
+      ></app-button-icon>
+    </div>
+    <div class="overflow-x-hidden rounded-20px">
+      <qrcode
+        [qrdata]="qrData()"
+        [allowEmptyString]="true"
+        [width]="320"
+      ></qrcode>
+    </div>
+  </div>
+</dialog>
