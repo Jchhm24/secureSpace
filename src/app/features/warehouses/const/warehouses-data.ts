@@ -2,7 +2,7 @@ import { Warehouse } from "../interfaces/warehouse-interface";
 
 export const warehouses: Warehouse[] = [
   {
-    id: 1,
+    id: '1',
     name: 'Bodega 1',
     location: 'Merida',
     register: new Date('2023-01-01'),
@@ -10,7 +10,7 @@ export const warehouses: Warehouse[] = [
     status: true,
   },
   {
-    id: 2,
+    id: '2',
     name: 'Bodega 2',
     location: 'Merida',
     register: new Date('2023-01-02'),
@@ -18,7 +18,7 @@ export const warehouses: Warehouse[] = [
     status: false,
   },
   {
-    id: 3,
+    id: '3',
     name: 'Bodega 3',
     location: 'Merida',
     register: new Date('2023-01-03'),
@@ -26,7 +26,7 @@ export const warehouses: Warehouse[] = [
     status: true,
   },
   {
-    id: 4,
+    id: '4',
     name: 'Bodega 4',
     location: 'Merida',
     register: new Date('2023-01-04'),
@@ -34,7 +34,7 @@ export const warehouses: Warehouse[] = [
     status: true,
   },
   {
-    id: 5,
+    id: '5',
     name: 'Bodega 5',
     location: 'Merida',
     register: new Date('2023-01-05'),
@@ -42,7 +42,7 @@ export const warehouses: Warehouse[] = [
     status: false,
   },
   {
-    id: 6,
+    id: '6',
     name: 'Bodega 6',
     location: 'Merida',
     register: new Date('2023-01-06'),
@@ -50,7 +50,7 @@ export const warehouses: Warehouse[] = [
     status: true,
   },
   {
-    id: 7,
+    id: '7',
     name: 'Bodega 7',
     location: 'Merida',
     register: new Date('2023-01-07'),
@@ -58,7 +58,7 @@ export const warehouses: Warehouse[] = [
     status: false,
   },
   {
-    id: 8,
+    id: '8',
     name: 'Bodega 8',
     location: 'Merida',
     register: new Date('2023-01-08'),
@@ -66,7 +66,7 @@ export const warehouses: Warehouse[] = [
     status: true,
   },
   {
-    id: 9,
+    id: '9',
     name: 'Bodega 9',
     location: 'Merida',
     register: new Date('2023-01-09'),
@@ -74,7 +74,7 @@ export const warehouses: Warehouse[] = [
     status: true,
   },
   {
-    id: 10,
+    id: '10',
     name: 'Bodega 10',
     location: 'Merida',
     register: new Date('2023-01-10'),
