@@ -17,6 +17,7 @@ import {
   UserRound,
   UserRoundPlus,
   Warehouse,
+  X,
 } from 'lucide-angular';
 
 @Injectable({
@@ -41,6 +42,7 @@ export class IconService {
     circleCheck: CircleCheck,
     circleAlert: CircleAlert,
     chevronRight: ChevronRight,
+    x: X,
   } as const;
 
   // TODO: It´s important to use LucideAngularModule in the module imports where this service is going to be used
