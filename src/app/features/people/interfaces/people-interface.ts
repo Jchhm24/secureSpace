@@ -1,7 +1,10 @@
 export interface People {
-  id:number;
+  id:string;
   name:string;
   lastName:string;
   email:string;
   phone:string;
+  role: 'admin' | 'user';
+  blocked:boolean;
+  tokenFCM?:string;
 }
