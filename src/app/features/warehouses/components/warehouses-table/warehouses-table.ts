@@ -3,7 +3,6 @@ import {
   effect,
   inject,
   model,
-  OnInit,
   signal,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -16,7 +15,6 @@ import { Warehouse } from '@features/warehouses/interfaces/warehouse-interface';
 import { paginateTable } from '@shared/utils/helpers/paginateTable';
 import { NgClass } from '@angular/common';
 import { IconService } from '@core/services/icon-service';
-import { DateFormatPipe } from '@shared/pipes/date-format-pipe';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { QrGenerate } from '@shared/components/qr-generate/qr-generate';
 
