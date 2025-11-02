@@ -10,15 +10,13 @@
   <table class="w-full table-fixed">
     <thead class="bg-text/10 border-b border-primary">
       <tr>
-        <th class="py-5 px-8 text-left w-[80px]">Id</th>
-        <th class="py-5 px-8 text-left">Nombre de la persona</th>
+        <th class="py-5 px-8 text-left w-full">Nombre de la persona</th>
         <th class="py-5 px-8 text-right w-[204px]">Acciones</th>
       </tr>
     </thead>
     <tbody>
       @for (people of peoples(); track $index) {
         <tr class="border-b border-dashed border-border">
-          <td class="py-5 px-8 font-medium text-text">{{ people.id }}</td>
           <td class="py-5 px-8">{{ people.name }} {{ people.lastName }}</td>
           <td class="py-5 px-8">
             <div class="flex flex-row justify-end gap-2.5">
