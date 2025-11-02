@@ -27,12 +27,12 @@
               <app-button-icon
                 [type_button]="'edit'"
                 [title_button]="'Editar ubicación'"
-                [function_action]="functionButton"
+                (clickAction)="functionButton()"
               ></app-button-icon>
               <app-button-icon
                 [type_button]="'delete'"
                 [title_button]="'Eliminar ubicación'"
-                [function_action]="functionButton"
+                (clickAction)="functionButton()"
               ></app-button-icon>
             </div>
           </td>

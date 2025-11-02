@@ -18,9 +18,6 @@ export class Locations implements OnInit {
       button: {
         label: 'Agregar ubicación',
         ariaLabel: 'Agregar ubicación',
-        functionAction: () => {
-          alert('Boton para agregar ubicación');
-        },
       },
     })
   }

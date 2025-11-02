@@ -9,8 +9,8 @@
       <h4>Código QR de acceso</h4>
       <app-button-icon
         [type_button]="'close'"
-        [function_action]="closedQrGenerate"
         [title_button]="'Cerrar código QR'"
+        (click)="closedQrGenerate()"
       ></app-button-icon>
     </div>
     <div class="overflow-x-hidden rounded-20px">

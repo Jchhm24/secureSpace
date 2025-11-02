@@ -17,9 +17,6 @@ export class People implements OnInit {
       button: {
         label: 'Agregar Persona',
         ariaLabel: 'Agregar Persona',
-        functionAction: () => {
-          alert('Agregar Persona button clicked');
-        }
       }
     });
   }
