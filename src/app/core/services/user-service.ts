@@ -32,6 +32,12 @@ export class UserService {
     return this.userSignal()?.role || 'user';
   }
 
+  getToken():string {
+    if (!isPlatformBrowser(this.platformId)) return '';
+
+    return localStorage.getItem('token') || '';
+  }
+
   isAuthenticated(): boolean {
     return this.userSignal() !== null;
   }
