@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { IconService } from '@core/services/icon-service';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -14,8 +14,11 @@ export class ButtonIcon {
   type_button = input.required<
     'add_user' | 'history' | 'qr_code' | 'edit' | 'delete' | 'close'
   >();
-  function_action = input.required<() => void>();
   title_button = input.required<string>();
+  clickAction = output<void>();
+  protected icons = inject(IconService).icons;
 
-  icons = inject(IconService).icons;
+  onClick(): void {
+    this.clickAction.emit();
+  }
 }
