@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-button-component',
@@ -6,13 +6,18 @@ import { Component, input } from '@angular/core';
   templateUrl: './button-component.html',
   styleUrl: './button-component.css',
   host: {
-    '[style.--width]' : 'width',
-  }
+    '[style.--width]': 'width',
+  },
 })
 export class ButtonComponent {
   label = input.required<string>();
   ariaLabel = input.required<string>();
+  clickAction = output<void>();
 
   width = 'auto';
   textAlign = 'start';
+
+  onClick(): void {
+    this.clickAction.emit();
+  }
 }
