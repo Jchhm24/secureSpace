@@ -40,6 +40,10 @@ export class MainLayout {
   showAction = this.layoutService.showAction;
   button = this.layoutService.button;
 
+  onActionClick() {
+    this.layoutService.notifyButtonClick();
+  }
+
   icons = inject(IconService).icons;
 
   private breakpointObserver = inject(BreakpointObserver);

@@ -17,7 +17,7 @@
       <app-button-component
         [label]="button.label()"
         [ariaLabel]="button.ariaLabel()"
-        (click)="button.functionAction()"
+        (clickAction)="onActionClick()"
       >
         <lucide-icon
           [img]="icons.plus"
@@ -30,3 +30,4 @@
     <router-outlet></router-outlet>
   </div>
 </div>
+.
