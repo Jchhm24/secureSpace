@@ -28,19 +28,19 @@ import { QrGenerate } from '@shared/components/qr-generate/qr-generate';
     BadgeEnable,
     ButtonIcon,
     NgClass,
-    DateFormatPipe,
     QrGenerate,
   ],
   templateUrl: './warehouses-table.html',
   styleUrl: './warehouses-table.css',
 })
-export class WarehousesTable implements OnInit {
+export class WarehousesTable {
   private readonly ITEMS_PER_PAGE = 5;
 
   icons = inject(IconService).icons;
 
   protected searchControl = new FormControl('');
   protected warehouseService = inject(WarehouseService);
+  protected warehouseState = this.warehouseService.state;
   protected warehouses = signal<Warehouse[]>([]);
   protected groupedWarehouses = signal<Warehouse[][]>([]);
   protected index_page = signal(0);
@@ -53,12 +53,10 @@ export class WarehousesTable implements OnInit {
     opened: false,
   });
 
-  ngOnInit(): void {
-    this.getPaginatedData(
-      this.ITEMS_PER_PAGE,
-      this.warehouseService.getFormattedWarehouses(),
-    );
-  }
+  private warehouseData = effect(() => {
+    const warehouses = this.warehouseService.getFormattedWarehouses();
+    this.getPaginatedData(this.ITEMS_PER_PAGE, warehouses);
+  })
 
   protected inputSize = signal('520px');
 
