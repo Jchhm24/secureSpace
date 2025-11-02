@@ -3,21 +3,21 @@
     <div>
       <app-warehouse-card
         [title]="'Total de bodegas:'"
-        [total]="5"
+        [total]="totalWarehouses().total"
         [icon]="'warehouse'"
       ></app-warehouse-card>
     </div>
     <div>
       <app-warehouse-card
         [title]="'Bodegas ocupadas:'"
-        [total]="3"
+        [total]="totalWarehouses().occupied"
         [icon]="'lock'"
       ></app-warehouse-card>
     </div>
     <div>
       <app-warehouse-card
         [title]="'Bodegas disponibles:'"
-        [total]="2"
+        [total]="totalWarehouses().available"
         [icon]="'lock-open'"
       ></app-warehouse-card>
     </div>
