@@ -23,7 +23,6 @@
   <table class="w-full">
     <thead class="bg-text/10 border-b border-primary">
       <tr>
-        <th class="p-5 text-left">Id</th>
         <th class="p-5 text-left max-[710px]:hidden">Ubicación</th>
         <th class="p-5 text-left max-[770px]:hidden">Ultimo registro</th>
         <th class="p-5 text-left">Bodega</th>
@@ -35,9 +34,8 @@
     <tbody>
       @for (warehouse of warehouses(); track warehouse.id) {
         <tr class="border-b border-dashed border-border">
-          <td class="p-5 font-medium text-text">{{ warehouse.id }}</td>
           <td class="p-5 max-[710px]:hidden">{{ warehouse.location }}</td>
-          <td class="p-5 max-[770px]:hidden">{{ warehouse.register | dateFormat }}</td>
+          <td class="p-5 max-[770px]:hidden">{{ warehouse.register }}</td>
           <td class="p-5 font-medium text-text">{{ warehouse.name }}</td>
           <td class="p-5 max-[876px]:hidden">{{ warehouse.owner }}</td>
           <td class="p-5 max-[876px]:w-26">
