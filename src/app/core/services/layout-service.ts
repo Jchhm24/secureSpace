@@ -1,4 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
+import { Subject } from 'rxjs';
 
 export interface LayoutConfig {
   title: string;
@@ -6,7 +7,6 @@ export interface LayoutConfig {
   button: {
     label: string,
     ariaLabel: string,
-    functionAction: () => void;
   };
 }
 
@@ -20,7 +20,6 @@ export class LayoutService {
     button: {
       label: 'Default Button',
       ariaLabel: 'Default Button',
-      functionAction: () => { console.log('this function was called, replace with new implementation') }
     }
   })
 
@@ -29,10 +28,16 @@ export class LayoutService {
   readonly button = {
     label: computed(() => this.config().button.label),
     ariaLabel: computed(() => this.config().button.ariaLabel),
-    functionAction: computed(() => this.config().button.functionAction)
   };
+
+  private buttonClick = new Subject<void>();
+  readonly onButtonClick$ = this.buttonClick.asObservable();
 
   setConfig(config: Partial<LayoutConfig>) {
     this.config.update(current => ({ ...current, ...config }));
+  }
+
+  notifyButtonClick() {
+    this.buttonClick.next();
   }
 }
