@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { PeopleService } from '@core/services/people-service';
 import { People } from '@features/people/interfaces/people-interface';
@@ -13,7 +13,7 @@ import { paginateTable } from '@shared/utils/helpers/paginateTable';
   templateUrl: './people-table.html',
   styleUrl: './people-table.css',
 })
-export class PeopleTable implements OnInit {
+export class PeopleTable {
   protected ITEMS_PER_PAGE = 5;
 
   protected searchControl = new FormControl('');
@@ -22,12 +22,10 @@ export class PeopleTable implements OnInit {
   protected groupedPeoples = signal<People[][]>([]);
   protected index_page = signal(0);
 
-  ngOnInit(): void {
-    this.getPaginatedData(
-      this.ITEMS_PER_PAGE,
-      this.peopleService.getFormattedPeoples(),
-    );
-  }
+  private peopleData = effect(() => {
+    const peoples = this.peopleService.getFormattedPeoples();
+    this.getPaginatedData(this.ITEMS_PER_PAGE, peoples);
+  })
 
   getPaginatedData(limit: number, data: People[] | undefined): void {
     const tableIndications = paginateTable(limit, data);
