@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { ButtonIcon } from '../button-icon/button-icon';
 
@@ -9,10 +9,11 @@ import { ButtonIcon } from '../button-icon/button-icon';
   styleUrl: './qr-generate.css',
 })
 export class QrGenerate {
-  qrData = model('');
-  opened = model<boolean>(false);
+  qrData = input('');
+  opened = input.required<boolean>();
+  closed = output<void>();
 
-  closedQrGenerate = () : void => {
-    this.opened.set(false);
+  closeModal() {
+    this.closed.emit();
   }
 }
