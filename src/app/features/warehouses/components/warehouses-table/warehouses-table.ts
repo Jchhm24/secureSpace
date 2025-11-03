@@ -1,10 +1,4 @@
-import {
-  Component,
-  effect,
-  inject,
-  model,
-  signal,
-} from '@angular/core';
+import { Component, effect, inject, model, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { LucideAngularModule } from 'lucide-angular';
@@ -17,6 +11,7 @@ import { NgClass } from '@angular/common';
 import { IconService } from '@core/services/icon-service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { QrGenerate } from '@shared/components/qr-generate/qr-generate';
+import { useToggle } from '@shared/hooks/use-toggle';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -43,18 +38,14 @@ export class WarehousesTable {
   protected groupedWarehouses = signal<Warehouse[][]>([]);
   protected index_page = signal(0);
 
-  protected qrGenerate = model<{
-    id: string;
-    opened: boolean;
-  }>({
-    id: '',
-    opened: false,
-  });
+  protected modal = useToggle();
+
+  protected idQrGenerate = signal('');
 
   private warehouseData = effect(() => {
     const warehouses = this.warehouseService.getFormattedWarehouses();
     this.getPaginatedData(this.ITEMS_PER_PAGE, warehouses);
-  })
+  });
 
   protected inputSize = signal('520px');
 
@@ -85,7 +76,8 @@ export class WarehousesTable {
     alert('solo para representar el boton');
   }
 
-  openQrGenerate = (id: string) => {
-    this.qrGenerate.set({ id: id, opened: true });
-  }
+  toggleQrGenerate = (id: string) => {
+    this.idQrGenerate.set(id);
+    this.modal.toggle();
+  };
 }

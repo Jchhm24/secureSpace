@@ -28,7 +28,9 @@
         <th class="p-5 text-left">Bodega</th>
         <th class="p-5 text-left max-[876px]:hidden">Persona asignada</th>
         <th class="p-5 text-center w-[140px] max-[876px]:w-26">Estado</th>
-        <th class="p-5 text-center w-[202px] max-[1040px]:w-[68px]">Acciones</th>
+        <th class="p-5 text-center w-[202px] max-[1040px]:w-[68px]">
+          Acciones
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -56,7 +58,7 @@
               <app-button-icon
                 [type_button]="'qr_code'"
                 [title_button]="'Ver código QR'"
-                (clickAction)="openQrGenerate(warehouse.id)"
+                (clickAction)="toggleQrGenerate(warehouse.id)"
               ></app-button-icon>
               <app-button-icon
                 [type_button]="'edit'"
@@ -103,6 +105,7 @@
 </div>
 
 <app-qr-generate
-  [(qrData)]="qrGenerate().id"
-  [(opened)]="qrGenerate().opened"
+  [qrData]="idQrGenerate()"
+  [opened]="modal.state()"
+  (closed)="toggleQrGenerate('')"
 ></app-qr-generate>
