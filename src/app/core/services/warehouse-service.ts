@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environment/environment';
-import { Warehouse } from '@features/warehouses/interfaces/warehouse-interface';
-import { catchError, of } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { UserService } from './user-service';
-import { WarehouseHomeData } from '@features/warehouses/interfaces/warehouse-home-data-interface';
+import {
+  WarehouseCreateInterface,
+  Warehouse,
+  WarehouseHomeData,
+} from '@features/warehouses/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -31,10 +34,10 @@ export class WarehouseService {
   readonly totalWarehouses = this._totalWarehouses.asReadonly();
 
   constructor() {
-    this.getWarehouses();
+    this.getWarehousesData();
   }
 
-  getWarehouses() {
+  getWarehousesData() {
     const token = this.user.getToken();
     this.http
       .get<any>(`${this.apiUrl}/bodegasHome`, {
@@ -49,7 +52,7 @@ export class WarehouseService {
         }),
       )
       .subscribe((response: WarehouseHomeData) => {
-        const {info, data } = response;
+        const { info, data } = response;
         // cards total warehouses
         this._totalWarehouses.set({
           total: info.total || 0,
@@ -76,5 +79,29 @@ export class WarehouseService {
 
   getFormattedWarehouses() {
     return Array.from(this.state().warehouses.values());
+  }
+
+  createWarehouse(warehouse: WarehouseCreateInterface): Observable<boolean> {
+    const token = this.user.getToken();
+    const warehousePayload = {
+      nombre: warehouse.name,
+      idUbicacion: warehouse.locationId,
+      idUserAsignado: warehouse.ownerId,
+    };
+
+    return this.http
+      .post(`${this.apiUrl}/bodegas`, warehousePayload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .pipe(
+        tap(() => this.getWarehousesData()), // Refresh data on success
+        map(() => true), // Return true on success
+        catchError((error) => {
+          console.error('Error creating warehouse:', error);
+          return of(false); // Return false on error
+        }),
+      );
   }
 }
