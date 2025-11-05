@@ -24,4 +24,8 @@
   </section>
 
   <app-warehouses-table></app-warehouses-table>
+  <app-create-warehouse-modal
+    [isOpen]="modal.state()"
+    (closeClick)="modal.toggle()"
+  ></app-create-warehouse-modal>
 </main>
