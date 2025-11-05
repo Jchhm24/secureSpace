@@ -1,0 +1,37 @@
+<div (appClickOutside)="opened.close()" class="relative">
+  <button
+    type="button"
+    (click)="opened.toggle()"
+    class="border border-primary bg-background/50 py-2.5 px-5 rounded-full flex flex-row items-center justify-center gap-1 text-text-secondary"
+  >
+    {{ selectedOption().label }}
+    <lucide-icon
+      [img]="icons.chevronDown"
+      name="chevron-down"
+      class="transition-transform duration-300"
+      [ngClass]="{
+        'rotate-180': opened.state(),
+      }"
+    ></lucide-icon>
+  </button>
+
+  <ul
+    class="absolute text-text-secondary py-5 bg-background/50 backdrop-blur-2xl rounded-20px text-base border border-text-secondary/25 mt-2 shadow-lg z-[1]"
+    [ngClass]="{
+      hidden: !opened.state(),
+      block: opened.state(),
+    }"
+  >
+    @for (option of optionsSelect(); track option.key) {
+      <li
+        class="cursor-pointer px-5 py-2.5 hover:bg-text-secondary/25"
+        (click)="changeOptionSelected(option)"
+      >
+        {{ option.label }}
+      </li>
+    }
+  </ul>
+  @if (showError && control().hasError("required")) {
+    <p class="!text-red-500 text-sm! mt-1 ml-5">Este campo es requerido</p>
+  }
+</div>

@@ -1,0 +1,11 @@
+button {
+  &&:hover {
+    box-shadow: none;
+    transform: none;
+    transition: none;
+  }
+}
+
+button, ul {
+  width: var(--width);
+}
