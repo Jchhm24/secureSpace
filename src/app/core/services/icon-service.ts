@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   ChartBar,
+  ChevronDown,
   ChevronRight,
   CircleAlert,
   CircleCheck,
@@ -43,6 +44,7 @@ export class IconService {
     circleAlert: CircleAlert,
     chevronRight: ChevronRight,
     x: X,
+    chevronDown: ChevronDown,
   } as const;
 
   // TODO: It´s important to use LucideAngularModule in the module imports where this service is going to be used
