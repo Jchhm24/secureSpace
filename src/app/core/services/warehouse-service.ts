@@ -117,6 +117,21 @@ export class WarehouseService {
       );
   }
 
+  deleteWarehouse(warehouseId: string): Observable<boolean> {
+    const token = this.user.getToken();
+    return this.http.delete(`${this.apiUrl}/bodegas/${warehouseId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).pipe(
+      map(() => true),
+      catchError((error) => {
+        console.error('Error deleting warehouse:', error);
+        return of(false);
+      })
+    )
+  }
+
   /**
    * Initialize WebSocket connection
    */
@@ -175,8 +190,8 @@ export class WarehouseService {
     });
 
     // Listen for warehouse deletion
-    this.socket.on('bodegaDeleted', (warehouseId: string) => {
-      this.handleWarehouseDeleted(warehouseId);
+    this.socket.on('bodegaDeleted', (warehouseId: { id: string }) => {
+      this.handleWarehouseDeleted(warehouseId.id);
     });
 
     // Listen for warehouse status changes
@@ -215,6 +230,7 @@ export class WarehouseService {
    * Handle warehouse deletion from WebSocket
    */
   private handleWarehouseDeleted(warehouseId: string): void {
+    console.log('Handling deletion for warehouse ID:', warehouseId);
     const warehouse = this.state().warehouses.get(warehouseId);
     if (warehouse) {
       this.state().warehouses.delete(warehouseId);
