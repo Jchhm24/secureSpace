@@ -53,7 +53,7 @@
             <app-label-indicator [label]="path.label"></app-label-indicator>
           }
 
-          @if(isMobile() && path.route === currentRoute()){
+          @if(isMobile() === true && path.route === currentRoute()){
             {{ path.label }}
           }
         </a>
