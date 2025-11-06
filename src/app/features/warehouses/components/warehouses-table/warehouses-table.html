@@ -50,11 +50,11 @@
                 [title_button]="'Añadir usuario'"
                 (clickAction)="functionButton()"
               ></app-button-icon>
-              <app-button-icon
+              <!-- <app-button-icon
                 [type_button]="'history'"
                 [title_button]="'Ver historial'"
                 (clickAction)="functionButton()"
-              ></app-button-icon>
+              ></app-button-icon> -->
               <app-button-icon
                 [type_button]="'qr_code'"
                 [title_button]="'Ver código QR'"
@@ -68,7 +68,7 @@
               <app-button-icon
                 [type_button]="'delete'"
                 [title_button]="'Eliminar bodega'"
-                (clickAction)="functionButton()"
+                (clickAction)="deleteWarehouse(warehouse.id)"
               ></app-button-icon>
             </div>
           </td>

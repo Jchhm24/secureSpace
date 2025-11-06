@@ -80,4 +80,14 @@ export class WarehousesTable {
     this.idQrGenerate.set(id);
     this.modal.toggle();
   };
+
+  deleteWarehouse(id: string){
+    this.warehouseService.deleteWarehouse(id).subscribe((success: boolean) => {
+      if(success){
+        alert('Warehouse deleted successfully');
+      }else {
+        alert('Failed to delete warehouse');
+      }
+    });
+  }
 }
