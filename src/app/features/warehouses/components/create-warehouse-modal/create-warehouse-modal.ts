@@ -13,6 +13,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { IconService } from '@core/services/icon-service';
 import { LocationsService } from '@core/services/locations-service';
 import { UserService } from '@core/services/user-service';
 import { WarehouseService } from '@core/services/warehouse-service';
@@ -22,6 +23,7 @@ import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { SelectInputCustom } from '@shared/components/select-input-custom/select-input-custom';
 import { selectInputCustom } from '@shared/components/select-input-custom/select-input-custom-input';
+import { LucideAngularModule } from 'lucide-angular';
 import { catchError, tap } from 'rxjs';
 
 @Component({
@@ -32,6 +34,7 @@ import { catchError, tap } from 'rxjs';
     ReactiveFormsModule,
     SelectInputCustom,
     ButtonComponent,
+    LucideAngularModule
   ],
   templateUrl: './create-warehouse-modal.html',
   styleUrl: './create-warehouse-modal.css',
@@ -44,6 +47,7 @@ export class CreateWarehouseModal {
   private locations = this.locationsService.selectLocations;
   private userService = inject(UserService);
   private warehouseService = inject(WarehouseService);
+  protected icons = inject(IconService).icons;
 
   protected locationsOptions = computed<selectInputCustom[]>(() => {
     return this.locations().map((location) => ({
