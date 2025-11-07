@@ -5,6 +5,7 @@ import { IconService } from '@core/services/icon-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { LabelIndicator } from './components/label-indicator/label-indicator';
 import { AuthService } from '@core/services/auth-service';
+import { UserService } from '@core/services/user-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,10 +25,11 @@ export class Sidebar {
   currentRoute = computed(() => this.route.snapshot.url[0].path);
 
   private authService = inject(AuthService);
+  protected user = inject(UserService).user();
 
-  icons = inject(IconService).icons;
+  protected icons = inject(IconService).icons;
 
-  paths = [
+  protected paths = [
     {
       route: 'warehouses',
       label: 'Bodegas',

@@ -10,7 +10,7 @@
       [img]="icons.chevronRight"
       name="chevron-right"
       [size]="34"
-      class="text-text ml-auto mr-0 transition-transform duration-400 cursor-pointer max-[605px]:hidden"
+      class="text-text ml-auto mr-0 transition-transform duration-400 cursor-pointer max-[730px]:hidden"
       [ngClass]="{
         'rotate-180': !isExpanded()
       }"
@@ -47,14 +47,10 @@
           [routerLink]="'/' + path.route"
         >
           <lucide-icon [img]="path.icon" [size]="24"></lucide-icon>
-          @if(isExpanded()){
+          @if(isExpanded() || (isMobile() && path.route === currentRoute())) {
             {{ path.label }}
           } @else {
             <app-label-indicator [label]="path.label"></app-label-indicator>
-          }
-
-          @if(isMobile() === true && path.route === currentRoute()){
-            {{ path.label }}
           }
         </a>
       }
@@ -66,17 +62,27 @@
       class="p-2.5 flex flex-row gap-2.5 items-center justify-start bg-[#0F1117]/30 rounded-10px"
       [routerLink]="'/profile'"
     >
-      <img
-        ngSrc="profile.jpg"
-        alt="Foto de perfil"
-        width="40"
-        height="40"
-        class="rounded-full object-cover"
-      />
+      @if(user?.photoUrl){
+        <img
+          ngSrc="profile.jpg"
+          alt="Foto de perfil"
+          width="40"
+          height="40"
+          class="rounded-full object-cover"
+        />
+      } @else {
+        <lucide-icon
+          class="text-text"
+          [img]="icons.circleUserRound"
+          [size]="24"
+          name="circle-user-round"
+        ></lucide-icon>
+      }
+
       @if(isExpanded()){
         <div class="flex flex-col w-full overflow-x-hidden">
-          <span class="text-base font-normal!">Julio Cesar</span>
-          <span class="text-xs text-text/80! underline">admin@securespace.com</span>
+          <span class="text-base font-normal!">{{ user?.name }} {{ user?.lastName }}</span>
+          <span class="text-xs text-text/80! underline">{{ user?.email }}</span>
         </div>
       }
     </a>
