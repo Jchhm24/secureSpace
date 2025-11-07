@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environment/environment';
 import { UserService } from './user-service';
-import { PeopleData, People } from '@features/people/interfaces';
+import { PeopleData, People, selectPeople } from '@features/people/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +12,13 @@ export class PeopleService {
   private apiUrl = environment.API_URL;
   private user = inject(UserService);
 
-  state = signal({
+  private state = signal({
     people: new Map<string, People>(),
+    selectPeople: new Map<string, selectPeople>(),
   });
+
+  people = signal(() => Array.from(this.state().people.values()));
+  selectPeople = computed(() => Array.from(this.state().selectPeople.values()));
 
   constructor() {
     this.getPeople();
@@ -31,6 +35,26 @@ export class PeopleService {
       })
       .subscribe((response: PeopleData) => {
         this.adaptPeopleDataResponse(response);
+      });
+  }
+
+  getSelectPeople() {
+    const token = this.user.getToken();
+    this.http
+      .get<{ data: selectPeople[] }>(`${this.apiUrl}/usuariosSelect`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .subscribe((result) => {
+        const newSelectPeople = new Map(
+          result.data.map((person) => [person.id, person]),
+        );
+
+        this.state.update((state) => ({
+          ...state,
+          selectPeople: newSelectPeople,
+        }));
       });
   }
 
@@ -54,6 +78,7 @@ export class PeopleService {
 
     this.state.set({
       people: this.state().people,
+      selectPeople: this.state().selectPeople,
     });
   }
 }
