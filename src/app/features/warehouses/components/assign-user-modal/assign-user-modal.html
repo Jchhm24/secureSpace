@@ -1,0 +1,34 @@
+<dialog
+  class="fixed inset-0 shadow-lg outline-hidden w-screen h-screen bg-black/50 backdrop-blur-[6px]"
+  [open]="isOpen()"
+>
+  <div
+    class="border border-border rounded-20px bg-secondary px-[30px] py-5 mx-auto w-full max-w-1/4 h-min translate-y-1/2 flex flex-col gap-5 items-center"
+  >
+    <div class="flex flex-row justify-between items-center w-full">
+      <h3>Asignar Usuario</h3>
+      <app-button-icon
+        [type_button]="'close'"
+        [title_button]="'Cerrar modal'"
+        (clickAction)="closeModal()"
+      ></app-button-icon>
+    </div>
+    <form
+      [formGroup]="assignUserControl"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col gap-4 w-full"
+    >
+      <app-select-input-custom
+        [options]="peopleOptions()"
+        [label]="'Seleccione a un usuario'"
+        [control]="assignUserControl.controls.personId"
+        [style.--width]="'100%'"
+      ></app-select-input-custom>
+      <app-button-component
+        [label]="'Asignar Usuario'"
+        [ariaLabel]="'Asignar usuario a la bodega'"
+        [style.--width]="'100%'"
+      ></app-button-component>
+    </form>
+  </div>
+</dialog>
