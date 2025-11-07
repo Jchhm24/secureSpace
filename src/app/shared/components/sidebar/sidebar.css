@@ -1,4 +1,4 @@
-@media screen and (width <= 604px) {
+@media screen and (width < 730px) {
   nav {
     flex-direction: row;
     height: min-content;
