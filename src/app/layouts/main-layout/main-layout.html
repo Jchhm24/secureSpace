@@ -4,11 +4,11 @@
   <div class="flex flex-col p-5 w-full container-content"
     [ngClass]="{
       'ml-60': isDesktop() && isExpanded(),
-      'ml-21': !isDesktop()
+      'ml-21': (isDesktop() && !isExpanded()) || isTablet(),
     }"
   >
     <span class="greeting-text text-base text-text-secondary">
-      Hola, {{ username() }} 👋
+      Hola, {{ user?.name }} {{ user?.lastName }} 👋
     </span>
     <div class="flex flex-row justify-between items-center">
       <h1>

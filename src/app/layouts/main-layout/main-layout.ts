@@ -17,6 +17,7 @@ import { IconService } from '@core/services/icon-service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs';
 import { NgClass } from '@angular/common';
+import { UserService } from '@core/services/user-service';
 
 @Component({
   selector: 'app-main-layout',
@@ -31,14 +32,14 @@ import { NgClass } from '@angular/common';
   styleUrl: './main-layout.css',
 })
 export class MainLayout {
+  // layout service
   private layoutService = inject(LayoutService);
+  protected title = this.layoutService.title;
+  protected showAction = this.layoutService.showAction;
+  protected button = this.layoutService.button;
 
-  username = signal('Julio Cesar Chan Manrique');
-
-  // Get the values from the LayoutService
-  title = this.layoutService.title;
-  showAction = this.layoutService.showAction;
-  button = this.layoutService.button;
+  // user service
+  protected user = inject(UserService).user();
 
   onActionClick() {
     this.layoutService.notifyButtonClick();
@@ -51,14 +52,15 @@ export class MainLayout {
   // * different screen sizes only affect the html, not the ts logic
   protected isDesktop: Signal<boolean> = toSignal(
     this.breakpointObserver
-      .observe('(width > 1200px)')
+      .observe('(min-width: 1200px)')
       .pipe(map((result) => result.matches)),
     { initialValue: true },
   );
 
   protected isTablet: Signal<boolean> = toSignal(
     this.breakpointObserver
-      .observe('(width > 730px && width <= 1200px)')
+      .observe('(min-width: 730px) and (max-width: 1199px)')
+      // width >= 730px and width <= 1199px
       .pipe(map((result) => result.matches)),
     { initialValue: false },
   );
@@ -73,14 +75,12 @@ export class MainLayout {
 
   // * breakpoints that affect the layout with ts logic
   private breakpointLogic = effect(() => {
-    if (this.isDesktop()) {
-      this.isExpanded.set(true);
-    } else {
-      this.isExpanded.set(false);
-    }
-
     if (this.isMobile()) {
       this.isExpanded.set(false);
+    } else if (this.isTablet()) {
+      this.isExpanded.set(false);
+    } else if (this.isDesktop()) {
+      this.isExpanded.set(true);
     }
   });
 }
