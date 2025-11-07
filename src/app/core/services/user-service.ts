@@ -58,7 +58,6 @@ export class UserService {
           role: rawData.rol === 'admin' ? 'admin' : 'user',
         };
         this.userSignal.set(user);
-        console.log('Loaded user from localStorage:', this.user());
       } catch (error) {
         console.error('Error parsing user data from localStorage', error);
         this.clearUser();
