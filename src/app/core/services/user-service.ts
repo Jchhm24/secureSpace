@@ -48,8 +48,17 @@ export class UserService {
     const userData = localStorage.getItem('user');
     if (userData) {
       try {
-        const user: UserInterface = JSON.parse(userData);
+        const rawData = JSON.parse(userData);
+        const user: UserInterface = {
+          id: rawData.id,
+          name: rawData.nombre,
+          lastName: rawData.apellido,
+          email: rawData.email,
+          photoUrl: rawData.fotoPerfil,
+          role: rawData.rol === 'admin' ? 'admin' : 'user',
+        };
         this.userSignal.set(user);
+        console.log('Loaded user from localStorage:', this.user());
       } catch (error) {
         console.error('Error parsing user data from localStorage', error);
         this.clearUser();
