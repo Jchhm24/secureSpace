@@ -12,6 +12,7 @@ import { IconService } from '@core/services/icon-service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { QrGenerate } from '@shared/components/qr-generate/qr-generate';
 import { useToggle } from '@shared/hooks/use-toggle';
+import { AssignUserModal } from '../assign-user-modal/assign-user-modal';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -22,6 +23,7 @@ import { useToggle } from '@shared/hooks/use-toggle';
     ButtonIcon,
     NgClass,
     QrGenerate,
+    AssignUserModal
   ],
   templateUrl: './warehouses-table.html',
   styleUrl: './warehouses-table.css',
@@ -39,6 +41,8 @@ export class WarehousesTable {
   protected index_page = signal(0);
 
   protected modal = useToggle();
+  protected assignUserModal = useToggle();
+  protected warehouseId = signal('');
 
   protected idQrGenerate = signal('');
 
@@ -80,6 +84,11 @@ export class WarehousesTable {
     this.idQrGenerate.set(id);
     this.modal.toggle();
   };
+
+  openModalAssignUser(warehouseId: string){
+    this.warehouseId.set(warehouseId);
+    this.assignUserModal.toggle();
+  }
 
   deleteWarehouse(id: string){
     this.warehouseService.deleteWarehouse(id).subscribe((success: boolean) => {

@@ -47,8 +47,8 @@
             <div class="flex flex-row gap-2.5 max-[1040px]:hidden">
               <app-button-icon
                 [type_button]="'add_user'"
-                [title_button]="'Añadir usuario'"
-                (clickAction)="functionButton()"
+                [title_button]="'Asignar usuario'"
+                (clickAction)="openModalAssignUser(warehouse.id)"
               ></app-button-icon>
               <!-- <app-button-icon
                 [type_button]="'history'"
@@ -109,3 +109,9 @@
   [opened]="modal.state()"
   (closed)="toggleQrGenerate('')"
 ></app-qr-generate>
+
+<app-assign-user-modal
+  [isOpen]="assignUserModal.state()"
+  (closeClick)="assignUserModal.close()"
+  [warehouseId]="warehouseId()"
+></app-assign-user-modal>
