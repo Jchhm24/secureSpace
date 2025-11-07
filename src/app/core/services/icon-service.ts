@@ -5,6 +5,7 @@ import {
   ChevronRight,
   CircleAlert,
   CircleCheck,
+  CircleUserRound,
   History,
   Lock,
   LockOpen,
@@ -45,6 +46,7 @@ export class IconService {
     chevronRight: ChevronRight,
     x: X,
     chevronDown: ChevronDown,
+    circleUserRound: CircleUserRound,
   } as const;
 
   // TODO: It´s important to use LucideAngularModule in the module imports where this service is going to be used
