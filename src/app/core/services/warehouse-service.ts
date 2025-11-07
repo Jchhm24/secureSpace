@@ -132,6 +132,29 @@ export class WarehouseService {
     )
   }
 
+  assignUserToWarehouse(warehouseId: string, userId: string): Observable<boolean> {
+
+    console.log('Assigning user', userId, 'to warehouse', warehouseId);
+
+    const token = this.user.getToken();
+
+    return this.http.put(
+      `${this.apiUrl}/asignar/bodega/${warehouseId}`,
+      { idUserAsignado: userId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).pipe(
+      map(() => true),
+      catchError((error) => {
+        console.error('Error assigning user to warehouse:', error);
+        return of(false);
+      })
+    );
+  }
+
   /**
    * Initialize WebSocket connection
    */
