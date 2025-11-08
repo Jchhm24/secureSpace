@@ -18,6 +18,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { UserService } from '@core/services/user-service';
+import { ToastContainer } from '@shared/components/toast-container/toast-container';
 
 @Component({
   selector: 'app-main-layout',
@@ -27,6 +28,7 @@ import { UserService } from '@core/services/user-service';
     ButtonComponent,
     LucideAngularModule,
     NgClass,
+    ToastContainer,
   ],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
