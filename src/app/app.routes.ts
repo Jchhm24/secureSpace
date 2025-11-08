@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '@core/guards/auth-guard';
 import { loginGuard } from '@core/guards/login-guard';
+import { roleGuard } from '@core/guards/role-guard';
 import { MainLayout } from '@layouts/main-layout/main-layout';
 
 export const routes: Routes = [
@@ -21,7 +22,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/warehouses/warehouses').then((m) => m.Warehouses),
       },
     ],
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
+    data: {
+      roles: ['admin']
+    }
   },
   {
     path: 'locations',
@@ -34,7 +38,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/locations/locations').then((m) => m.Locations),
       },
     ],
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
+    data: {
+      roles: ['admin']
+    }
   },
   {
     path: 'people',
@@ -47,7 +54,26 @@ export const routes: Routes = [
         loadComponent: () => import('./features/people/people').then((m) => m.People),
       },
     ],
-    canActivate: [authGuard],
+    canActivate: [authGuard, roleGuard],
+    data: {
+      roles: ['admin']
+    }
+  },
+  {
+    path: 'my-warehouses',
+    title: 'Mis Bodegas - SecureSpace',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        title: 'Lista de Mis Bodegas',
+        loadComponent: () => import('./features/my-warehouses/my-warehouses').then((m) => m.MyWarehouses),
+      }
+    ],
+    canActivate: [authGuard, roleGuard],
+    data: {
+      roles: ['user']
+    }
   },
   {
     path: '',
