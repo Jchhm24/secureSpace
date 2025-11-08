@@ -13,6 +13,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { QrGenerate } from '@shared/components/qr-generate/qr-generate';
 import { useToggle } from '@shared/hooks/use-toggle';
 import { AssignUserModal } from '../assign-user-modal/assign-user-modal';
+import { ToastService } from '@core/services/toast-service';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -45,6 +46,8 @@ export class WarehousesTable {
   protected warehouseId = signal('');
 
   protected idQrGenerate = signal('');
+
+  private toastService = inject(ToastService);
 
   private warehouseData = effect(() => {
     const warehouses = this.warehouseService.getFormattedWarehouses();
@@ -91,11 +94,11 @@ export class WarehousesTable {
   }
 
   deleteWarehouse(id: string){
-    this.warehouseService.deleteWarehouse(id).subscribe((success: boolean) => {
-      if(success){
-        alert('Warehouse deleted successfully');
+    this.warehouseService.deleteWarehouse(id).subscribe((response: {success: boolean, message: string}) => {
+      if(response.success){
+        this.toastService.show(response.message, 'success');
       }else {
-        alert('Failed to delete warehouse');
+        this.toastService.show(response.message, 'error');
       }
     });
   }

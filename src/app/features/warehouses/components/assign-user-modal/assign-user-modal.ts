@@ -9,6 +9,7 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IconService } from '@core/services/icon-service';
 import { PeopleService } from '@core/services/people-service';
+import { ToastService } from '@core/services/toast-service';
 import { WarehouseService } from '@core/services/warehouse-service';
 import { ButtonComponent } from '@shared/components/button-component/button-component';
 import { ButtonIcon } from '@shared/components/button-icon/button-icon';
@@ -38,6 +39,8 @@ export class AssignUserModal {
   private people = this.peopleService.selectPeople;
   protected icons = inject(IconService).icons;
 
+  private toastService = inject(ToastService);
+
   protected peopleOptions = computed<selectInputCustom[]>(() => {
     return this.people().map((person) => ({
       key: person.id,
@@ -65,14 +68,14 @@ export class AssignUserModal {
           this.warehouseId(),
           this.assignUserControl.value.personId!,
         )
-        .subscribe((success: boolean) => {
-          if(success){
-            alert('Usuario asignado correctamente');
+        .subscribe((response: { success: boolean; message: string }) => {
+          if (response.success) {
+            this.toastService.show(response.message, 'success');
             this.closeModal();
 
             this.assignUserControl.reset();
-          }else{
-            alert('Error al asignar el usuario');
+          } else {
+            this.toastService.show(response.message, 'error');
           }
         });
     }

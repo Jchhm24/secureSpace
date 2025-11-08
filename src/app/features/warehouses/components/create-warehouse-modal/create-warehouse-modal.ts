@@ -15,6 +15,7 @@ import {
 } from '@angular/forms';
 import { IconService } from '@core/services/icon-service';
 import { LocationsService } from '@core/services/locations-service';
+import { ToastService } from '@core/services/toast-service';
 import { UserService } from '@core/services/user-service';
 import { WarehouseService } from '@core/services/warehouse-service';
 import { WarehouseCreateInterface } from '@features/warehouses/interfaces';
@@ -24,7 +25,6 @@ import { InputComponent } from '@shared/components/input-component/input-compone
 import { SelectInputCustom } from '@shared/components/select-input-custom/select-input-custom';
 import { selectInputCustom } from '@shared/components/select-input-custom/select-input-custom-input';
 import { LucideAngularModule } from 'lucide-angular';
-import { catchError, tap } from 'rxjs';
 
 @Component({
   selector: 'app-create-warehouse-modal',
@@ -48,6 +48,8 @@ export class CreateWarehouseModal {
   private userService = inject(UserService);
   private warehouseService = inject(WarehouseService);
   protected icons = inject(IconService).icons;
+
+  private toastService = inject(ToastService);
 
   protected locationsOptions = computed<selectInputCustom[]>(() => {
     return this.locations().map((location) => ({
@@ -83,10 +85,9 @@ export class CreateWarehouseModal {
     if (this.warehouseControl.valid) {
       this.warehouseService
         .createWarehouse(this.warehouseControl.value as WarehouseCreateInterface)
-        .subscribe((success: boolean) => {
-          if (success) {
-            alert('Warehouse created successfully');
-            this.closeModal();
+        .subscribe((success: {success: boolean, message: string}) => {
+          if (success.success) {
+            this.toastService.show(success.message, 'success');
 
             // set the form back to initial state
             this.warehouseControl.reset({
@@ -94,8 +95,10 @@ export class CreateWarehouseModal {
               locationId: '',
               ownerId: this.userService.user()?.id,
             });
+
+            this.closeModal();
           } else {
-            alert('Failed to create warehouse');
+            this.toastService.show(success.message, 'error');
           }
         });
     }
