@@ -17,7 +17,24 @@ export class UserService {
   setUser(user: UserInterface | null): void {
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
-      this.userSignal.set(user);
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        try {
+          const rawData = JSON.parse(userData);
+          const user: UserInterface = {
+            id: rawData.id,
+            name: rawData.nombre,
+            lastName: rawData.apellido,
+            email: rawData.email,
+            photoUrl: rawData.fotoPerfil,
+            role: rawData.rol === 'admin' ? 'admin' : 'user',
+          };
+          this.userSignal.set(user);
+        } catch (error) {
+          console.error('Error parsing user data from localStorage', error);
+          this.clearUser();
+        }
+      }
     } else {
       this.clearUser();
     }
