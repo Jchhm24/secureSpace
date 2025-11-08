@@ -20,6 +20,8 @@ import {
   throwError,
 } from 'rxjs';
 import { UserService } from './user-service';
+import { Router } from '@angular/router';
+import { redirectBasedOnRole } from '@shared/utils/helpers/redirect-to-based-on-role';
 
 export interface AuthResponse {
   user: UserInterface;
@@ -34,6 +36,7 @@ export class AuthService {
   private auth = inject(Auth);
   private apiUrl = environment.API_URL;
   private userService = inject(UserService);
+  private router = inject(Router);
 
   // **Auth methods with Google ** //
   signInWithGoogle(): Observable<UserInterface> {
@@ -65,6 +68,7 @@ export class AuthService {
               user.role = user.role !== 'admin' ? 'user' : 'admin'; // Ensure role is either 'admin' or 'user'
 
               this.setSession({ token: token, user: user });
+              redirectBasedOnRole(this.userService, this.router);
             }),
           );
       }),
@@ -96,6 +100,7 @@ export class AuthService {
                 user.role = user.role !== 'admin' ? 'user' : 'admin'; // Ensure role is either 'admin' or 'user'
 
                 this.setSession({ token: token, user: user });
+                redirectBasedOnRole(this.userService, this.router);
               }),
             );
         }),
