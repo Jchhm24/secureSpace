@@ -94,13 +94,15 @@ export class WarehouseService {
     return Array.from(this.state().warehouses.values());
   }
 
-  createWarehouse(warehouse: WarehouseCreateInterface): Observable<boolean> {
+  createWarehouse(warehouse: WarehouseCreateInterface): Observable<{success: boolean, message: string}> {
     const token = this.user.getToken();
     const warehousePayload = {
       nombre: warehouse.name,
       idUbicacion: warehouse.locationId,
       idUserAsignado: warehouse.ownerId,
     };
+
+    let message = '';
 
     return this.http
       .post(`${this.apiUrl}/bodegas`, warehousePayload, {
@@ -109,34 +111,42 @@ export class WarehouseService {
         },
       })
       .pipe(
-        map(() => true), // Return true on success
+        tap((response: any) => {
+          message = response?.message || '';
+        }),
+        map(() => ({success: true, message: message})),
         catchError((error) => {
           console.error('Error creating warehouse:', error);
-          return of(false); // Return false on error
+          return of({success: false, message: 'Failed to create warehouse'});
         }),
       );
   }
 
-  deleteWarehouse(warehouseId: string): Observable<boolean> {
+  deleteWarehouse(warehouseId: string): Observable<{success: boolean, message: string}> {
     const token = this.user.getToken();
+    let message = '';
     return this.http.delete(`${this.apiUrl}/bodegas/${warehouseId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }).pipe(
-      map(() => true),
+      tap((response: any) => {
+        message = response?.message || '';
+      }),
+      map(() => ({success: true, message: message})),
       catchError((error) => {
         console.error('Error deleting warehouse:', error);
-        return of(false);
+        return of({success: false, message: 'Failed to delete warehouse'});
       })
     )
   }
 
-  assignUserToWarehouse(warehouseId: string, userId: string): Observable<boolean> {
+  assignUserToWarehouse(warehouseId: string, userId: string): Observable<{success: boolean, message: string}> {
 
     console.log('Assigning user', userId, 'to warehouse', warehouseId);
 
     const token = this.user.getToken();
+    let message = '';
 
     return this.http.put(
       `${this.apiUrl}/asignar/bodega/${warehouseId}`,
@@ -147,10 +157,13 @@ export class WarehouseService {
         },
       }
     ).pipe(
-      map(() => true),
+      tap((response: any) => {
+        message = response?.message || '';
+      }),
+      map(() => ({success: true, message: message})),
       catchError((error) => {
         console.error('Error assigning user to warehouse:', error);
-        return of(false);
+        return of({success: false, message: 'Failed to assign user to warehouse'});
       })
     );
   }
