@@ -7,10 +7,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth-service';
+import { ToastService } from '@core/services/toast-service';
 import { ButtonComponent } from '@shared/components/button-component/button-component';
 import { InputComponent } from '@shared/components/input-component/input-component';
+import { ToastContainer } from '@shared/components/toast-container/toast-container';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ import { InputComponent } from '@shared/components/input-component/input-compone
     ButtonComponent,
     ReactiveFormsModule,
     NgOptimizedImage,
+    ToastContainer
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -31,10 +33,10 @@ export class Login {
   protected submitted = false;
 
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
   ) {
     this.userControl = this.fb.group({
       email: ['', [Validators.required]],
@@ -50,9 +52,10 @@ export class Login {
         .signIn(this.userControl.value.email!, this.userControl.value.password!)
         .subscribe({
           next: () => {
-            this.router.navigate(['/warehouses']);
+            this.toastService.show('Inicio de sesión exitoso', 'success');
           },
           error: (error) => {
+            this.toastService.show(error.message, 'error');
             console.error('Sign in error:', error);
           },
           complete: () => {
@@ -65,9 +68,10 @@ export class Login {
   googleLogin() {
     this.authService.signInWithGoogle().subscribe({
       next: () => {
-        this.router.navigate(['/warehouses']);
+        this.toastService.show('Inicio de sesión exitoso', 'success');
       },
       error: (error) => {
+        this.toastService.show(error.message, 'error');
         console.error('Sign in error:', error);
       },
     });
