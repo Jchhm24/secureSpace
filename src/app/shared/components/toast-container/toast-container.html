@@ -2,12 +2,12 @@
   @for (toast of toasts$ | async; track $index) {
     <!-- this is the toast -->
     <div
-      class="min-w-[250pxf] max-w-[400px] p-5 rounded-md text-text flex flex-row gap-2 items-center justify-center shadow-lg select-none"
+      class="min-w-[250pxf] max-w-[400px] p-5 rounded-md text-text flex flex-row gap-2 items-start justify-center shadow-lg select-none"
       [ngClass]="{
         'bg-success': toast.type === 'success',
         'bg-red-500': toast.type === 'error',
         'bg-warning': toast.type === 'warning',
-        'bg-blue-500': toast.type === 'info'
+        'bg-blue-500': toast.type === 'info',
       }"
       (click)="closeToast(toast.id)"
       animate.enter="toast-enter"
@@ -18,8 +18,8 @@
           toast.type === 'success'
             ? icons.circleCheck
             : toast.type === 'error'
-            ? icons.circleX
-            : icons.circleAlert
+              ? icons.circleX
+              : icons.circleAlert
         "
         [size]="26"
       ></lucide-angular>
