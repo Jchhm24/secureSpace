@@ -104,7 +104,17 @@ export class AuthService {
               }),
             );
         }),
-        catchError((error) => this.handleError(error)),
+        catchError((error) => {
+          console.error('Login error:', error);
+          return throwError(
+            () =>
+              new Error(
+                error.error?.error ||
+                  error.error?.message ||
+                  'Error during login',
+              )
+          );
+        }),
       );
   }
 
@@ -144,7 +154,10 @@ export class AuthService {
   private handleError(error: any) {
     console.error('Error en la API', error);
     return throwError(
-      () => new Error(error.error?.message || 'Error en el login con Google'),
+      () =>
+      new Error(
+        error.error?.error || error.error?.message || 'An error occurred',
+      ),
     );
   }
 }
