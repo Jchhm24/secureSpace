@@ -64,13 +64,13 @@
     >
       @if(user?.photoUrl){
         <img
-          ngSrc="profile.jpg"
+          [src]="user?.photoUrl!"
           alt="Foto de perfil"
           width="40"
           height="40"
-          class="rounded-full object-cover"
+          class="rounded-full object-cover max-h-10"
         />
-      } @else {
+      } @else {.
         <lucide-icon
           class="text-text"
           [img]="icons.circleUserRound"
