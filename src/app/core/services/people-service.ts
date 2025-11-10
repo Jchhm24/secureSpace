@@ -58,10 +58,6 @@ export class PeopleService {
       });
   }
 
-  getFormattedPeoples() {
-    return Array.from(this.state().people.values());
-  }
-
   private adaptPeopleDataResponse(data: PeopleData): void {
     data.data.forEach((person) => {
       this.state().people.set(person.id, {
