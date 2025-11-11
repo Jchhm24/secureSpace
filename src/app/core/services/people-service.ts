@@ -1,8 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environment/environment';
 import { UserService } from './user-service';
 import { PeopleData, People, selectPeople } from '@features/people/interfaces';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import { CreatePeople } from '@features/people/interfaces/create-people-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -56,6 +58,61 @@ export class PeopleService {
           selectPeople: newSelectPeople,
         }));
       });
+  }
+
+  createPerson(
+    person: CreatePeople,
+  ): Observable<{ success: boolean; message: string }> {
+    const payload = {
+      nombre: person.name,
+      apellido: person.lastName,
+      email: person.email,
+      password: person.password,
+    };
+    const token = this.user.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http
+      .post(`${this.apiUrl}/auth/register`, payload, { headers })
+      .pipe(
+        switchMap((response:any) => {
+          const tokenAuth = response.token;
+          const authHeaders = new HttpHeaders().set('Authorization', `Bearer ${tokenAuth}`);
+          return this.http
+            .post(`${this.apiUrl}/auth/me`, payload, { headers: authHeaders }) // Send empty object, not payload
+            .pipe(
+              tap(() => {
+                this.getPeople();
+              }),
+              map(() => ({
+                success: true,
+                message: 'Persona creada con éxito',
+              })),
+              catchError((error) => {
+                console.error('Error in auth:', error);
+                const errorMessage =
+                  error.error?.error ||
+                  error.error?.message ||
+                  'Failed to verify user creation';
+                return of({
+                  success: false,
+                  message: errorMessage,
+                });
+              }),
+            );
+        }),
+        catchError((error) => {
+          console.error('Error in register:', error);
+          const errorMessage =
+            error.error?.error ||
+            error.error?.message ||
+            'Failed to create person';
+          return of({
+            success: false,
+            message: errorMessage,
+          });
+        }),
+      );
   }
 
   private adaptPeopleDataResponse(data: PeopleData): void {
