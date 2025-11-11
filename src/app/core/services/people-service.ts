@@ -19,7 +19,7 @@ export class PeopleService {
     selectPeople: new Map<string, selectPeople>(),
   });
 
-  people = signal(() => Array.from(this.state().people.values()));
+  people = computed(() => Array.from(this.state().people.values()));
   selectPeople = computed(() => Array.from(this.state().selectPeople.values()));
 
   constructor() {
@@ -115,9 +115,50 @@ export class PeopleService {
       );
   }
 
+  deletePerson(personId: string):Observable<{success: boolean; message: string}>{
+    const token = this.user.getToken();
+    let message = '';
+    return this.http.delete(`${this.apiUrl}/usuario/${personId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).pipe(
+      tap((response: any) => {
+        message = response?.message || '';
+      }),
+      map(() => ({success: true, message: message})),
+      catchError((error) => {
+        console.error('Error deleting person:', error);
+        return of({success: false, message: error.error?.error});
+      })
+    )
+  }
+
+  lockUnlockPerson(personId: string):Observable<{success: boolean; message: string}>{
+    const token = this.user.getToken();
+    let message = '';
+
+    return this.http.post(`${this.apiUrl}/blockUsuario/${personId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).pipe(
+      tap((response: any) => {
+        console.log('Lock/Unlock response:', response);
+        message = response?.message || '';
+      }),
+      map(() => ({success: true, message: message})),
+      catchError((error) => {
+        console.error('Error locking/unlocking person:', error);
+        return of({success: false, message: error.error?.error});
+      })
+    )
+  }
+
   private adaptPeopleDataResponse(data: PeopleData): void {
+    const newPeopleMap = new Map<string, People>();
     data.data.forEach((person) => {
-      this.state().people.set(person.id, {
+      newPeopleMap.set(person.id, {
         id: person.id,
         name: person.nombre,
         lastName: person.apellido,
@@ -129,9 +170,9 @@ export class PeopleService {
       });
     });
 
-    this.state.set({
-      people: this.state().people,
-      selectPeople: this.state().selectPeople,
-    });
+    this.state.update((state) => ({
+      ...state,
+      people: newPeopleMap,
+    }));
   }
 }
