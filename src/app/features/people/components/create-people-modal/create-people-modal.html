@@ -1,0 +1,79 @@
+<dialog
+  class="fixed inset-0 shadow-lg outline-hidden w-screen h-screen bg-black/50 backdrop-blur-[6px]"
+  [open]="isOpen()"
+>
+  <div
+    class="border border-border rounded-20px bg-secondary px-[30px] py-5 mx-auto w-full max-w-1/4 h-min translate-y-1/2 flex flex-col gap-5 items-center"
+  >
+    <div class="flex flex-row justify-between items-start w-full">
+      <h3 class="flex flex-row gap-1 items-start">
+        <lucide-icon
+          [img]="icons.personAdd"
+          name="warehouse"
+          color="#14b8a6"
+          class="my-icon"
+          [size]="32"
+        ></lucide-icon>
+        Crear nueva persona
+      </h3>
+      <app-button-icon
+        [type_button]="'close'"
+        [title_button]="'Cerrar modal'"
+        (clickAction)="closeModal()"
+      ></app-button-icon>
+    </div>
+
+    <form
+      [formGroup]="personControl"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col gap-4 w-full"
+    >
+      <app-input-component
+        [type]="'text'"
+        [name]="'first-name'"
+        [placeholder]="'Nombre'"
+        [control]="personControl.controls.name"
+        [required]="true"
+        [style.--width]="'100%'"
+      ></app-input-component>
+      <app-input-component
+        [type]="'text'"
+        [name]="'last-name'"
+        [placeholder]="'Apellido'"
+        [control]="personControl.controls.lastName"
+        [required]="true"
+        [style.--width]="'100%'"
+      ></app-input-component>
+      <app-input-component
+        [type]="'email'"
+        [name]="'email'"
+        [placeholder]="'Correo electrónico'"
+        [control]="personControl.controls.email"
+        [required]="true"
+        [style.--width]="'100%'"
+      ></app-input-component>
+      <app-input-component
+        [type]="'password'"
+        [name]="'password'"
+        [placeholder]="'Escriba una contraseña'"
+        [control]="personControl.controls.password"
+        [required]="true"
+        [style.--width]="'100%'"
+      ></app-input-component>
+      <app-input-component
+        [type]="'password'"
+        [name]="'confirm-password'"
+        [placeholder]="'Confirme la contraseña'"
+        [control]="personControl.controls.confirmPassword"
+        [required]="true"
+        [style.--width]="'100%'"
+      ></app-input-component>
+
+      <app-button-component
+        [label]="'Crear nueva persona'"
+        [ariaLabel]="'Crear nueva persona'"
+        [style.--width]="'100%'"
+      ></app-button-component>
+    </form>
+  </div>
+</dialog>
