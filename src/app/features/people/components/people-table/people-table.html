@@ -21,14 +21,14 @@
           <td class="py-5 px-8">
             <div class="flex flex-row justify-end gap-2.5">
               <app-button-icon
-                [type_button]="'edit'"
-                [title_button]="'Editar persona'"
-                (clickAction)="functionButton()"
+                [type_button]="people.blocked ? 'unlock' : 'lock'"
+                [title_button]="'Bloquear/desbloquear persona'"
+                (clickAction)="lockUnlockPerson(people.id)"
               ></app-button-icon>
               <app-button-icon
                 [type_button]="'delete'"
                 [title_button]="'Eliminar persona'"
-                (clickAction)="functionButton()"
+                (clickAction)="deletePerson(people.id)"
               ></app-button-icon>
             </div>
           </td>

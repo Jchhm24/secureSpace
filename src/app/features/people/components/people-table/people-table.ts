@@ -1,7 +1,15 @@
 import { NgClass } from '@angular/common';
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { PeopleService } from '@core/services/people-service';
+import { ToastService } from '@core/services/toast-service';
 import { People } from '@features/people/interfaces/people-interface';
 import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { InputComponent } from '@shared/components/input-component/input-component';
@@ -18,14 +26,15 @@ export class PeopleTable {
 
   protected searchControl = new FormControl('');
   private peopleService = inject(PeopleService);
+  private toast = inject(ToastService);
   protected peoples = signal<People[]>([]);
   protected groupedPeoples = signal<People[][]>([]);
   protected index_page = signal(0);
 
   private peopleData = effect(() => {
     const peoples = this.peopleService.people();
-    this.getPaginatedData(this.ITEMS_PER_PAGE, peoples());
-  })
+    this.getPaginatedData(this.ITEMS_PER_PAGE, peoples);
+  });
 
   getPaginatedData(limit: number, data: People[] | undefined): void {
     const tableIndications = paginateTable(limit, data);
@@ -36,6 +45,32 @@ export class PeopleTable {
   changePage(page: number): void {
     this.index_page.set(page);
     this.peoples.set(this.groupedPeoples()[page] || []);
+  }
+
+  deletePerson(personId: string): void {
+    this.peopleService
+      .deletePerson(personId)
+      .subscribe((response: { success: boolean; message: string }) => {
+        if (response.success) {
+          this.peopleService.getPeople();
+          this.toast.show(response.message, 'success');
+        } else {
+          this.toast.show(response.message, 'error');
+        }
+      });
+  }
+
+  lockUnlockPerson(personId: string): void {
+    this.peopleService
+      .lockUnlockPerson(personId)
+      .subscribe((response: { success: boolean; message: string }) => {
+        if (response.success) {
+          this.peopleService.getPeople();
+          this.toast.show(response.message, 'success');
+        } else {
+          this.toast.show(response.message, 'error');
+        }
+      });
   }
 
   functionButton(): void {
