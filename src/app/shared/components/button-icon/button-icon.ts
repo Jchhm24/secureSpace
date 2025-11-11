@@ -7,12 +7,18 @@ import { LucideAngularModule } from 'lucide-angular';
   selector: 'app-button-icon',
   imports: [LucideAngularModule, NgClass],
   templateUrl: './button-icon.html',
-  styleUrl: './button-icon.css'
+  styleUrl: './button-icon.css',
 })
 export class ButtonIcon {
-
   type_button = input.required<
-    'add_user' | 'history' | 'qr_code' | 'edit' | 'delete' | 'close'
+    | 'add_user'
+    | 'history'
+    | 'qr_code'
+    | 'edit'
+    | 'delete'
+    | 'close'
+    | 'lock'
+    | 'unlock'
   >();
   title_button = input.required<string>();
   clickAction = output<void>();
