@@ -1,1 +1,6 @@
 <app-people-table></app-people-table>
+
+<app-create-people-modal
+  [isOpen]="modal.state()"
+  (closeClick)="modal.close()"
+></app-create-people-modal>
