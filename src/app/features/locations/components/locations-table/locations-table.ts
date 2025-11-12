@@ -6,9 +6,11 @@ import { LocationsService } from '@core/services/locations-service';
 import { Location } from '@features/locations/interfaces/locations-interface';
 import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { InputComponent } from '@shared/components/input-component/input-component';
+import { useToggle } from '@shared/hooks/use-toggle';
 import { DateFormatPipe } from '@shared/pipes/date-format-pipe';
 import { paginateTable } from '@shared/utils/helpers/paginateTable';
 import { LucideAngularModule } from 'lucide-angular';
+import { UpdateLocationModal } from '../update-location-modal/update-location-modal';
 
 @Component({
   selector: 'app-locations-table',
@@ -18,6 +20,7 @@ import { LucideAngularModule } from 'lucide-angular';
     ButtonIcon,
     DateFormatPipe,
     NgClass,
+    UpdateLocationModal,
   ],
   templateUrl: './locations-table.html',
   styleUrl: './locations-table.css',
@@ -30,6 +33,8 @@ export class LocationsTable {
   protected locations = signal<Location[]>([]);
   protected groupedLocations = signal<Location[][]>([]);
   protected index_page = signal(0);
+  protected location = signal<Location>({} as Location);
+  protected modal = useToggle();
 
   protected icons = inject(IconService).icons;
 
@@ -47,6 +52,11 @@ export class LocationsTable {
   changePage(page: number): void {
     this.index_page.set(page);
     this.locations.set(this.groupedLocations()[page] || []);
+  }
+
+  openUpdateLocationModal(location: Location): void {
+    this.location.set(location);
+    this.modal.open();
   }
 
   functionButton() {

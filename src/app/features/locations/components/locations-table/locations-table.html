@@ -27,7 +27,7 @@
               <app-button-icon
                 [type_button]="'edit'"
                 [title_button]="'Editar ubicación'"
-                (clickAction)="functionButton()"
+                (clickAction)="openUpdateLocationModal(location)"
               ></app-button-icon>
               <app-button-icon
                 [type_button]="'delete'"
@@ -67,3 +67,9 @@
     </tfoot>
   </table>
 </div>
+
+<app-update-location-modal
+  [isOpen]="modal.state()"
+  (closeClick)="modal.close()"
+  [location]="location()"
+></app-update-location-modal>
