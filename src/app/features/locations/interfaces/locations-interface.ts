@@ -1,5 +1,6 @@
 export interface Location {
-  id: number;
+  id: string;
   location: string;
   registryDate: Date;
+  active?: boolean;
 }
