@@ -166,6 +166,31 @@ export class LocationsService {
       );
   }
 
+  deleteLocation(
+    id: string,
+  ): Observable<{ success: boolean; message: string }> {
+    const token = this.user.getToken();
+    let message = '';
+
+    return this.http
+      .delete(`${this.apiUrl}/locations/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .pipe(
+        tap((response: any) => {
+          message = response?.message || '';
+        }),
+        map(() => ({ success: true, message: message })),
+        catchError((error) => {
+          console.error('Error deleting location:', error);
+          return of({ success: false, message: 'Failed to delete location' });
+        }),
+      );
+  }
+
   private setupSocketListeners(): void {
     if (!this.socket) return;
 
@@ -213,6 +238,21 @@ export class LocationsService {
           locations: updatedLocations,
         };
       });
+    });
+
+    this.socket.on('ubicacionDeleted', (data: any) => {
+      const locationId = typeof data === 'string' ? data : data?.id;
+
+      if (locationId) {
+        this.state.update((state) => {
+          const updatedLocations = new Map(state.locations);
+          updatedLocations.delete(locationId);
+          return {
+            ...state,
+            locations: updatedLocations,
+          };
+        });
+      }
     });
   }
 
