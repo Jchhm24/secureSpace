@@ -17,7 +17,7 @@ export class LocationsService {
   private wsUrl = environment.WS_URL;
 
   private state = signal({
-    locations: new Map<number, Location>(),
+    locations: new Map<string, Location>(),
     selectLocations: new Map<string, selectLocations>(),
   });
 
@@ -41,13 +41,14 @@ export class LocationsService {
         },
       })
       .subscribe((result: any) => {
-        const newLocations = new Map<number, Location>(
+        const newLocations = new Map<string, Location>(
           result.data.map((location: any) => [
             location.id,
             {
               id: location.id,
               location: location.nombre,
               registryDate: new Date(location.fechaCreacion),
+              active: location.activa || false,
             },
           ]),
         );
@@ -134,16 +135,47 @@ export class LocationsService {
     this.setupSocketListeners();
   }
 
-  private setupSocketListeners(): void{
-    if(!this.socket) return;
+  updateLocation(
+    name: string,
+    active: boolean,
+    id: string,
+  ): Observable<{ success: boolean; message: string }> {
+    const token = this.user.getToken();
+    let message = '';
+
+    return this.http
+      .put(
+        `${this.apiUrl}/locations/${id}`,
+        { nombre: name, activo: active },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .pipe(
+        tap((response: any) => {
+          message = response?.message || '';
+        }),
+        map(() => ({ success: true, message: message })),
+        catchError((error) => {
+          console.error('Error updating location:', error);
+          return of({ success: false, message: 'Failed to update location' });
+        }),
+      );
+  }
+
+  private setupSocketListeners(): void {
+    if (!this.socket) return;
 
     this.socket.on('connect', () => {
       console.log('Connected to Locations WebSocket');
-    })
+    });
 
     this.socket.on('connect_error', (error) => {
       console.error('WebSocket connection error:', error);
-    })
+    });
 
     // listen creation of location
     this.socket.on('ubicacionCreated', (data: any) => {
@@ -151,11 +183,31 @@ export class LocationsService {
         id: data.id,
         location: data.nombre,
         registryDate: new Date(data.fechaCreacion),
+        active: data.activa || false,
       };
 
       this.state.update((state) => {
         const updatedLocations = new Map(state.locations);
         updatedLocations.set(newLocation.id, newLocation);
+        return {
+          ...state,
+          locations: updatedLocations,
+        };
+      });
+    });
+
+    // listen update of location
+    this.socket.on('ubicacionUpdated', (data: any) => {
+      const updatedLocation: Location = {
+        id: data.id,
+        location: data.nombre,
+        registryDate: new Date(data.fechaCreacion),
+        active: data.activa || false,
+      };
+
+      this.state.update((state) => {
+        const updatedLocations = new Map(state.locations);
+        updatedLocations.set(updatedLocation.id, updatedLocation);
         return {
           ...state,
           locations: updatedLocations,
