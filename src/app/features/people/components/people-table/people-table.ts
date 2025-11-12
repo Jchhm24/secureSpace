@@ -1,12 +1,5 @@
 import { NgClass } from '@angular/common';
-import {
-  Component,
-  computed,
-  effect,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { PeopleService } from '@core/services/people-service';
 import { ToastService } from '@core/services/toast-service';
@@ -71,9 +64,5 @@ export class PeopleTable {
           this.toast.show(response.message, 'error');
         }
       });
-  }
-
-  functionButton(): void {
-    alert('Function button works!');
   }
 }
