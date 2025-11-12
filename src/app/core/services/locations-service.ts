@@ -3,6 +3,8 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environment/environment';
 import { UserService } from './user-service';
 import { selectLocations, Location } from '@features/locations/interfaces';
+import { catchError, map, Observable, of, tap } from 'rxjs';
+import { io, Socket } from 'socket.io-client';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +13,9 @@ export class LocationsService {
   private http = inject(HttpClient);
   private apiUrl = environment.API_URL;
   private user = inject(UserService);
- 
+  private socket: Socket | null = null;
+  private wsUrl = environment.WS_URL;
+
   private state = signal({
     locations: new Map<number, Location>(),
     selectLocations: new Map<string, selectLocations>(),
@@ -52,11 +56,9 @@ export class LocationsService {
           ...state,
           locations: newLocations,
         }));
-      });
-  }
 
-  getFormattedLocations() {
-    return Array.from(this.state().locations.values());
+        this.initializeWebSocket();
+      });
   }
 
   getSelectLocations() {
@@ -78,5 +80,99 @@ export class LocationsService {
           selectLocations: newSelectLocations,
         }));
       });
+  }
+
+  createLocation(
+    name: string,
+  ): Observable<{ success: boolean; message: string }> {
+    const token = this.user.getToken();
+    let message = '';
+
+    return this.http
+      .post(
+        `${this.apiUrl}/locations`,
+        { nombre: name },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .pipe(
+        tap((response: any) => {
+          message = response?.message || '';
+        }),
+        map(() => ({ success: true, message: message })),
+        catchError((error) => {
+          console.error('Error creating location:', error);
+          return of({ success: false, message: 'Failed to create location' });
+        }),
+      );
+  }
+
+  private initializeWebSocket(): void {
+    const token = this.user.getToken();
+
+    if (!token) {
+      console.error('No token available for WebSocket connection');
+      return;
+    }
+
+    this.disconnectWebSocket();
+
+    this.socket = io(this.wsUrl, {
+      auth: {
+        token: token,
+      },
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionAttempts: 5,
+    });
+
+    this.setupSocketListeners();
+  }
+
+  private setupSocketListeners(): void{
+    if(!this.socket) return;
+
+    this.socket.on('connect', () => {
+      console.log('Connected to Locations WebSocket');
+    })
+
+    this.socket.on('connect_error', (error) => {
+      console.error('WebSocket connection error:', error);
+    })
+
+    // listen creation of location
+    this.socket.on('ubicacionCreated', (data: any) => {
+      const newLocation: Location = {
+        id: data.id,
+        location: data.nombre,
+        registryDate: new Date(data.fechaCreacion),
+      };
+
+      this.state.update((state) => {
+        const updatedLocations = new Map(state.locations);
+        updatedLocations.set(newLocation.id, newLocation);
+        return {
+          ...state,
+          locations: updatedLocations,
+        };
+      });
+    });
+  }
+
+  disconnectWebSocket(): void {
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
+  }
+
+  reconnectWebSocket(): void {
+    this.disconnectWebSocket();
+    this.initializeWebSocket();
   }
 }
