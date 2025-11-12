@@ -1,1 +1,5 @@
 <app-locations-table></app-locations-table>
+<app-create-location-modal
+  [isOpen]="modal.state()"
+  (closeClick)="modal.close()"
+></app-create-location-modal>
