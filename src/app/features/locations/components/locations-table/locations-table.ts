@@ -11,6 +11,7 @@ import { DateFormatPipe } from '@shared/pipes/date-format-pipe';
 import { paginateTable } from '@shared/utils/helpers/paginateTable';
 import { LucideAngularModule } from 'lucide-angular';
 import { UpdateLocationModal } from '../update-location-modal/update-location-modal';
+import { ToastService } from '@core/services/toast-service';
 
 @Component({
   selector: 'app-locations-table',
@@ -35,6 +36,7 @@ export class LocationsTable {
   protected index_page = signal(0);
   protected location = signal<Location>({} as Location);
   protected modal = useToggle();
+  private toastService =inject(ToastService);
 
   protected icons = inject(IconService).icons;
 
@@ -59,7 +61,13 @@ export class LocationsTable {
     this.modal.open();
   }
 
-  functionButton() {
-    alert('solo para representar el boton');
+  deleteLocation(id: string): void {
+    this.locationsService.deleteLocation(id).subscribe((response: { success: boolean; message: string }) => {
+      if(response.success) {
+        this.toastService.show(response.message, 'success');
+      } else {
+        this.toastService.show(response.message, 'error');
+      }
+    })
   }
 }
