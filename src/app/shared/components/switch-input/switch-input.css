@@ -1,0 +1,7 @@
+label, span{
+  color: var(--color-text-secondary);
+}
+
+span {
+  font-weight: 400;
+}
