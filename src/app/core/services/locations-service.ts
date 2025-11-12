@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environment/environment';
-import { Locations } from '@features/locations/const/locations-data';
-import { of } from 'rxjs';
 import { UserService } from './user-service';
 import { selectLocations, Location } from '@features/locations/interfaces';
 
@@ -13,9 +11,8 @@ export class LocationsService {
   private http = inject(HttpClient);
   private apiUrl = environment.API_URL;
   private user = inject(UserService);
-
-  // TODO: Become this state to private when i work on the locations service more
-  state = signal({
+ 
+  private state = signal({
     locations: new Map<number, Location>(),
     selectLocations: new Map<string, selectLocations>(),
   });
@@ -31,18 +28,31 @@ export class LocationsService {
   }
 
   getLocations() {
-    const mockLocations: Location[] = Locations;
+    const token = this.user.getToken();
+    this.http
+      .get<{ data: Location[] }>(`${this.apiUrl}/locations`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      .subscribe((result: any) => {
+        const newLocations = new Map<number, Location>(
+          result.data.map((location: any) => [
+            location.id,
+            {
+              id: location.id,
+              location: location.nombre,
+              registryDate: new Date(location.fechaCreacion),
+            },
+          ]),
+        );
 
-    of(mockLocations).subscribe((result) => {
-      const newLocations = new Map(
-        result.map((location) => [location.id, location]),
-      );
-
-      this.state.update((state) => ({
-        ...state,
-        locations: newLocations,
-      }));
-    });
+        this.state.update((state) => ({
+          ...state,
+          locations: newLocations,
+        }));
+      });
   }
 
   getFormattedLocations() {

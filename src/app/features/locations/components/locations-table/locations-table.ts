@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IconService } from '@core/services/icon-service';
 import { LocationsService } from '@core/services/locations-service';
@@ -12,11 +12,17 @@ import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-locations-table',
-  imports: [LucideAngularModule, InputComponent, ButtonIcon, DateFormatPipe, NgClass],
+  imports: [
+    LucideAngularModule,
+    InputComponent,
+    ButtonIcon,
+    DateFormatPipe,
+    NgClass,
+  ],
   templateUrl: './locations-table.html',
   styleUrl: './locations-table.css',
 })
-export class LocationsTable implements OnInit {
+export class LocationsTable {
   private readonly ITEMS_PER_PAGE = 5;
 
   protected searchControl = new FormControl('');
@@ -27,12 +33,10 @@ export class LocationsTable implements OnInit {
 
   protected icons = inject(IconService).icons;
 
-  ngOnInit(): void {
-    this.getPaginatedDate(
-      this.ITEMS_PER_PAGE,
-      this.locationsService.getFormattedLocations(),
-    );
-  }
+  private locationsData = effect(() => {
+    const locations = this.locationsService.locations();
+    this.getPaginatedDate(this.ITEMS_PER_PAGE, locations);
+  });
 
   getPaginatedDate(limit: number, data: Location[] | undefined): void {
     const tableIndications = paginateTable(limit, data);

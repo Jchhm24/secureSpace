@@ -10,16 +10,16 @@
   <table class="w-full table-fixed">
     <thead class="bg-text/10 border-b border-primary">
       <tr>
-        <th class="py-5 px-8 text-left w-[80px]">Id</th>
+        <!-- <th class="py-5 px-8 text-left w-[80px]">Id</th> -->
         <th class="py-5 px-8 text-left w-[200px]">Ubicación</th>
         <th class="py-5 px-8 text-left w-[200px]">Fecha registrado</th>
-        <th class="py-5 px-8 text-right">Acciones</th>
+        <th class="py-5 px-8 text-right w-full">Acciones</th>
       </tr>
     </thead>
     <tbody>
       @for (location of locations(); track location.id) {
         <tr class="border-b border-dashed border-border">
-          <td class="py-5 px-8 font-medium text-text">{{ location.id }}</td>
+          <!-- <td class="py-5 px-8 font-medium text-text">{{ location.id }}</td> -->
           <td class="py-5 px-8">{{ location.location }}</td>
           <td class="py-5 px-8">{{ location.registryDate | dateFormat }}</td>
           <td class="py-5 px-8">
