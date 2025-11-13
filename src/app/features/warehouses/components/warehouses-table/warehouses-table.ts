@@ -14,6 +14,9 @@ import { QrGenerate } from '@shared/components/qr-generate/qr-generate';
 import { useToggle } from '@shared/hooks/use-toggle';
 import { AssignUserModal } from '../assign-user-modal/assign-user-modal';
 import { ToastService } from '@core/services/toast-service';
+import { ConfirmActionModalService } from '@core/services/confirm-action-modal-service';
+import e from 'express';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -48,6 +51,8 @@ export class WarehousesTable {
   protected idQrGenerate = signal('');
 
   private toastService = inject(ToastService);
+  private actionModalService = inject(ConfirmActionModalService);
+  private clickSubModal?: Subscription;
 
   private warehouseData = effect(() => {
     const warehouses = this.warehouseService.getFormattedWarehouses();
@@ -101,5 +106,24 @@ export class WarehousesTable {
         this.toastService.show(response.message, 'error');
       }
     });
+  }
+
+  openConfirmActionModal(warehouseId: string){
+    const warehouse = this.warehouses().find(w => w.id === warehouseId);
+    if(!warehouse) return;
+    this.actionModalService.setConfig({
+      title: '¿Estás seguro de que deseas eliminar este almacén?',
+      message: `Esta acción eliminará el almacén "${warehouse.name}" de forma permanente.`,
+      iconType: 'warning',
+      buttonText: 'Eliminar',
+    });
+
+    this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(() => {
+      this.deleteWarehouse(warehouseId);
+      this.clickSubModal?.unsubscribe();
+      this.actionModalService.closeModal();
+    })
+
+    this.actionModalService.openModal();
   }
 }
