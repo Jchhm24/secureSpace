@@ -142,9 +142,6 @@ export class WarehouseService {
   }
 
   assignUserToWarehouse(warehouseId: string, userId: string): Observable<{success: boolean, message: string}> {
-
-    console.log('Assigning user', userId, 'to warehouse', warehouseId);
-
     const token = this.user.getToken();
     let message = '';
 
@@ -266,7 +263,6 @@ export class WarehouseService {
    * Handle warehouse deletion from WebSocket
    */
   private handleWarehouseDeleted(warehouseId: string): void {
-    console.log('Handling deletion for warehouse ID:', warehouseId);
     const warehouse = this.state().warehouses.get(warehouseId);
     if (warehouse) {
       this.state().warehouses.delete(warehouseId);
