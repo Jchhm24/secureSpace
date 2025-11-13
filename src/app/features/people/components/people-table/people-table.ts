@@ -1,12 +1,14 @@
 import { NgClass } from '@angular/common';
 import { Component, effect, inject, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ConfirmActionModalService } from '@core/services/confirm-action-modal-service';
 import { PeopleService } from '@core/services/people-service';
 import { ToastService } from '@core/services/toast-service';
 import { People } from '@features/people/interfaces/people-interface';
 import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { paginateTable } from '@shared/utils/helpers/paginateTable';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-people-table',
@@ -23,6 +25,8 @@ export class PeopleTable {
   protected peoples = signal<People[]>([]);
   protected groupedPeoples = signal<People[][]>([]);
   protected index_page = signal(0);
+  private actionModalService = inject(ConfirmActionModalService);
+  private clickSubModal?: Subscription;
 
   private peopleData = effect(() => {
     const peoples = this.peopleService.people();
@@ -60,9 +64,28 @@ export class PeopleTable {
         if (response.success) {
           this.peopleService.getPeople();
           this.toast.show(response.message, 'success');
+          this.actionModalService.closeModal();
         } else {
           this.toast.show(response.message, 'error');
         }
       });
+  }
+
+  openDeletePersonModal(personId: string): void {
+    const person = this.peoples().find((p) => p.id === personId);
+    if (!person) return;
+
+    this.actionModalService.setConfig({
+      title: '¿Estás seguro de eliminar a esta persona?',
+      message: `Esta acción no se puede deshacer. Persona: ${person.name} ${person.lastName}`,
+      buttonText: 'Eliminar',
+    })
+
+    this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(() => {
+      this.deletePerson(personId);
+      this.clickSubModal?.unsubscribe();
+    })
+
+    this.actionModalService.openModal();
   }
 }

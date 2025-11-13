@@ -102,6 +102,7 @@ export class WarehousesTable {
     this.warehouseService.deleteWarehouse(id).subscribe((response: {success: boolean, message: string}) => {
       if(response.success){
         this.toastService.show(response.message, 'success');
+        this.actionModalService.closeModal();
       }else {
         this.toastService.show(response.message, 'error');
       }
@@ -121,7 +122,6 @@ export class WarehousesTable {
     this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(() => {
       this.deleteWarehouse(warehouseId);
       this.clickSubModal?.unsubscribe();
-      this.actionModalService.closeModal();
     })
 
     this.actionModalService.openModal();

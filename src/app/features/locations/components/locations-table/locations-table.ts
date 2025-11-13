@@ -12,6 +12,8 @@ import { paginateTable } from '@shared/utils/helpers/paginateTable';
 import { LucideAngularModule } from 'lucide-angular';
 import { UpdateLocationModal } from '../update-location-modal/update-location-modal';
 import { ToastService } from '@core/services/toast-service';
+import { ConfirmActionModalService } from '@core/services/confirm-action-modal-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-locations-table',
@@ -37,6 +39,8 @@ export class LocationsTable {
   protected location = signal<Location>({} as Location);
   protected modal = useToggle();
   private toastService =inject(ToastService);
+  private modalActionService = inject(ConfirmActionModalService);
+  private clickSubModal?: Subscription;
 
   protected icons = inject(IconService).icons;
 
@@ -65,9 +69,29 @@ export class LocationsTable {
     this.locationsService.deleteLocation(id).subscribe((response: { success: boolean; message: string }) => {
       if(response.success) {
         this.toastService.show(response.message, 'success');
+        this.modalActionService.closeModal();
       } else {
         this.toastService.show(response.message, 'error');
       }
     })
+  }
+
+  openActionModal(locationId: string): void {
+    const location = this.locations().find(loc => loc.id === locationId);
+    if (!location) return;
+
+    this.modalActionService.setConfig({
+      title: '¿Estás seguro de que deseas eliminar esta ubicación?',
+      message: `Esta acción eliminará la ubicación "${location.location}" de forma permanente.`,
+      iconType: 'warning',
+      buttonText: 'Eliminar',
+    });
+
+    this.clickSubModal = this.modalActionService.onButtonClick$.subscribe(() => {
+      this.deleteLocation(locationId);
+      this.clickSubModal?.unsubscribe();
+    });
+
+    this.modalActionService.openModal();
   }
 }
