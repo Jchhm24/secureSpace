@@ -5,7 +5,6 @@ import {
   inject,
   model,
   Signal,
-  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterOutlet } from '@angular/router';
@@ -19,6 +18,7 @@ import { map } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { UserService } from '@core/services/user-service';
 import { ToastContainer } from '@shared/components/toast-container/toast-container';
+import { ConfirmActionModal } from '@shared/components/confirm-action-modal/confirm-action-modal';
 
 @Component({
   selector: 'app-main-layout',
@@ -29,6 +29,7 @@ import { ToastContainer } from '@shared/components/toast-container/toast-contain
     LucideAngularModule,
     NgClass,
     ToastContainer,
+    ConfirmActionModal,
   ],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
