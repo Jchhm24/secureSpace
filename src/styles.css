@@ -8,8 +8,8 @@
   --color-background: #0f1117;
   --color-text: #fafafa;
   --color-text-secondary: #9ca0b4;
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
 
   /* font size */
   --text-base: clamp(1rem, calc(0.9rem + 0.2vw), 1.125rem);
@@ -58,7 +58,11 @@ h4 {
   font-weight: 500; /* Medium */
 }
 
-p, input, th, td, a {
+p,
+input,
+th,
+td,
+a {
   font-size: var(--text-base);
   color: var(--color-text);
 }
@@ -67,7 +71,9 @@ input::placeholder {
   color: var(--color-text-secondary);
 }
 
-button, span, th {
+button,
+span,
+th {
   font-weight: 500; /* Medium */
   font-size: var(--text-base);
 }
@@ -89,9 +95,19 @@ td {
 
 .custom-dashed-border {
   border-bottom: none;
-  background-image: linear-gradient(to right, #2A2E3D 0%, #2A2E3D 33%, transparent 33%, transparent 100%);
+  background-image: linear-gradient(
+    to right,
+    #2a2e3d 0%,
+    #2a2e3d 33%,
+    transparent 33%,
+    transparent 100%
+  );
   background-size: 24px 1px;
   background-repeat: repeat-x;
   background-position: bottom;
   padding-bottom: calc(1.25rem - 1px);
+}
+
+.bg-modal {
+  @apply fixed inset-0 shadow-lg outline-hidden w-screen h-screen bg-black/50 backdrop-blur-[6px];
 }
