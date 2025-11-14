@@ -6,4 +6,5 @@ export interface Warehouse {
   owner: string | null;
   status: boolean
   idOwner?: string | null;
+  locationId?: string | null;
 }
