@@ -14,8 +14,8 @@
     <span class="greeting-text text-base text-text-secondary">
       Hola, {{ user?.name }} {{ user?.lastName }} 👋
     </span>
-    <div class="flex flex-row justify-between items-center">
-      <h1>
+    <div class="flex flex-row justify-end items-center gap-4 flex-wrap mb-5">
+      <h1 class="mr-auto ml-0">
         {{ title() }}
       </h1>
       <app-button-component
