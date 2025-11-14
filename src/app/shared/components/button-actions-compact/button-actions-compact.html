@@ -1,0 +1,21 @@
+<div class="relative max-w-min">
+  <app-button-icon
+    [type_button]="'options-points'"
+    (clickAction)="open.toggle()"
+    [title_button]="'Acciones'"
+  ></app-button-icon>
+  @if (open.state()) {
+    <div
+      class="absolute right-0 mt-2 bg-secondary border border-border rounded-lg shadow-lg z-10 min-w-[150px]"
+    >
+      @for (button of buttons(); track button.label) {
+        <button
+          (click)="onButtonClick(button.action)"
+          class="w-full px-4 py-2 text-left hover:bg-primary/10 first:rounded-t-lg last:rounded-b-lg transition-colors"
+        >
+          {{ button.label }}
+        </button>
+      }
+    </div>
+  }
+</div>
