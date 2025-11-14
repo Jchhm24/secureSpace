@@ -19,6 +19,7 @@ import {
   SquarePen,
   Trash2,
   TriangleAlert,
+  UserMinus,
   UserRound,
   UserRoundPlus,
   Warehouse,
@@ -53,6 +54,7 @@ export class IconService {
     circleX: CircleX,
     triangleAlert: TriangleAlert,
     ellipsisVertical: EllipsisVertical,
+    userMinus: UserMinus,
   } as const;
 
   // TODO: It´s important to use LucideAngularModule in the module imports where this service is going to be used
