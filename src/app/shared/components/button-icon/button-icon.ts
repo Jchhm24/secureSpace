@@ -12,6 +12,7 @@ import { LucideAngularModule } from 'lucide-angular';
 export class ButtonIcon {
   type_button = input.required<
     | 'add_user'
+    | 'remove_user'
     | 'history'
     | 'qr_code'
     | 'edit'

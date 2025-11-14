@@ -7,12 +7,16 @@
     'hover:bg-red-600/10 hover:text-red-600!':
       type_button() === 'delete' ||
       type_button() === 'close' ||
-      type_button() === 'unlock',
+      type_button() === 'unlock' ||
+      type_button() === 'remove_user',
   }"
 >
   @switch (type_button()) {
     @case ("add_user") {
       <lucide-icon [img]="icons.personAdd" name="user-round-plus"></lucide-icon>
+    }
+    @case ("remove_user") {
+      <lucide-icon [img]="icons.userMinus" name="user-round-minus"></lucide-icon>
     }
     @case ("history") {
       <lucide-icon [img]="icons.history" name="history"></lucide-icon>
