@@ -63,7 +63,7 @@
               <app-button-icon
                 [type_button]="'edit'"
                 [title_button]="'Editar bodega'"
-                (clickAction)="functionButton()"
+                (clickAction)="openUpdateModal(warehouse.id)"
               ></app-button-icon>
               <app-button-icon
                 [type_button]="'delete'"
@@ -115,3 +115,9 @@
   (closeClick)="assignUserModal.close()"
   [warehouseId]="warehouseId()"
 ></app-assign-user-modal>
+
+<app-update-warehouse-modal
+  [isOpen]="updateModal.state()"
+  (closeClick)="updateModal.close()"
+  [warehouse]="warehouse()"
+></app-update-warehouse-modal>

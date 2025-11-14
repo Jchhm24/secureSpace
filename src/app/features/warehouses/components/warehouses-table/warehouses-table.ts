@@ -1,4 +1,4 @@
-import { Component, effect, inject, model, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { LucideAngularModule } from 'lucide-angular';
@@ -15,8 +15,8 @@ import { useToggle } from '@shared/hooks/use-toggle';
 import { AssignUserModal } from '../assign-user-modal/assign-user-modal';
 import { ToastService } from '@core/services/toast-service';
 import { ConfirmActionModalService } from '@core/services/confirm-action-modal-service';
-import e from 'express';
 import { Subscription } from 'rxjs';
+import { UpdateWarehouseModal } from '../update-warehouse-modal/update-warehouse-modal';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -27,7 +27,8 @@ import { Subscription } from 'rxjs';
     ButtonIcon,
     NgClass,
     QrGenerate,
-    AssignUserModal
+    AssignUserModal,
+    UpdateWarehouseModal
   ],
   templateUrl: './warehouses-table.html',
   styleUrl: './warehouses-table.css',
@@ -46,6 +47,7 @@ export class WarehousesTable {
 
   protected modal = useToggle();
   protected assignUserModal = useToggle();
+  protected updateModal = useToggle();
   protected warehouseId = signal('');
 
   protected idQrGenerate = signal('');
@@ -59,6 +61,7 @@ export class WarehousesTable {
     this.getPaginatedData(this.ITEMS_PER_PAGE, warehouses);
   });
 
+  protected warehouse = signal<Warehouse>({} as Warehouse);
   protected inputSize = signal('520px');
 
   private breakpointObserver = inject(BreakpointObserver);
@@ -84,10 +87,6 @@ export class WarehousesTable {
     this.warehouses.set(this.groupedWarehouses()[page] || []);
   }
 
-  functionButton() {
-    alert('solo para representar el boton');
-  }
-
   toggleQrGenerate = (id: string) => {
     this.idQrGenerate.set(id);
     this.modal.toggle();
@@ -95,7 +94,14 @@ export class WarehousesTable {
 
   openModalAssignUser(warehouseId: string){
     this.warehouseId.set(warehouseId);
-    this.assignUserModal.toggle();
+    this.assignUserModal.open();
+  }
+
+  openUpdateModal(warehouseId:string): void{
+    const warehouse = this.warehouses().find(warehouse => warehouse.id === warehouseId);
+    if(!warehouse) return;
+    this.warehouse.set(warehouse);
+    this.updateModal.open();
   }
 
   deleteWarehouse(id: string){
