@@ -178,7 +178,7 @@ export class WarehouseService {
         map(() => ({ success: true, message: message })),
         catchError((error) => {
           console.error('Error deleting warehouse:', error);
-          return of({ success: false, message: 'Failed to delete warehouse' });
+          return of({ success: false, message: error.error?.error || 'Failed to delete warehouse' });
         }),
       );
   }
@@ -209,7 +209,7 @@ export class WarehouseService {
           console.error('Error assigning user to warehouse:', error);
           return of({
             success: false,
-            message: 'Failed to assign user to warehouse',
+            message: error.error?.error || 'Failed to assign user to warehouse',
           });
         }),
       );
