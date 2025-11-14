@@ -28,6 +28,7 @@ export class PeopleTable {
   protected peoples = signal<People[]>([]);
   protected groupedPeoples = signal<People[][]>([]);
   protected index_page = signal(0);
+  protected allPeoples = signal<People[]>([]);
   private actionModalService = inject(ConfirmActionModalService);
   private clickSubModal?: Subscription;
 
@@ -48,7 +49,16 @@ export class PeopleTable {
 
   private peopleData = effect(() => {
     const peoples = this.peopleService.people();
+    this.allPeoples.set(peoples || []);
     this.getPaginatedData(this.ITEMS_PER_PAGE, peoples);
+  });
+
+  private searchEffect = effect(() => {
+    this.searchControl.valueChanges.subscribe((searchTerm) => {
+      const filtered = this.filterPeople(searchTerm || '');
+      this.getPaginatedData(this.ITEMS_PER_PAGE, filtered);
+      this.index_page.set(0);
+    });
   });
 
   protected inputSize = signal('520px');
@@ -74,6 +84,20 @@ export class PeopleTable {
   changePage(page: number): void {
     this.index_page.set(page);
     this.peoples.set(this.groupedPeoples()[page] || []);
+  }
+
+  filterPeople(searchTerm: string): People[] {
+    if (!searchTerm.trim()) {
+      return this.allPeoples();
+    }
+
+    const term = searchTerm.toLowerCase();
+    return this.allPeoples().filter(
+      (person) =>
+        person.name.toLowerCase().includes(term) ||
+        person.lastName.toLowerCase().includes(term) ||
+        `${person.name} ${person.lastName}`.toLowerCase().includes(term),
+    );
   }
 
   deletePerson(personId: string): void {

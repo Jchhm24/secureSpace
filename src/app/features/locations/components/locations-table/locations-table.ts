@@ -40,6 +40,7 @@ export class LocationsTable {
   protected locations = signal<Location[]>([]);
   protected groupedLocations = signal<Location[][]>([]);
   protected index_page = signal(0);
+  protected allLocations = signal<Location[]>([]);
   protected location = signal<Location>({} as Location);
   protected modal = useToggle();
   private toastService = inject(ToastService);
@@ -70,7 +71,16 @@ export class LocationsTable {
 
   private locationsData = effect(() => {
     const locations = this.locationsService.locations();
+    this.allLocations.set(locations || []);
     this.getPaginatedDate(this.ITEMS_PER_PAGE, locations);
+  });
+
+  private searchEffect = effect(() => {
+    this.searchControl.valueChanges.subscribe((searchTerm) => {
+      const filtered = this.filterLocations(searchTerm || '');
+      this.getPaginatedDate(this.ITEMS_PER_PAGE, filtered);
+      this.index_page.set(0);
+    });
   });
 
   protected inputSize = signal('520px');
@@ -96,6 +106,17 @@ export class LocationsTable {
   changePage(page: number): void {
     this.index_page.set(page);
     this.locations.set(this.groupedLocations()[page] || []);
+  }
+
+  filterLocations(searchTerm: string): Location[] {
+    if (!searchTerm.trim()) {
+      return this.allLocations();
+    }
+
+    const term = searchTerm.toLowerCase();
+    return this.allLocations().filter((location) =>
+      location.location.toLowerCase().includes(term),
+    );
   }
 
   openUpdateLocationModal(location: Location): void {

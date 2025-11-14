@@ -47,6 +47,7 @@ export class WarehousesTable {
   protected warehouses = signal<Warehouse[]>([]);
   protected groupedWarehouses = signal<Warehouse[][]>([]);
   protected index_page = signal(0);
+  protected allWarehouses = signal<Warehouse[]>([]);
 
   protected modal = useToggle();
   protected assignUserModal = useToggle();
@@ -88,7 +89,16 @@ export class WarehousesTable {
 
   private warehouseData = effect(() => {
     const warehouses = this.warehouseService.getFormattedWarehouses();
+    this.allWarehouses.set(warehouses || []);
     this.getPaginatedData(this.ITEMS_PER_PAGE, warehouses);
+  });
+
+  private searchEffect = effect(() => {
+    this.searchControl.valueChanges.subscribe((searchTerm) => {
+      const filtered = this.filterWarehouses(searchTerm || '');
+      this.getPaginatedData(this.ITEMS_PER_PAGE, filtered);
+      this.index_page.set(0);
+    });
   });
 
   protected warehouse = signal<Warehouse>({} as Warehouse);
@@ -115,6 +125,20 @@ export class WarehousesTable {
   changePage(page: number): void {
     this.index_page.set(page);
     this.warehouses.set(this.groupedWarehouses()[page] || []);
+  }
+
+  filterWarehouses(searchTerm: string): Warehouse[] {
+    if (!searchTerm.trim()) {
+      return this.allWarehouses();
+    }
+
+    const term = searchTerm.toLowerCase();
+    return this.allWarehouses().filter(
+      (warehouse) =>
+        warehouse.name.toLowerCase().includes(term) ||
+        warehouse.location.toLowerCase().includes(term) ||
+        (warehouse.owner?.toLowerCase().includes(term) ?? false),
+    );
   }
 
   toggleQrGenerate = (id: string) => {
