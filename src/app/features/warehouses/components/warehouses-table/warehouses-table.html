@@ -71,6 +71,12 @@
                 (clickAction)="openConfirmActionModal(warehouse.id)"
               ></app-button-icon>
             </div>
+            <div class="hidden max-[1040px]:block">
+              <app-button-actions-compact
+                [buttons]="buttonsActions"
+                [itemId]="warehouse.id"
+              ></app-button-actions-compact>
+            </div>
           </td>
         </tr>
       } @empty {

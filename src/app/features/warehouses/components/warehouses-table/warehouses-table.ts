@@ -17,6 +17,8 @@ import { ToastService } from '@core/services/toast-service';
 import { ConfirmActionModalService } from '@core/services/confirm-action-modal-service';
 import { Subscription } from 'rxjs';
 import { UpdateWarehouseModal } from '../update-warehouse-modal/update-warehouse-modal';
+import { ButtonActionsCompact } from '@shared/components/button-actions-compact/button-actions-compact';
+import { ButtonActionCompact } from '@shared/interfaces/button-action-compact-interface';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -28,7 +30,8 @@ import { UpdateWarehouseModal } from '../update-warehouse-modal/update-warehouse
     NgClass,
     QrGenerate,
     AssignUserModal,
-    UpdateWarehouseModal
+    UpdateWarehouseModal,
+    ButtonActionsCompact,
   ],
   templateUrl: './warehouses-table.html',
   styleUrl: './warehouses-table.css',
@@ -55,6 +58,33 @@ export class WarehousesTable {
   private toastService = inject(ToastService);
   private actionModalService = inject(ConfirmActionModalService);
   private clickSubModal?: Subscription;
+
+  protected buttonsActions: ButtonActionCompact[] = [
+    {
+      label: 'Asignar usuario',
+      action: (warehouseId?: string) => {
+        if (warehouseId) this.openModalAssignUser(warehouseId);
+      },
+    },
+    {
+      label: 'Generar QR',
+      action: (warehouseId?: string) => {
+        if (warehouseId) this.toggleQrGenerate(warehouseId);
+      },
+    },
+    {
+      label: 'Editar',
+      action: (warehouseId?: string) => {
+        if (warehouseId) this.openUpdateModal(warehouseId);
+      },
+    },
+    {
+      label: 'Eliminar',
+      action: (warehouseId?: string) => {
+        if (warehouseId) this.openConfirmActionModal(warehouseId);
+      },
+    },
+  ];
 
   private warehouseData = effect(() => {
     const warehouses = this.warehouseService.getFormattedWarehouses();
@@ -92,32 +122,36 @@ export class WarehousesTable {
     this.modal.toggle();
   };
 
-  openModalAssignUser(warehouseId: string){
+  openModalAssignUser(warehouseId: string) {
     this.warehouseId.set(warehouseId);
     this.assignUserModal.open();
   }
 
-  openUpdateModal(warehouseId:string): void{
-    const warehouse = this.warehouses().find(warehouse => warehouse.id === warehouseId);
-    if(!warehouse) return;
+  openUpdateModal(warehouseId: string): void {
+    const warehouse = this.warehouses().find(
+      (warehouse) => warehouse.id === warehouseId,
+    );
+    if (!warehouse) return;
     this.warehouse.set(warehouse);
     this.updateModal.open();
   }
 
-  deleteWarehouse(id: string){
-    this.warehouseService.deleteWarehouse(id).subscribe((response: {success: boolean, message: string}) => {
-      if(response.success){
-        this.toastService.show(response.message, 'success');
-        this.actionModalService.closeModal();
-      }else {
-        this.toastService.show(response.message, 'error');
-      }
-    });
+  deleteWarehouse(id: string) {
+    this.warehouseService
+      .deleteWarehouse(id)
+      .subscribe((response: { success: boolean; message: string }) => {
+        if (response.success) {
+          this.toastService.show(response.message, 'success');
+          this.actionModalService.closeModal();
+        } else {
+          this.toastService.show(response.message, 'error');
+        }
+      });
   }
 
-  openConfirmActionModal(warehouseId: string){
-    const warehouse = this.warehouses().find(w => w.id === warehouseId);
-    if(!warehouse) return;
+  openConfirmActionModal(warehouseId: string) {
+    const warehouse = this.warehouses().find((w) => w.id === warehouseId);
+    if (!warehouse) return;
     this.actionModalService.setConfig({
       title: '¿Estás seguro de que deseas eliminar este almacén?',
       message: `Esta acción eliminará el almacén "${warehouse.name}" de forma permanente.`,
@@ -125,10 +159,12 @@ export class WarehousesTable {
       buttonText: 'Eliminar',
     });
 
-    this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(() => {
-      this.deleteWarehouse(warehouseId);
-      this.clickSubModal?.unsubscribe();
-    })
+    this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(
+      () => {
+        this.deleteWarehouse(warehouseId);
+        this.clickSubModal?.unsubscribe();
+      },
+    );
 
     this.actionModalService.openModal();
   }
