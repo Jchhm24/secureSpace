@@ -109,5 +109,5 @@ td {
 }
 
 .bg-modal {
-  @apply fixed inset-0 shadow-lg outline-hidden w-screen h-screen bg-black/50 backdrop-blur-[6px];
+  @apply fixed inset-0 shadow-lg outline-hidden w-screen h-screen bg-black/50 backdrop-blur-[6px] px-4;
 }
