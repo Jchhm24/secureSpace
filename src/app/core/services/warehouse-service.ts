@@ -50,6 +50,7 @@ export class WarehouseService {
       status: apiData.estado === 'Disponible',
       register: apiData.ultimoRegistro,
       idOwner: apiData.IdpersonaAsignada,
+      locationId: apiData.idubicacion,
     };
   }
 
@@ -94,7 +95,9 @@ export class WarehouseService {
     return Array.from(this.state().warehouses.values());
   }
 
-  createWarehouse(warehouse: WarehouseCreateInterface): Observable<{success: boolean, message: string}> {
+  createWarehouse(
+    warehouse: WarehouseCreateInterface,
+  ): Observable<{ success: boolean; message: string }> {
     const token = this.user.getToken();
     const warehousePayload = {
       nombre: warehouse.name,
@@ -114,55 +117,102 @@ export class WarehouseService {
         tap((response: any) => {
           message = response?.message || '';
         }),
-        map(() => ({success: true, message: message})),
+        map(() => ({ success: true, message: message })),
         catchError((error) => {
           console.error('Error creating warehouse:', error);
-          return of({success: false, message: 'Failed to create warehouse'});
+          return of({ success: false, message: 'Failed to create warehouse' });
         }),
       );
   }
 
-  deleteWarehouse(warehouseId: string): Observable<{success: boolean, message: string}> {
+  updateWarehouse(
+    id: string,
+    name: string,
+    locationId: string,
+    // active: boolean,
+  ): Observable<{ success: boolean; message: string }> {
     const token = this.user.getToken();
     let message = '';
-    return this.http.delete(`${this.apiUrl}/bodegas/${warehouseId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).pipe(
-      tap((response: any) => {
-        message = response?.message || '';
-      }),
-      map(() => ({success: true, message: message})),
-      catchError((error) => {
-        console.error('Error deleting warehouse:', error);
-        return of({success: false, message: 'Failed to delete warehouse'});
-      })
-    )
+
+    return this.http
+      .put(
+        `${this.apiUrl}/bodegas/${id}`,
+        {
+          nombre: name,
+          idUbicacion: locationId,
+          // active: active,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      .pipe(
+        tap((response: any) => {
+          message = response?.message || '';
+        }),
+        map(() => ({ success: true, message: message })),
+        catchError((error) => {
+          console.error('Error updating warehouse:', error);
+          return of({ success: false, message: 'Failed to update warehouse' });
+        }),
+      );
   }
 
-  assignUserToWarehouse(warehouseId: string, userId: string): Observable<{success: boolean, message: string}> {
+  deleteWarehouse(
+    warehouseId: string,
+  ): Observable<{ success: boolean; message: string }> {
     const token = this.user.getToken();
     let message = '';
-
-    return this.http.put(
-      `${this.apiUrl}/asignar/bodega/${warehouseId}`,
-      { idUserAsignado: userId },
-      {
+    return this.http
+      .delete(`${this.apiUrl}/bodegas/${warehouseId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    ).pipe(
-      tap((response: any) => {
-        message = response?.message || '';
-      }),
-      map(() => ({success: true, message: message})),
-      catchError((error) => {
-        console.error('Error assigning user to warehouse:', error);
-        return of({success: false, message: 'Failed to assign user to warehouse'});
       })
-    );
+      .pipe(
+        tap((response: any) => {
+          message = response?.message || '';
+        }),
+        map(() => ({ success: true, message: message })),
+        catchError((error) => {
+          console.error('Error deleting warehouse:', error);
+          return of({ success: false, message: 'Failed to delete warehouse' });
+        }),
+      );
+  }
+
+  assignUserToWarehouse(
+    warehouseId: string,
+    userId: string,
+  ): Observable<{ success: boolean; message: string }> {
+    const token = this.user.getToken();
+    let message = '';
+
+    return this.http
+      .put(
+        `${this.apiUrl}/asignar/bodega/${warehouseId}`,
+        { idUserAsignado: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      .pipe(
+        tap((response: any) => {
+          message = response?.message || '';
+        }),
+        map(() => ({ success: true, message: message })),
+        catchError((error) => {
+          console.error('Error assigning user to warehouse:', error);
+          return of({
+            success: false,
+            message: 'Failed to assign user to warehouse',
+          });
+        }),
+      );
   }
 
   /**
