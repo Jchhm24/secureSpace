@@ -27,6 +27,8 @@ export class SelectInputCustom {
   options = input.required<selectInputCustom[]>();
   label = input('Seleccione una opción');
   control = input.required<FormControl<string | null>>();
+  // this is to pre select the option
+  selectedId = input('');
 
   protected width = 'auto';
   protected opened = useToggle();
@@ -48,6 +50,12 @@ export class SelectInputCustom {
       ctrl.valueChanges.subscribe((value) => {
         this.controlValue.set(value);
       });
+
+      // If selectedId input is provided, set the control value
+      if(this.selectedId() !== ''){
+        ctrl.setValue(this.selectedId());
+        this.controlValue.set(this.selectedId());
+      }
     });
   }
   protected optionsSelect = computed<selectInputCustom[]>(() => {
