@@ -1,7 +1,7 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InputComponent } from '@shared/components/input-component/input-component';
-import { LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule, ThumbsDown } from 'lucide-angular';
 import { BadgeEnable } from '../badge-enable/badge-enable';
 import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { WarehouseService } from '@core/services/warehouse-service';
@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { UpdateWarehouseModal } from '../update-warehouse-modal/update-warehouse-modal';
 import { ButtonActionsCompact } from '@shared/components/button-actions-compact/button-actions-compact';
 import { ButtonActionCompact } from '@shared/interfaces/button-action-compact-interface';
+import { UserService } from '@core/services/user-service';
 
 @Component({
   selector: 'app-warehouses-table',
@@ -59,6 +60,8 @@ export class WarehousesTable {
   private toastService = inject(ToastService);
   private actionModalService = inject(ConfirmActionModalService);
   private clickSubModal?: Subscription;
+
+  private user = inject(UserService).user;
 
   protected buttonsActions: ButtonActionCompact[] = [
     {
@@ -189,6 +192,39 @@ export class WarehousesTable {
         this.clickSubModal?.unsubscribe();
       },
     );
+
+    this.actionModalService.openModal();
+  }
+
+  openDesignModal(warehouseId: string) {
+
+    const warehouse = this.warehouses().find((w) => w.id === warehouseId);
+    if (!warehouse) return;
+
+    this.actionModalService.setConfig({
+      title: '¿Estás seguro de desasignar el usuario de esta bodega?',
+      message: `Esta acción desasignará a "${warehouse.owner}" de la bodega "${warehouse.name}".`,
+      iconType: 'warning',
+      buttonText: 'Desasignar',
+    });
+
+
+    this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(
+      () => {
+        const currentUser = this.user();
+        if (currentUser && currentUser.id) {
+          this.warehouseService.assignUserToWarehouse(warehouseId, currentUser.id).subscribe((response: { success: boolean; message: string }) => {
+            if (response.success) {
+              this.toastService.show(response.message, 'success');
+              this.actionModalService.closeModal();
+              this.clickSubModal?.unsubscribe();
+            } else {
+              this.toastService.show(response.message, 'error');
+            }
+          })
+        }
+      }
+    )
 
     this.actionModalService.openModal();
   }

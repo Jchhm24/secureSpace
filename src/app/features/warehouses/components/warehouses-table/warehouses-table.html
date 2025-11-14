@@ -45,11 +45,19 @@
           </td>
           <td class="p-5">
             <div class="flex flex-row gap-2.5 max-[1040px]:hidden">
-              <app-button-icon
-                [type_button]="'add_user'"
-                [title_button]="'Asignar usuario'"
-                (clickAction)="openModalAssignUser(warehouse.id)"
-              ></app-button-icon>
+              @if (warehouse.status) {
+                <app-button-icon
+                  [type_button]="'add_user'"
+                  [title_button]="'Asignar usuario'"
+                  (clickAction)="openModalAssignUser(warehouse.id)"
+                ></app-button-icon>
+              } @else {
+                <app-button-icon
+                  [type_button]="'remove_user'"
+                  [title_button]="'Desasignar usuario'"
+                  (clickAction)="openDesignModal(warehouse.id)"
+                ></app-button-icon>
+              }
               <!-- <app-button-icon
                 [type_button]="'history'"
                 [title_button]="'Ver historial'"
