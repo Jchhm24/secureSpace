@@ -19,6 +19,7 @@ export class ButtonIcon {
     | 'close'
     | 'lock'
     | 'unlock'
+    | 'options-points'
   >();
   title_button = input.required<string>();
   clickAction = output<void>();
