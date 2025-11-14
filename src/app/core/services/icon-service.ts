@@ -7,6 +7,7 @@ import {
   CircleCheck,
   CircleUserRound,
   CircleX,
+  EllipsisVertical,
   History,
   Lock,
   LockOpen,
@@ -51,6 +52,7 @@ export class IconService {
     circleUserRound: CircleUserRound,
     circleX: CircleX,
     triangleAlert: TriangleAlert,
+    ellipsisVertical: EllipsisVertical,
   } as const;
 
   // TODO: It´s important to use LucideAngularModule in the module imports where this service is going to be used
