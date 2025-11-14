@@ -1,5 +1,5 @@
 <div
-  class="bg-secondary border-border border px-[30px] py-5 rounded-[20px] mx-auto w-full max-w-1/4 h-min translate-y-1/2 flex flex-col gap-5 items-center"
+  class="bg-secondary border-border border px-[30px] py-5 rounded-[20px] mx-auto w-full max-w-[520px] h-min translate-y-1/2 flex flex-col gap-5 items-center"
 >
   <img
     ngSrc="logo-completo.png"
@@ -8,7 +8,11 @@
     height="97"
     priority
   />
-  <form [formGroup]="userControl" (ngSubmit)="onSubmit()" class="flex flex-col gap-5 w-full">
+  <form
+    [formGroup]="userControl"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-5 w-full"
+  >
     <app-input-component
       [type]="'email'"
       [name]="'email'"
@@ -43,7 +47,11 @@
     </div>
   </div>
   <!-- end separator -->
-  <button class="border border-border outline-none rounded-full mt-[30px] mb-5 px-4 py-2 w-full" (click)="googleLogin()" aria-label="Iniciar sesión con Google">
+  <button
+    class="border border-border outline-none rounded-full mt-[30px] mb-5 px-4 py-2 w-full"
+    (click)="googleLogin()"
+    aria-label="Iniciar sesión con Google"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       x="0px"
