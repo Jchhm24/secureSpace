@@ -9,10 +9,12 @@ import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { paginateTable } from '@shared/utils/helpers/paginateTable';
 import { Subscription } from 'rxjs';
+import { ButtonActionsCompact } from '@shared/components/button-actions-compact/button-actions-compact';
+import { ButtonActionCompact } from '@shared/interfaces/button-action-compact-interface';
 
 @Component({
   selector: 'app-people-table',
-  imports: [InputComponent, ButtonIcon, NgClass],
+  imports: [InputComponent, ButtonIcon, NgClass, ButtonActionsCompact],
   templateUrl: './people-table.html',
   styleUrl: './people-table.css',
 })
@@ -27,6 +29,21 @@ export class PeopleTable {
   protected index_page = signal(0);
   private actionModalService = inject(ConfirmActionModalService);
   private clickSubModal?: Subscription;
+
+  protected buttonsActions: ButtonActionCompact[] = [
+    {
+      label: 'Bloquear/Desbloquear',
+      action: (personId?: string) => {
+        if (personId) this.lockUnlockPerson(personId);
+      },
+    },
+    {
+      label: 'Eliminar',
+      action: (personId?: string) => {
+        if (personId) this.openDeletePersonModal(personId);
+      },
+    },
+  ];
 
   private peopleData = effect(() => {
     const peoples = this.peopleService.people();
@@ -79,12 +96,14 @@ export class PeopleTable {
       title: '¿Estás seguro de eliminar a esta persona?',
       message: `Esta acción no se puede deshacer. Persona: ${person.name} ${person.lastName}`,
       buttonText: 'Eliminar',
-    })
+    });
 
-    this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(() => {
-      this.deletePerson(personId);
-      this.clickSubModal?.unsubscribe();
-    })
+    this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(
+      () => {
+        this.deletePerson(personId);
+        this.clickSubModal?.unsubscribe();
+      },
+    );
 
     this.actionModalService.openModal();
   }
