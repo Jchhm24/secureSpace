@@ -16,6 +16,7 @@ import { ConfirmActionModalService } from '@core/services/confirm-action-modal-s
 import { Subscription } from 'rxjs';
 import { ButtonActionsCompact } from '@shared/components/button-actions-compact/button-actions-compact';
 import { ButtonActionCompact } from '@shared/interfaces/button-action-compact-interface';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-locations-table',
@@ -70,6 +71,20 @@ export class LocationsTable {
   private locationsData = effect(() => {
     const locations = this.locationsService.locations();
     this.getPaginatedDate(this.ITEMS_PER_PAGE, locations);
+  });
+
+  protected inputSize = signal('520px');
+
+  private breakpointObserver = inject(BreakpointObserver);
+
+  private breakpointLogic = effect(() => {
+    this.breakpointObserver.observe('(width <= 604px)').subscribe((result) => {
+      if (result.matches) {
+        this.inputSize.set('100%');
+      } else {
+        this.inputSize.set('520px');
+      }
+    });
   });
 
   getPaginatedDate(limit: number, data: Location[] | undefined): void {
