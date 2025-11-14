@@ -14,6 +14,8 @@ import { UpdateLocationModal } from '../update-location-modal/update-location-mo
 import { ToastService } from '@core/services/toast-service';
 import { ConfirmActionModalService } from '@core/services/confirm-action-modal-service';
 import { Subscription } from 'rxjs';
+import { ButtonActionsCompact } from '@shared/components/button-actions-compact/button-actions-compact';
+import { ButtonActionCompact } from '@shared/interfaces/button-action-compact-interface';
 
 @Component({
   selector: 'app-locations-table',
@@ -24,6 +26,7 @@ import { Subscription } from 'rxjs';
     DateFormatPipe,
     NgClass,
     UpdateLocationModal,
+    ButtonActionsCompact,
   ],
   templateUrl: './locations-table.html',
   styleUrl: './locations-table.css',
@@ -38,9 +41,29 @@ export class LocationsTable {
   protected index_page = signal(0);
   protected location = signal<Location>({} as Location);
   protected modal = useToggle();
-  private toastService =inject(ToastService);
+  private toastService = inject(ToastService);
   private modalActionService = inject(ConfirmActionModalService);
   private clickSubModal?: Subscription;
+
+  protected buttonsActions: ButtonActionCompact[] = [
+    {
+      label: 'Editar',
+      action: (locationId?: string) => {
+        if (locationId) {
+          const location = this.locations().find(
+            (loc) => loc.id === locationId,
+          );
+          if (location) this.openUpdateLocationModal(location);
+        }
+      },
+    },
+    {
+      label: 'Eliminar',
+      action: (locationId?: string) => {
+        if (locationId) this.openActionModal(locationId);
+      },
+    },
+  ];
 
   protected icons = inject(IconService).icons;
 
@@ -66,18 +89,20 @@ export class LocationsTable {
   }
 
   deleteLocation(id: string): void {
-    this.locationsService.deleteLocation(id).subscribe((response: { success: boolean; message: string }) => {
-      if(response.success) {
-        this.toastService.show(response.message, 'success');
-        this.modalActionService.closeModal();
-      } else {
-        this.toastService.show(response.message, 'error');
-      }
-    })
+    this.locationsService
+      .deleteLocation(id)
+      .subscribe((response: { success: boolean; message: string }) => {
+        if (response.success) {
+          this.toastService.show(response.message, 'success');
+          this.modalActionService.closeModal();
+        } else {
+          this.toastService.show(response.message, 'error');
+        }
+      });
   }
 
   openActionModal(locationId: string): void {
-    const location = this.locations().find(loc => loc.id === locationId);
+    const location = this.locations().find((loc) => loc.id === locationId);
     if (!location) return;
 
     this.modalActionService.setConfig({
@@ -87,10 +112,12 @@ export class LocationsTable {
       buttonText: 'Eliminar',
     });
 
-    this.clickSubModal = this.modalActionService.onButtonClick$.subscribe(() => {
-      this.deleteLocation(locationId);
-      this.clickSubModal?.unsubscribe();
-    });
+    this.clickSubModal = this.modalActionService.onButtonClick$.subscribe(
+      () => {
+        this.deleteLocation(locationId);
+        this.clickSubModal?.unsubscribe();
+      },
+    );
 
     this.modalActionService.openModal();
   }

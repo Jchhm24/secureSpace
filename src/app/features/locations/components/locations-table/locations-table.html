@@ -12,7 +12,7 @@
       <tr>
         <!-- <th class="py-5 px-8 text-left w-[80px]">Id</th> -->
         <th class="py-5 px-8 text-left w-[200px]">Ubicación</th>
-        <th class="py-5 px-8 text-left w-[200px]">Fecha registrado</th>
+        <th class="py-5 px-8 text-left w-[200px] max-[620px]:hidden">Fecha registrado</th>
         <th class="py-5 px-8 text-right w-full">Acciones</th>
       </tr>
     </thead>
@@ -21,9 +21,9 @@
         <tr class="border-b border-dashed border-border">
           <!-- <td class="py-5 px-8 font-medium text-text">{{ location.id }}</td> -->
           <td class="py-5 px-8">{{ location.location }}</td>
-          <td class="py-5 px-8">{{ location.registryDate | dateFormat }}</td>
+          <td class="py-5 px-8 max-[620px]:hidden">{{ location.registryDate | dateFormat }}</td>
           <td class="py-5 px-8">
-            <div class="flex flex-row justify-end gap-2.5">
+            <div class="flex flex-row justify-end gap-2.5 max-[1040px]:hidden">
               <app-button-icon
                 [type_button]="'edit'"
                 [title_button]="'Editar ubicación'"
@@ -34,6 +34,12 @@
                 [title_button]="'Eliminar ubicación'"
                 (clickAction)="openActionModal(location.id)"
               ></app-button-icon>
+            </div>
+            <div class="hidden max-[1040px]:flex justify-end">
+              <app-button-actions-compact
+                [buttons]="buttonsActions"
+                [itemId]="location.id"
+              ></app-button-actions-compact>
             </div>
           </td>
         </tr>
