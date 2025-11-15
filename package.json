@@ -30,6 +30,7 @@
     "@angular/platform-browser": "^20.1.0",
     "@angular/platform-server": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "@angular/service-worker": "^20.1.0",
     "@angular/ssr": "^20.1.0",
     "@tailwindcss/postcss": "^4.1.14",
     "angularx-qrcode": "^20.0.0",
