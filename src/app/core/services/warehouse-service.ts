@@ -3,6 +3,8 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environment/environment';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { UserService } from './user-service';
+import { OfflineService } from './offline-service';
+import { SyncService } from './sync-service';
 import {
   WarehouseCreateInterface,
   Warehouse,
@@ -21,6 +23,8 @@ export class WarehouseService {
   private http = inject(HttpClient);
   private apiUrl = environment.API_URL;
   private user = inject(UserService);
+  private offlineService = inject(OfflineService);
+  private syncService = inject(SyncService);
 
   private _totalWarehouses = signal<{
     total: number;
@@ -39,6 +43,21 @@ export class WarehouseService {
 
   constructor() {
     this.getWarehousesData();
+
+    // Listen to online/offline status
+    this.offlineService.online$.subscribe((isOnline) => {
+      if (isOnline) {
+        // Reconnect WebSocket when coming back online
+        if (!this.socket?.connected) {
+          this.initializeWebSocket();
+        }
+        // Update last sync time when fetching fresh data
+        this.offlineService.updateLastSyncTime();
+      } else {
+        // Disconnect WebSocket when going offline
+        this.disconnectWebSocket();
+      }
+    });
   }
 
   private mapApiToWarehouse(apiData: any): Warehouse {
@@ -87,7 +106,13 @@ export class WarehouseService {
         });
         this.state.set({ warehouses: newWarehouses });
 
-        this.initializeWebSocket();
+        // Only initialize WebSocket if online
+        if (this.offlineService.checkOnlineStatus()) {
+          this.initializeWebSocket();
+        }
+
+        // Update last sync time on successful data fetch
+        this.offlineService.updateLastSyncTime();
       });
   }
 
@@ -178,7 +203,10 @@ export class WarehouseService {
         map(() => ({ success: true, message: message })),
         catchError((error) => {
           console.error('Error deleting warehouse:', error);
-          return of({ success: false, message: error.error?.error || 'Failed to delete warehouse' });
+          return of({
+            success: false,
+            message: error.error?.error || 'Failed to delete warehouse',
+          });
         }),
       );
   }
@@ -223,6 +251,12 @@ export class WarehouseService {
 
     if (!token) {
       console.error('No token available for WebSocket connection');
+      return;
+    }
+
+    // Don't initialize WebSocket if offline
+    if (!this.offlineService.checkOnlineStatus()) {
+      console.log('Offline - WebSocket initialization skipped');
       return;
     }
 
