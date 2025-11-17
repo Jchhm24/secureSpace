@@ -4,10 +4,11 @@ import { LocationsTable } from './components/locations-table/locations-table';
 import { useToggle } from '@shared/hooks/use-toggle';
 import { Subscription } from 'rxjs';
 import { CreateLocationModal } from './components/create-location-modal/create-location-modal';
+import { AlertNetwork } from '@shared/components/alert-network/alert-network';
 
 @Component({
   selector: 'app-locations',
-  imports: [LocationsTable, CreateLocationModal],
+  imports: [LocationsTable, CreateLocationModal, AlertNetwork],
   templateUrl: './locations.html',
   styleUrl: './locations.css',
 })

@@ -5,11 +5,12 @@ import { WarehousesTable } from './components/warehouses-table/warehouses-table'
 import { WarehouseService } from '@core/services/warehouse-service';
 import { Subscription } from 'rxjs';
 import { useToggle } from '@shared/hooks/use-toggle';
-import { CreateWarehouseModal } from "./components/create-warehouse-modal/create-warehouse-modal";
+import { CreateWarehouseModal } from './components/create-warehouse-modal/create-warehouse-modal';
+import { AlertNetwork } from '@shared/components/alert-network/alert-network';
 
 @Component({
   selector: 'app-warehouses',
-  imports: [WarehouseCard, WarehousesTable, CreateWarehouseModal],
+  imports: [WarehouseCard, WarehousesTable, CreateWarehouseModal, AlertNetwork],
   templateUrl: './warehouses.html',
   styleUrl: './warehouses.css',
 })
