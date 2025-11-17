@@ -26,5 +26,51 @@
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "api-warehouses",
+      "urls": [
+        "https://apispacesegure-0mzh.onrender.com/api/bodegasHome",
+        "https://apispacesegure-0mzh.onrender.com/api/bodegas",
+        "https://apispacesegure-0mzh.onrender.com/api/bodegas/*"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 100,
+        "maxAge": "24h",
+        "timeout": "5s"
+      }
+    },
+    {
+      "name": "api-locations",
+      "urls": [
+        "https://apispacesegure-0mzh.onrender.com/api/locations",
+        "https://apispacesegure-0mzh.onrender.com/api/locations/*",
+        "https://apispacesegure-0mzh.onrender.com/api/locationsSelect"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 50,
+        "maxAge": "24h",
+        "timeout": "5s"
+      }
+    },
+    {
+      "name": "api-users",
+      "urls": [
+        "https://apispacesegure-0mzh.onrender.com/api/usuarios",
+        "https://apispacesegure-0mzh.onrender.com/api/usuarios/*",
+        "https://apispacesegure-0mzh.onrender.com/api/usuario/*",
+        "https://apispacesegure-0mzh.onrender.com/api/usuariosSelect",
+        "https://apispacesegure-0mzh.onrender.com/api/blockUsuario/*"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 50,
+        "maxAge": "12h",
+        "timeout": "5s"
+      }
+    }
   ]
 }
