@@ -1,7 +1,8 @@
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection, isDevMode,
+  provideZoneChangeDetection,
+  isDevMode,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -14,8 +15,13 @@ import {
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
 import { provideServiceWorker } from '@angular/service-worker';
+import { offlineInterceptor } from './core/interceptors/offline.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,7 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withIncrementalHydration(), withEventReplay()),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([offlineInterceptor])),
     provideFirebaseApp(() =>
       initializeApp({
         projectId: 'space-127d3',
@@ -37,9 +43,10 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()), provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          }),
+    provideFirestore(() => getFirestore()),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 };
