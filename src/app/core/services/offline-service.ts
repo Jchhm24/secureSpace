@@ -155,10 +155,10 @@ export class OfflineService {
    * Called when connection is restored
    */
   private onConnectionRestored(): void {
-    console.log(
-      'Conexión restaurada. Operaciones pendientes:',
-      this._pendingOperations().length,
-    );
+    // console.log(
+    //   'Conexión restaurada. Operaciones pendientes:',
+    //   this._pendingOperations().length,
+    // );
     // The sync logic will be handled by the HTTP interceptor or a dedicated sync service
   }
 

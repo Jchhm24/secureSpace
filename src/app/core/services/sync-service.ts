@@ -16,17 +16,17 @@ export class SyncService {
   private isSyncing = false;
 
   constructor() {
-    console.log('🔄 SyncService initialized');
+    // console.log('🔄 SyncService initialized');
     // Listen for online status changes
     this.offlineService.online$.subscribe((isOnline) => {
-      console.log('📡 Online status changed:', isOnline);
+      // console.log('📡 Online status changed:', isOnline);
       if (isOnline && !this.isSyncing) {
         const pendingCount = this.offlineService.getPendingOperations().length;
-        console.log(
-          '🔄 Attempting to sync',
-          pendingCount,
-          'pending operations',
-        );
+        // console.log(
+        //   '🔄 Attempting to sync',
+        //   pendingCount,
+        //   'pending operations',
+        // );
         this.syncPendingOperations();
       }
     });
@@ -144,16 +144,16 @@ export class SyncService {
       request
         .pipe(
           tap((response) => {
-            console.log(
-              `✅ Successfully executed ${operation.method} ${operation.endpoint}`,
-              response,
-            );
+            // console.log(
+            //   `✅ Successfully executed ${operation.method} ${operation.endpoint}`,
+            //   response,
+            // );
           }),
           catchError((error) => {
-            console.error(
-              `❌ Failed to execute ${operation.method} ${operation.endpoint}:`,
-              error,
-            );
+            // console.error(
+            //   `❌ Failed to execute ${operation.method} ${operation.endpoint}:`,
+            //   error,
+            // );
             return of(null);
           }),
         )
