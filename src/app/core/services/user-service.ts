@@ -55,6 +55,10 @@ export class UserService {
     return localStorage.getItem('token') || '';
   }
 
+  getUserId(): string {
+    return this.userSignal()?.id || '';
+  }
+
   isAuthenticated(): boolean {
     return this.userSignal() !== null;
   }
