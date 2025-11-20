@@ -33,7 +33,8 @@
       "urls": [
         "https://apispacesegure-0mzh.onrender.com/api/bodegasHome",
         "https://apispacesegure-0mzh.onrender.com/api/bodegas",
-        "https://apispacesegure-0mzh.onrender.com/api/bodegas/*"
+        "https://apispacesegure-0mzh.onrender.com/api/bodegas/*",
+        "https://apispacesegure-0mzh.onrender.com/api/bodegasUsuario/*"
       ],
       "cacheConfig": {
         "strategy": "freshness",
