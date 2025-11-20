@@ -1,0 +1,62 @@
+<div
+  class="bg-secondary border border-border rounded-20px p-5 flex flex-col gap-2.5"
+>
+  <div class="flex flex-row items-start justify-between">
+    <div class="flex flex-row items-start w-full gap-1">
+      <div class="bg-primary/10 p-2.5 rounded-10px w-min">
+        <lucide-angular
+          [img]="icons.warehouse"
+          class="text-primary"
+        ></lucide-angular>
+      </div>
+      <div>
+        <h4>
+          {{ warehouse()?.name }}
+        </h4>
+        <span class="text-text-secondary flex flex-row gap-0.5 items-center">
+          <lucide-angular [img]="icons.mapPin" [size]="14"></lucide-angular>
+          {{ warehouse()?.location }}
+        </span>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 p-2.5 rounded-10px w-min">
+      <lucide-angular
+        [img]="warehouse()?.status === true ? icons.lock : icons.lockOpen"
+        class="text-primary"
+      ></lucide-angular>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-2.5">
+    <div class="flex flex-col p-2.5 gap-0.5 rounded-10px bg-background">
+      <span class="text-text-secondary"> Último acceso </span>
+      <span class="text-text">
+        {{ warehouse()?.register }}
+      </span>
+    </div>
+    <div class="flex flex-col p-2.5 gap-0.5 rounded-10px bg-background">
+      <span class="text-text-secondary"> Estado </span>
+      <span class="text-text">
+        {{ warehouse()?.status ? "Cerrado" : "Abierto" }}
+      </span>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2.5 w-full">
+    <app-button-component
+      [label]="'Abrir'"
+      [ariaLabel]="'Abrir bodega'"
+      (click)="openWarehouse()"
+      [style.--width]="'100%'"
+    ></app-button-component>
+    <app-button-component
+      [label]="'Generar QR'"
+      [ariaLabel]="'Generar código QR de la bodega'"
+      (click)="openQrCode()"
+      [style.--width]="'100%'"
+    >
+      <lucide-angular [img]="icons.qrCode"></lucide-angular>
+    </app-button-component>
+  </div>
+</div>
