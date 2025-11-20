@@ -1,1 +1,20 @@
-<p>my-warehouses works!</p>
+<div class="flex flex-col gap-5">
+  <app-warehouse-card
+    [title]="'Bodegas asignadas'"
+    [total]="totalWarehouses()"
+    [icon]="'warehouse'"
+  ></app-warehouse-card>
+
+  @for (warehouse of warehouses(); track $index) {
+    <app-card-warehouse
+      [warehouse]="warehouse"
+      (openQrCodeModal)="openQrCodeModal(warehouse.id)"
+    ></app-card-warehouse>
+  }
+</div>
+
+<app-qr-generate
+  [opened]="openQrModal.state()"
+  [qrData]="idWarehouseSelected() || ''"
+  (closed)="openQrModal.close()"
+></app-qr-generate>
