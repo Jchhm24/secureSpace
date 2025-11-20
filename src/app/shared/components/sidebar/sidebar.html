@@ -1,8 +1,8 @@
 <nav
   class="fixed bg-secondary h-screen p-5 border-l border-border flex flex-col justify-between items-center"
   [ngClass]="{
-    'w-60':isExpanded(),
-    'w-min':!isExpanded(),
+    'w-60': isExpanded(),
+    'w-min': !isExpanded(),
   }"
 >
   <div class="flex flex-col gap-4 w-full items-center">
@@ -12,12 +12,12 @@
       [size]="34"
       class="text-text ml-auto mr-0 transition-transform duration-400 cursor-pointer max-[730px]:hidden"
       [ngClass]="{
-        'rotate-180': !isExpanded()
+        'rotate-180': !isExpanded(),
       }"
       (click)="isExpanded.set(!isExpanded())"
     ></lucide-icon>
 
-    @if(isExpanded()) {
+    @if (isExpanded()) {
       <img
         ngSrc="logo-completo.png"
         alt="SecureSpace Logo"
@@ -37,32 +37,38 @@
 
     <div class="flex flex-col gap-1 w-full container-links">
       @for (path of paths; track $index) {
-        <a
-          class="flex flex-row items-start gap-1 p-2 rounded-10px select-none group relative outline-hidden"
-          [ngClass]="{
-            'bg-primary/10! text-primary! font-medium':
-              path.route == currentRoute(),
-            'text-text/80! hover:bg-text/5': path.route != currentRoute(),
-          }"
-          [routerLink]="'/' + path.route"
-        >
-          <lucide-icon [img]="path.icon" [size]="24"></lucide-icon>
-          @if(isExpanded() || (isMobile() && path.route === currentRoute())) {
-            {{ path.label }}
-          } @else {
-            <app-label-indicator [label]="path.label"></app-label-indicator>
-          }
-        </a>
+        @if (path.rol.includes(user?.role!)) {
+          <a
+            class="flex flex-row items-start gap-1 p-2 rounded-10px select-none group relative outline-hidden"
+            [ngClass]="{
+              'bg-primary/10! text-primary! font-medium':
+                path.route == currentRoute(),
+              'text-text/80! hover:bg-text/5': path.route != currentRoute(),
+            }"
+            [routerLink]="'/' + path.route"
+          >
+            <lucide-icon [img]="path.icon" [size]="24"></lucide-icon>
+            @if (
+              isExpanded() || (isMobile() && path.route === currentRoute())
+            ) {
+              {{ path.label }}
+            } @else {
+              <app-label-indicator [label]="path.label"></app-label-indicator>
+            }
+          </a>
+        }
       }
     </div>
   </div>
 
-  <div class="flex flex-col gap-1 py-5 border-t border-border w-full container-user-info">
+  <div
+    class="flex flex-col gap-1 py-5 border-t border-border w-full container-user-info"
+  >
     <a
       class="p-2.5 flex flex-row gap-2.5 items-center justify-start bg-[#0F1117]/30 rounded-10px"
       [routerLink]="'/profile'"
     >
-      @if(user?.photoUrl){
+      @if (user?.photoUrl) {
         <img
           [src]="user?.photoUrl!"
           alt="Foto de perfil"
@@ -79,9 +85,11 @@
         ></lucide-icon>
       }
 
-      @if(isExpanded()){
+      @if (isExpanded()) {
         <div class="flex flex-col w-full overflow-x-hidden">
-          <span class="text-base font-normal!">{{ user?.name }} {{ user?.lastName }}</span>
+          <span class="text-base font-normal!"
+            >{{ user?.name }} {{ user?.lastName }}</span
+          >
           <span class="text-xs text-text/80! underline">{{ user?.email }}</span>
         </div>
       }
@@ -92,7 +100,7 @@
       (click)="logout()"
     >
       <lucide-icon [img]="icons.logOut" [size]="24"></lucide-icon>
-      @if(isExpanded()){
+      @if (isExpanded()) {
         Cerrar sesión
       } @else {
         <app-label-indicator [label]="'Cerrar sesión'"></app-label-indicator>

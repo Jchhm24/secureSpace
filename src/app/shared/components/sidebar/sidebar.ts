@@ -34,16 +34,31 @@ export class Sidebar {
       route: 'warehouses',
       label: 'Bodegas',
       icon: this.icons.warehouse,
+      rol: ['admin'],
     },
     {
       route: 'locations',
       label: 'Ubicaciones',
       icon: this.icons.mapPin,
+      rol: ['admin'],
     },
     {
       route: 'people',
       label: 'Personas',
       icon: this.icons.userRound,
+      rol: ['admin'],
+    },
+    {
+      route: 'my-warehouses',
+      label: 'Mi Bodega',
+      icon: this.icons.warehouse,
+      rol: ['user'],
+    },
+    {
+      route: 'notifications',
+      label: 'Notificaciones',
+      icon: this.icons.bell,
+      rol: ['user'],
     },
   ];
 
@@ -57,7 +72,7 @@ export class Sidebar {
       },
       error: (error) => {
         console.error('Sign out error:', error);
-      }
-    })
+      },
+    });
   }
 }
