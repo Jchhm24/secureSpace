@@ -11,10 +11,10 @@
       (openQrCodeModal)="openQrCodeModal(warehouse.id)"
     ></app-card-warehouse>
   }
-</div>
 
-<app-qr-generate
-  [opened]="openQrModal.state()"
-  [qrData]="idWarehouseSelected() || ''"
-  (closed)="openQrModal.close()"
-></app-qr-generate>
+  <app-qr-generate
+    [opened]="openQrModal.state()"
+    [qrData]="idWarehouseSelected() || ''"
+    (closed)="openQrModal.close()"
+  ></app-qr-generate>
+</div>
