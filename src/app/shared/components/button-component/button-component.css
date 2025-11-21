@@ -1,3 +1,7 @@
 button {
   width: var(--width);
+
+  &&:hover {
+    transform: scale(var(--scale-hover));
+  }
 }
