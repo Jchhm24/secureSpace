@@ -1,7 +1,7 @@
 <nav
-  class="fixed bg-secondary h-screen p-5 border-l border-border flex flex-col justify-between items-center"
+  class="fixed bg-secondary h-screen p-5 border-r border-border flex flex-col justify-between items-center"
   [ngClass]="{
-    'w-60': isExpanded(),
+    'min-w-60 w-60 max-w-60': isExpanded(),
     'w-min': !isExpanded(),
   }"
 >
@@ -36,23 +36,42 @@
     }
 
     <div class="flex flex-col gap-1 w-full container-links">
+      @let userRol = user?.role!;
       @for (path of paths; track $index) {
-        @if (path.rol.includes(user?.role!)) {
+        @if (path.rol.includes(userRol)) {
           <a
-            class="flex flex-row items-start gap-1 p-2 rounded-10px select-none group relative outline-hidden"
+            class="flex items-center gap-1 rounded-10px select-none group relative outline-hidden"
             [ngClass]="{
-              'bg-primary/10! text-primary! font-medium':
-                path.route == currentRoute(),
+              'bg-primary/10! font-medium':
+                path.route == currentRoute() && userRol === 'admin',
               'text-text/80! hover:bg-text/5': path.route != currentRoute(),
+              'justify-center': !isExpanded(),
+              'flex-row p-2': userRol === 'admin',
+              'flex-col': userRol !== 'admin' && !isExpanded() && isMobile(),
+              'font-medium': userRol !== 'admin',
+              'text-primary!':
+                path.route == currentRoute(),
             }"
             [routerLink]="'/' + path.route"
           >
-            <lucide-icon [img]="path.icon" [size]="24"></lucide-icon>
+            <div
+              class="rounded-10px"
+              [ngClass]="{
+                'p-2': userRol !== 'admin',
+                'bg-primary/10!':
+                  path.route == currentRoute() && userRol !== 'admin',
+              }"
+            >
+              <lucide-icon [img]="path.icon" [size]="24"></lucide-icon>
+            </div>
             @if (
-              isExpanded() || (isMobile() && path.route === currentRoute())
+              isExpanded() || (isMobile() && path.route === currentRoute() && userRol === 'admin')
             ) {
               {{ path.label }}
-            } @else {
+            } @else if( isExpanded() || (isMobile() && userRol !== 'admin')) {
+              {{ path.label}}
+            }
+            @else {
               <app-label-indicator [label]="path.label"></app-label-indicator>
             }
           </a>
@@ -80,7 +99,7 @@
         <lucide-icon
           class="text-text"
           [img]="icons.circleUserRound"
-          [size]="24"
+          [size]="40"
           name="circle-user-round"
         ></lucide-icon>
       }
@@ -96,6 +115,9 @@
     </a>
     <a
       class="flex flex-row items-start gap-1 p-2 rounded-10px text-text/80! font-normal! group relative hover:bg-text/5"
+      [ngClass]="{
+        'justify-center': !isExpanded(),
+      }"
       [routerLink]="'/login'"
       (click)="logout()"
     >
