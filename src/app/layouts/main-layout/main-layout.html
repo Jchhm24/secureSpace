@@ -34,6 +34,12 @@
       }
     </div>
     <router-outlet></router-outlet>
+    <div class="min-h-22"
+      [ngClass]="{
+        'block' : isMobile(),
+        'hidden' : !isMobile()
+      }"
+    ></div>
   </div>
 </div>
 <app-toast-container></app-toast-container>
