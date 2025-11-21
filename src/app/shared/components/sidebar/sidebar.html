@@ -99,7 +99,9 @@
         <lucide-icon
           class="text-text"
           [img]="icons.circleUserRound"
-          [size]="40"
+          [size]="
+            isExpanded() ? 40 : 24
+          "
           name="circle-user-round"
         ></lucide-icon>
       }
