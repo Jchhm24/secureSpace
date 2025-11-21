@@ -49,12 +49,14 @@
       [ariaLabel]="'Abrir bodega'"
       (click)="openWarehouse()"
       [style.--width]="'100%'"
+      [style.--scale-hover]="'1.02'"
     ></app-button-component>
     <app-button-component
       [label]="'Generar QR'"
       [ariaLabel]="'Generar código QR de la bodega'"
       (click)="openQrCode()"
       [style.--width]="'100%'"
+      [style.--scale-hover]="'1.02'"
     >
       <lucide-angular [img]="icons.qrCode"></lucide-angular>
     </app-button-component>
