@@ -86,7 +86,7 @@ export class UserWarehousesService {
         },
       })
       .pipe(
-        tap((response) => {
+        tap((response:any) => {
           message = response?.message || 'Bodega abierta con éxito';
         }),
         map(() => ({ success: true, message: message })),
