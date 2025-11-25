@@ -34,7 +34,8 @@
         "https://apispacesegure-0mzh.onrender.com/api/bodegasHome",
         "https://apispacesegure-0mzh.onrender.com/api/bodegas",
         "https://apispacesegure-0mzh.onrender.com/api/bodegas/*",
-        "https://apispacesegure-0mzh.onrender.com/api/bodegasUsuario/*"
+        "https://apispacesegure-0mzh.onrender.com/api/bodegasUsuario/*",
+        "https://apispacesegure-0mzh.onrender.com/api/bodega/*"
       ],
       "cacheConfig": {
         "strategy": "freshness",
