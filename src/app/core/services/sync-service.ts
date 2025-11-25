@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { OfflineService, PendingOperation } from './offline-service';
 import { ToastService } from './toast-service';
 import { catchError, of, tap } from 'rxjs';
+import { UserService } from './user-service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class SyncService {
   private offlineService = inject(OfflineService);
   private toastService = inject(ToastService);
   private platformId = inject(PLATFORM_ID);
+  private userService = inject(UserService);
   private isSyncing = false;
 
   constructor() {
@@ -122,18 +124,29 @@ export class SyncService {
     //   operation.method,
     //   operation.endpoint,
     // );
+
+    const token = this.userService.getToken();
+    const headers: any = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     return new Promise((resolve) => {
       let request;
 
       switch (operation.method) {
         case 'POST':
-          request = this.http.post(operation.endpoint, operation.body);
+          request = this.http.post(operation.endpoint, operation.body, {
+            headers,
+          });
           break;
         case 'PUT':
-          request = this.http.put(operation.endpoint, operation.body);
+          request = this.http.put(operation.endpoint, operation.body, {
+            headers,
+          });
           break;
         case 'DELETE':
-          request = this.http.delete(operation.endpoint);
+          request = this.http.delete(operation.endpoint, { headers });
           break;
         default:
           console.error('Unknown HTTP method:', operation.method);
