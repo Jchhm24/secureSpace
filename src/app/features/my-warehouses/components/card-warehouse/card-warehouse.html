@@ -38,15 +38,17 @@
     <div class="flex flex-col p-2.5 gap-0.5 rounded-10px bg-background">
       <span class="text-text-secondary"> Estado </span>
       <span class="text-text">
-        {{ warehouse()?.status ? "Cerrado" : "Abierto" }}
+        {{ warehouse()?.status ? "Abierto" : "Cerrado" }}
       </span>
     </div>
   </div>
 
   <div class="flex flex-col gap-2.5 w-full">
     <app-button-component
-      [label]="'Abrir'"
-      [ariaLabel]="'Abrir bodega'"
+      [label]="
+        warehouse()?.status ? 'Cerrar Bodega' : 'Abrir Bodega'
+      "
+      [ariaLabel]="'Abrir/Cerrar bodega'"
       (click)="openWarehouse()"
       [style.--width]="'100%'"
       [style.--scale-hover]="'1.02'"
