@@ -5,14 +5,15 @@ import { WarehouseCard } from '@shared/components/warehouse-card/warehouse-card'
 import { CardWarehouse } from './components/card-warehouse/card-warehouse';
 import { QrGenerate } from '@shared/components/qr-generate/qr-generate';
 import { useToggle } from '@shared/hooks/use-toggle';
+import { UserNotificationsService } from '@core/services/user-notifications-service';
 
 @Component({
   selector: 'app-my-warehouses',
   imports: [WarehouseCard, CardWarehouse, QrGenerate],
   templateUrl: './my-warehouses.html',
-  styleUrl: './my-warehouses.css'
+  styleUrl: './my-warehouses.css',
 })
-export class MyWarehouses implements OnInit {
+export class MyWarehouses {
   private layoutService = inject(LayoutService);
   private warehouseService = inject(UserWarehousesService);
 
@@ -22,14 +23,15 @@ export class MyWarehouses implements OnInit {
   protected openQrModal = useToggle();
   protected idWarehouseSelected = signal<string | null>(null);
 
-  ngOnInit(): void {
+  // Inject notification service only to connect to the socket and receive notifications
+  constructor(notificationService: UserNotificationsService) {
     this.layoutService.setConfig({
       title: 'Mis Bodegas',
       showAction: false,
-    })
+    });
   }
 
-  openQrCodeModal(id: string){
+  openQrCodeModal(id: string) {
     this.idWarehouseSelected.set(id);
     this.openQrModal.open();
   }
