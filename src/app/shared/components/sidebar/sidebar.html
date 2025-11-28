@@ -49,8 +49,7 @@
               'flex-row p-2': userRol === 'admin',
               'flex-col': userRol !== 'admin' && !isExpanded() && isMobile(),
               'font-medium': userRol !== 'admin',
-              'text-primary!':
-                path.route == currentRoute(),
+              'text-primary!': path.route == currentRoute(),
             }"
             [routerLink]="'/' + path.route"
           >
@@ -60,18 +59,34 @@
                 'p-2': userRol !== 'admin',
                 'bg-primary/10!':
                   path.route == currentRoute() && userRol !== 'admin',
+                'relative': path.route === 'notifications',
               }"
             >
               <lucide-icon [img]="path.icon" [size]="24"></lucide-icon>
+              @if (path.route === "notifications" && countNotifications > 0) {
+                <div
+                  class="absolute top-0 right-0 bg-red-500 rounded-full border-2 border-white text-white p-1 size-6 flex flex-col items-center justify-center"
+                >
+                  <span class="text-count-notification!">
+                      @if(countNotifications > 9){
+                        9+
+                      }@else{
+                        {{ countNotifications }}
+                      }
+                  </span>
+                </div>
+              }
             </div>
             @if (
-              isExpanded() || (isMobile() && path.route === currentRoute() && userRol === 'admin')
+              isExpanded() ||
+              (isMobile() &&
+                path.route === currentRoute() &&
+                userRol === "admin")
             ) {
               {{ path.label }}
-            } @else if( isExpanded() || (isMobile() && userRol !== 'admin')) {
-              {{ path.label}}
-            }
-            @else {
+            } @else if (isExpanded() || (isMobile() && userRol !== "admin")) {
+              {{ path.label }}
+            } @else {
               <app-label-indicator [label]="path.label"></app-label-indicator>
             }
           </a>
@@ -99,9 +114,7 @@
         <lucide-icon
           class="text-text"
           [img]="icons.circleUserRound"
-          [size]="
-            isExpanded() ? 40 : 24
-          "
+          [size]="isExpanded() ? 40 : 24"
           name="circle-user-round"
         ></lucide-icon>
       }

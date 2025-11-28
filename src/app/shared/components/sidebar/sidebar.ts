@@ -6,6 +6,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { LabelIndicator } from './components/label-indicator/label-indicator';
 import { AuthService } from '@core/services/auth-service';
 import { UserService } from '@core/services/user-service';
+import { UserNotificationsService } from '@core/services/user-notifications-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -27,6 +28,8 @@ export class Sidebar {
   private authService = inject(AuthService);
   protected user = inject(UserService).user();
 
+  private notificationsService = inject(UserNotificationsService);
+  protected countNotifications = this.notificationsService.countNotifications();
   protected icons = inject(IconService).icons;
 
   protected paths = [
