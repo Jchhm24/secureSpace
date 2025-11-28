@@ -19,13 +19,14 @@ export const routes: Routes = [
       {
         path: '',
         title: 'Lista de Bodegas',
-        loadComponent: () => import('./features/warehouses/warehouses').then((m) => m.Warehouses),
+        loadComponent: () =>
+          import('./features/warehouses/warehouses').then((m) => m.Warehouses),
       },
     ],
     canActivate: [authGuard, roleGuard],
     data: {
-      roles: ['admin']
-    }
+      roles: ['admin'],
+    },
   },
   {
     path: 'locations',
@@ -35,13 +36,14 @@ export const routes: Routes = [
       {
         path: '',
         title: 'Lista de Ubicaciones',
-        loadComponent: () => import('./features/locations/locations').then((m) => m.Locations),
+        loadComponent: () =>
+          import('./features/locations/locations').then((m) => m.Locations),
       },
     ],
     canActivate: [authGuard, roleGuard],
     data: {
-      roles: ['admin']
-    }
+      roles: ['admin'],
+    },
   },
   {
     path: 'people',
@@ -51,13 +53,14 @@ export const routes: Routes = [
       {
         path: '',
         title: 'Lista de Personas',
-        loadComponent: () => import('./features/people/people').then((m) => m.People),
+        loadComponent: () =>
+          import('./features/people/people').then((m) => m.People),
       },
     ],
     canActivate: [authGuard, roleGuard],
     data: {
-      roles: ['admin']
-    }
+      roles: ['admin'],
+    },
   },
   {
     path: 'my-warehouses',
@@ -67,13 +70,35 @@ export const routes: Routes = [
       {
         path: '',
         title: 'Lista de Mis Bodegas',
-        loadComponent: () => import('./features/my-warehouses/my-warehouses').then((m) => m.MyWarehouses),
-      }
+        loadComponent: () =>
+          import('./features/my-warehouses/my-warehouses').then(
+            (m) => m.MyWarehouses,
+          ),
+      },
     ],
     canActivate: [authGuard, roleGuard],
     data: {
-      roles: ['user']
-    }
+      roles: ['user'],
+    },
+  },
+  {
+    path: 'notifications',
+    title: 'Notificaciones - SecureSpace',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        title: 'Lista de Notificaciones',
+        loadComponent: () =>
+          import('./features/notifications/notifications').then(
+            (m) => m.Notifications,
+          ),
+      },
+    ],
+    canActivate: [authGuard, roleGuard],
+    data: {
+      roles: ['user'],
+    },
   },
   {
     path: '',
