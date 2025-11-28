@@ -25,6 +25,8 @@ import {
   UserRoundPlus,
   Warehouse,
   X,
+  UserStar,
+  Unlink,
 } from 'lucide-angular';
 
 @Injectable({
@@ -57,6 +59,8 @@ export class IconService {
     ellipsisVertical: EllipsisVertical,
     userMinus: UserMinus,
     bell: Bell,
+    userStar: UserStar,
+    unlink: Unlink,
   } as const;
 
   // TODO: It´s important to use LucideAngularModule in the module imports where this service is going to be used
