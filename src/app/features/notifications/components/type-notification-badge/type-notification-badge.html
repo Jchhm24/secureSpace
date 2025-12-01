@@ -1,0 +1,29 @@
+<span
+  class="px-2 py-1 rounded-full flex flex-row items-center gap-1 w-max"
+  [ngClass]="{
+    'text-primary bg-primary/10': title() === 'Bodega asignada',
+    'text-red-500 bg-red-500/10': title() === 'Bodega desasignada',
+  }"
+>
+
+  @switch(title()) {
+    @case('Bodega asignada') {
+      <lucide-icon [img]="icons.userStar" class="size-4"></lucide-icon>
+    }
+    @case('Bodega desasignada') {
+      <lucide-icon [img]="icons.unlink" class="size-4"></lucide-icon>
+    }
+    @default {
+      <lucide-icon [img]="icons.bell" class="size-4"></lucide-icon>
+    }
+  }
+
+  {{ title() }}
+</span>
+<!-- Bodega desasignada -->
+
+<!-- Bodega asignada -->
+
+<!-- Se te ha desasignado la bodega -->
+
+<!-- Se te ha asignado la bodega -->
