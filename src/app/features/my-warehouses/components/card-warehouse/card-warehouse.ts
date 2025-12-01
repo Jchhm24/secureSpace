@@ -5,10 +5,11 @@ import { UserWarehousesService } from '@core/services/user-warehouses-service';
 import { Warehouse } from '@features/warehouses/interfaces';
 import { ButtonComponent } from '@shared/components/button-component/button-component';
 import { LucideAngularModule } from 'lucide-angular';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-card-warehouse',
-  imports: [LucideAngularModule, ButtonComponent],
+  imports: [LucideAngularModule, ButtonComponent, RouterLink],
   templateUrl: './card-warehouse.html',
   styleUrl: './card-warehouse.css',
 })

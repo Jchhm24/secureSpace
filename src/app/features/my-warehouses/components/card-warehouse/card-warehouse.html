@@ -20,11 +20,22 @@
       </div>
     </div>
 
-    <div class="bg-primary/10 p-2.5 rounded-10px w-min">
-      <lucide-angular
-        [img]="warehouse()?.status === true ? icons.lock : icons.lockOpen"
-        class="text-primary"
-      ></lucide-angular>
+    <div class="flex flex-row items-center gap-1">
+      <a
+        [routerLink]="['/my-warehouses', 'history', warehouse()?.id]"
+        class="bg-background border border-border p-2.5 rounded-10px w-min flex items-center justify-center"
+      >
+        <lucide-angular
+          [img]="icons.history"
+          class="text-text-secondary"
+        ></lucide-angular>
+      </a>
+      <div class="bg-primary/10 p-2.5 rounded-10px w-min">
+        <lucide-angular
+          [img]="warehouse()?.status === true ? icons.lock : icons.lockOpen"
+          class="text-primary"
+        ></lucide-angular>
+      </div>
     </div>
   </div>
 
@@ -45,9 +56,7 @@
 
   <div class="flex flex-col gap-2.5 w-full">
     <app-button-component
-      [label]="
-        warehouse()?.status ? 'Cerrar Bodega' : 'Abrir Bodega'
-      "
+      [label]="warehouse()?.status ? 'Cerrar Bodega' : 'Abrir Bodega'"
       [ariaLabel]="'Abrir/Cerrar bodega'"
       (click)="openWarehouse()"
       [style.--width]="'100%'"
