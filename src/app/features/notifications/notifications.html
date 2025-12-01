@@ -1,0 +1,16 @@
+<article class="flex flex-col gap-2.5" >
+  <app-list-notifications
+    [title]="'Hoy'"
+    [notifications]="today"
+  ></app-list-notifications>
+
+  <app-list-notifications
+    [title]="'Ayer'"
+    [notifications]="yesterday"
+  ></app-list-notifications>
+
+  <app-list-notifications
+    [title]="'Antes'"
+    [notifications]="other"
+  ></app-list-notifications>
+</article>
