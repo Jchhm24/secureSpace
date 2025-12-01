@@ -49,7 +49,9 @@ h2 {
   font-weight: 600; /* Semi-bold */
 }
 
-h3 {
+h3,
+.span-history
+{
   font-size: clamp(1.5rem, calc(1.2rem + 1.5vw), 2rem);
   font-weight: 500; /* Medium */
 }
