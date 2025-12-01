@@ -1,0 +1,49 @@
+<span class="flex items-center text-primary! font-medium mb-2.5">
+  <a [routerLink]="['/my-warehouses']" class="text-primary!"> Mis bodegas</a>
+  <lucide-angular [img]="icons.chevronRight"></lucide-angular>
+  Historial
+</span>
+
+<article class="flex flex-row border-t border-border">
+  <section class="flex flex-col gap-2.5 p-5">
+    @defer {
+      @if (groupedHistory().length > 0) {
+        <div class="flex flex-col gap-6">
+          @for (group of groupedHistory(); track group.day + group.month) {
+            <div class="flex flex-row">
+              <!-- Timeline Line -->
+              <div
+                class="relative flex flex-col items-center border-r border-border pr-5"
+              >
+                <h3 class="flex flex-col">
+                  <span class="span-history">{{ group.day }}</span>
+                  <span class="text-text-secondary span-history">
+                    {{ group.month }}
+                  </span>
+                </h3>
+                <div
+                  class="absolute size-4 rounded-full bg-background border-4 border-border z-10 -top-2 -right-2"
+                ></div>
+              </div>
+
+              <!-- Events Column -->
+              <div class="flex flex-col gap-6 flex-1 pl-5">
+                @for (history of group.events; track history.id) {
+                  <app-card-history
+                    [type]="history.type"
+                    [message]="history.message"
+                    [timestamps]="history.timestamps"
+                  ></app-card-history>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <span>No hay historial</span>
+      }
+    } @loading {
+      <span>Cargando...</span>
+    }
+  </section>
+</article>

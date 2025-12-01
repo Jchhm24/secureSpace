@@ -1,0 +1,39 @@
+<span
+  class="flex flex-row items-center gap-1 py-1 px-2 rounded-full w-max"
+  [ngClass]="{
+    'bg-primary/10 text-primary': type() === 'Asignación',
+    'bg-red-500/10 text-red-500': type() === 'Desasignación',
+    'bg-warning/10 text-warning': type() === 'Abierto',
+    'bg-success/10 text-success': type() === 'Cerrado',
+  }"
+>
+  <lucide-angular
+    [img]="
+      type() === 'Asignación'
+        ? icons.userStar
+        : type() === 'Desasignación'
+          ? icons.unlink
+          : type() === 'Abierto'
+            ? icons.lockOpen
+            : icons.lock
+    "
+    [size]="16"
+  ></lucide-angular>
+  @switch (type()) {
+    @case ("Asignación") {
+      Asignado
+    }
+    @case ("Desasignación") {
+      Desasignado
+    }
+    @case ("Abierto") {
+      Abierto
+    }
+    @case ("Cerrado") {
+      Cerrado
+    }
+    @default {
+      {{ type() }}
+    }
+  }
+</span>
