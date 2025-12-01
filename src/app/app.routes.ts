@@ -75,6 +75,14 @@ export const routes: Routes = [
             (m) => m.MyWarehouses,
           ),
       },
+      {
+        path: 'history/:id',
+        title: 'Historial de la bodega',
+        loadComponent: () =>
+          import('./features/my-warehouses/history/history').then(
+            (m) => m.History,
+          ),
+      },
     ],
     canActivate: [authGuard, roleGuard],
     data: {
