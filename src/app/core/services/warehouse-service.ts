@@ -321,11 +321,28 @@ export class WarehouseService {
   }
 
   /**
+   * Recalculate totals based on current state
+   */
+  private updateTotals(): void {
+    const warehouses = Array.from(this.state().warehouses.values());
+    const total = warehouses.length;
+    const available = warehouses.filter((w) => w.status).length;
+    const occupied = total - available;
+
+    this._totalWarehouses.set({
+      total,
+      available,
+      occupied,
+    });
+  }
+
+  /**
    * Handle warehouse update from WebSocket
    */
   private handleWarehouseUpdate(warehouse: Warehouse): void {
     this.state().warehouses.set(warehouse.id, warehouse);
     this.state.set({ warehouses: this.state().warehouses });
+    this.updateTotals();
   }
 
   /**
@@ -334,13 +351,7 @@ export class WarehouseService {
   private handleWarehouseCreated(warehouse: Warehouse): void {
     this.state().warehouses.set(warehouse.id, warehouse);
     this.state.set({ warehouses: this.state().warehouses });
-
-    // Update totals
-    this._totalWarehouses.update((current) => ({
-      total: current.total + 1,
-      available: warehouse.status ? current.available + 1 : current.available,
-      occupied: !warehouse.status ? current.occupied + 1 : current.occupied,
-    }));
+    this.updateTotals();
   }
 
   /**
@@ -351,13 +362,7 @@ export class WarehouseService {
     if (warehouse) {
       this.state().warehouses.delete(warehouseId);
       this.state.set({ warehouses: this.state().warehouses });
-
-      // Update totals
-      this._totalWarehouses.update((current) => ({
-        total: current.total - 1,
-        available: warehouse.status ? current.available - 1 : current.available,
-        occupied: !warehouse.status ? current.occupied - 1 : current.occupied,
-      }));
+      this.updateTotals();
     }
   }
 
@@ -370,21 +375,10 @@ export class WarehouseService {
   }): void {
     const warehouse = this.state().warehouses.get(data.id);
     if (warehouse) {
-      const oldStatus = warehouse.status;
       warehouse.status = data.status;
       this.state().warehouses.set(data.id, warehouse);
       this.state.set({ warehouses: this.state().warehouses });
-
-      // Update availability counts
-      if (oldStatus !== data.status) {
-        this._totalWarehouses.update((current) => ({
-          total: current.total,
-          available: data.status
-            ? current.available + 1
-            : current.available - 1,
-          occupied: !data.status ? current.occupied + 1 : current.occupied - 1,
-        }));
-      }
+      this.updateTotals();
     }
   }
 
