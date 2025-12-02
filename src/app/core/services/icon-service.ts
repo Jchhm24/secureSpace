@@ -27,6 +27,7 @@ import {
   X,
   UserStar,
   Unlink,
+  LoaderCircle,
 } from 'lucide-angular';
 
 @Injectable({
@@ -61,6 +62,7 @@ export class IconService {
     bell: Bell,
     userStar: UserStar,
     unlink: Unlink,
+    loaderCircle: LoaderCircle
   } as const;
 
   // TODO: It´s important to use LucideAngularModule in the module imports where this service is going to be used
