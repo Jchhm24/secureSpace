@@ -186,7 +186,7 @@ export class LocationsService {
         map(() => ({ success: true, message: message })),
         catchError((error) => {
           console.error('Error deleting location:', error);
-          return of({ success: false, message: 'Failed to delete location' });
+          return of({ success: false, message: error.error?.error || 'Failed to delete location' });
         }),
       );
   }
