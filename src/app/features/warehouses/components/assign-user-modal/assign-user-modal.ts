@@ -5,6 +5,7 @@ import {
   inject,
   input,
   output,
+  signal,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IconService } from '@core/services/icon-service';
@@ -41,6 +42,8 @@ export class AssignUserModal {
 
   private toastService = inject(ToastService);
 
+  protected enabled = signal(true);
+
   protected peopleOptions = computed<selectInputCustom[]>(() => {
     return this.people().map((person) => ({
       key: person.id,
@@ -63,6 +66,7 @@ export class AssignUserModal {
   onSubmit() {
     this.assignUserControl.markAllAsTouched();
     if (this.assignUserControl.valid) {
+      this.enabled.set(false);
       this.warehouseService
         .assignUserToWarehouse(
           this.warehouseId(),
@@ -77,6 +81,8 @@ export class AssignUserModal {
           } else {
             this.toastService.show(response.message, 'error');
           }
+
+          this.enabled.set(true);
         });
     }
   }

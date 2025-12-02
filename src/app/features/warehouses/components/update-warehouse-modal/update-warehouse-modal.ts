@@ -17,6 +17,7 @@ import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { SelectInputCustom } from '@shared/components/select-input-custom/select-input-custom';
 import { selectInputCustom } from '@shared/components/select-input-custom/select-input-custom-input';
+import { useToggle } from '@shared/hooks/use-toggle';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
@@ -56,6 +57,8 @@ export class UpdateWarehouseModal {
     // active: new FormControl(true),
   });
 
+  protected enabled = useToggle(true);
+
   constructor() {
     effect(() => {
       const currentWarehouse = this.warehouse();
@@ -78,6 +81,7 @@ export class UpdateWarehouseModal {
   onSubmit(): void {
     // console.log(this.warehouseControl.value);
     this.warehouseControl.markAllAsTouched();
+    this.enabled.toggle();
     if(this.warehouseControl.valid){
       this.warehouseService.updateWarehouse(
         this.warehouse().id,
@@ -91,6 +95,7 @@ export class UpdateWarehouseModal {
         } else {
           this.toastService.show(response.message, 'error');
         }
+        this.enabled.toggle();
       });
     }
   }

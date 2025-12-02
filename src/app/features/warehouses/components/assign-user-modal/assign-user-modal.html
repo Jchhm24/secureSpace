@@ -27,8 +27,14 @@
       <app-button-component
         [label]="'Asignar Usuario'"
         [ariaLabel]="'Asignar usuario a la bodega'"
+        [enabled]="enabled()"
+        [enabledLabel]="'Asignando Usuario'"
         [style.--width]="'100%'"
-      ></app-button-component>
+      >
+      @if(!enabled()) {
+        <lucide-angular [name]="icons.loaderCircle" [size]="24" class="animate-spin"></lucide-angular>
+      }
+    </app-button-component>
     </form>
   </div>
 </dialog>

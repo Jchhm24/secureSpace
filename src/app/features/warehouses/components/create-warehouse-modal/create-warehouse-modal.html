@@ -45,8 +45,18 @@
       <app-button-component
         [label]="'Crear Bodega'"
         [ariaLabel]="'Crear nueva bodega'"
+        [enabled]="enabled.state()"
+        [enabledLabel]="'Creando Bodega'"
         [style.--width]="'100%'"
-      ></app-button-component>
+      >
+      @if(!enabled.state()){
+        <lucide-icon
+          [img]="icons.loaderCircle"
+          class="animate-spin"
+          [size]="24"
+        ></lucide-icon>
+      }
+    </app-button-component>
     </form>
   </div>
 </dialog>

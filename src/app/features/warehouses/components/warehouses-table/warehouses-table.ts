@@ -164,19 +164,25 @@ export class WarehousesTable {
   }
 
   deleteWarehouse(id: string) {
-    this.warehouseService
-      .deleteWarehouse(id)
-      .subscribe((response: { success: boolean; message: string }) => {
+    this.actionModalService.disable();
+    this.warehouseService.deleteWarehouse(id).subscribe({
+      next: (response: { success: boolean; message: string }) => {
         if (response.success) {
           this.toastService.show(response.message, 'success');
           this.actionModalService.closeModal();
         } else {
           this.toastService.show(response.message, 'error');
+          this.actionModalService.enable();
         }
-      });
+      },
+      error: () => {
+        this.actionModalService.enable();
+      },
+    });
   }
 
   openConfirmActionModal(warehouseId: string) {
+    this.clickSubModal?.unsubscribe();
     const warehouse = this.warehouses().find((w) => w.id === warehouseId);
     if (!warehouse) return;
     this.actionModalService.setConfig({
@@ -184,6 +190,7 @@ export class WarehousesTable {
       message: `Esta acción eliminará el almacén "${warehouse.name}" de forma permanente.`,
       iconType: 'warning',
       buttonText: 'Eliminar',
+      disabledText: 'Eliminando',
     });
 
     this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(
@@ -197,7 +204,7 @@ export class WarehousesTable {
   }
 
   openDesignModal(warehouseId: string) {
-
+    this.clickSubModal?.unsubscribe();
     const warehouse = this.warehouses().find((w) => w.id === warehouseId);
     if (!warehouse) return;
 
@@ -206,25 +213,28 @@ export class WarehousesTable {
       message: `Esta acción desasignará a "${warehouse.owner}" de la bodega "${warehouse.name}".`,
       iconType: 'warning',
       buttonText: 'Desasignar',
+      disabledText: 'Desasignando',
     });
-
 
     this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(
       () => {
         const currentUser = this.user();
         if (currentUser && currentUser.id) {
-          this.warehouseService.assignUserToWarehouse(warehouseId, currentUser.id).subscribe((response: { success: boolean; message: string }) => {
-            if (response.success) {
-              this.toastService.show(response.message, 'success');
-              this.actionModalService.closeModal();
-              this.clickSubModal?.unsubscribe();
-            } else {
-              this.toastService.show(response.message, 'error');
-            }
-          })
+          this.actionModalService.disable();
+          this.warehouseService
+            .assignUserToWarehouse(warehouseId, currentUser.id)
+            .subscribe((response: { success: boolean; message: string }) => {
+              if (response.success) {
+                this.toastService.show(response.message, 'success');
+                this.actionModalService.closeModal();
+                this.clickSubModal?.unsubscribe();
+              } else {
+                this.toastService.show(response.message, 'error');
+              }
+            });
         }
-      }
-    )
+      },
+    );
 
     this.actionModalService.openModal();
   }
