@@ -1,8 +1,9 @@
-import { Component, input, output } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, input, output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-button-component',
-  imports: [],
+  imports: [NgClass],
   templateUrl: './button-component.html',
   styleUrl: './button-component.css',
   host: {
@@ -14,6 +15,8 @@ export class ButtonComponent {
   label = input.required<string>();
   ariaLabel = input.required<string>();
   clickAction = output<void>();
+  enabled = input<boolean>(true);
+  enabledLabel = input<string>('text of the button when it is enabled');
 
   width = 'auto';
   textAlign = 'start';

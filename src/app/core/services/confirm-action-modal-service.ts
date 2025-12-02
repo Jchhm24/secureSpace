@@ -6,13 +6,14 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class ConfirmActionModalService {
-
   private config = signal<ConfirmActionModalConfig>({
     title: 'title here',
     message: 'message here',
     iconType: 'info',
     buttonText: 'Accept',
     isOpen: false,
+    enabled: true,
+    disabledText: 'loading',
   });
 
   readonly modalConfig = this.config.asReadonly();
@@ -34,5 +35,13 @@ export class ConfirmActionModalService {
 
   closeModal() {
     this.config.update((current) => ({ ...current, isOpen: false }));
+  }
+
+  disable() {
+    this.config.update((current) => ({ ...current, enabled: false }));
+  }
+
+  enable() {
+    this.config.update((current) => ({ ...current, enabled: true }));
   }
 }

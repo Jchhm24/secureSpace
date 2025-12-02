@@ -4,5 +4,7 @@ export interface ConfirmActionModalConfig {
   iconType: 'warning' | 'info' | 'error' | 'success';
   buttonText: string;
   isOpen?: boolean;
+  enabled?: boolean;
+  disabledText?: string;
 }
 

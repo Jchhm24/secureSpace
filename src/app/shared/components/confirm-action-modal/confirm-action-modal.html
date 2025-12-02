@@ -27,10 +27,21 @@
         Cancelar
       </button>
 
-      <button class="bg-red-500 text-text!"
+      <button
+        class="bg-red-500 text-text! flex flex-row gap-2 items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
         (click)="onActionClick()"
+        [disabled]="!modalConfig().enabled"
       >
-        {{ modalConfig().buttonText }}
+        @if (!modalConfig().enabled) {
+          <lucide-icon
+            [img]="icons.loaderCircle"
+            [size]="20"
+            class="animate-spin"
+          ></lucide-icon>
+          {{ modalConfig().disabledText || modalConfig().buttonText }}
+        } @else {
+          {{ modalConfig().buttonText }}
+        }
       </button>
     </div>
   </div>

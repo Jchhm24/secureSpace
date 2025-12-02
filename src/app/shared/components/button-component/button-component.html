@@ -1,8 +1,17 @@
 <button
   [title]="ariaLabel()"
   (click)="onClick()"
-  class="flex flex-row gap-1 justify-center py-2 px-4 rounded-[20px] bg-primary text-background cursor-pointer font-medium text-center outline-none select-none"
+  [disabled]="!enabled()"
+  class="flex flex-row gap-1 justify-center items-center py-2 px-4 rounded-[20px] bg-primary text-background font-medium text-center outline-none select-none"
+  [ngClass]="{
+    'cursor-pointer': enabled(),
+    'cursor-not-allowed opacity-50': !enabled(),
+  }"
 >
   <ng-content></ng-content>
-  {{ label() }}
+  @if (enabled()) {
+    {{ label() }}
+  } @else {
+    {{ enabledLabel() }}
+  }
 </button>
