@@ -125,19 +125,25 @@ export class LocationsTable {
   }
 
   deleteLocation(id: string): void {
-    this.locationsService
-      .deleteLocation(id)
-      .subscribe((response: { success: boolean; message: string }) => {
+    this.modalActionService.disable();
+    this.locationsService.deleteLocation(id).subscribe({
+      next: (response: { success: boolean; message: string }) => {
         if (response.success) {
           this.toastService.show(response.message, 'success');
           this.modalActionService.closeModal();
         } else {
           this.toastService.show(response.message, 'error');
+          this.modalActionService.enable();
         }
-      });
+      },
+      error: () => {
+        this.modalActionService.enable();
+      },
+    });
   }
 
   openActionModal(locationId: string): void {
+    this.clickSubModal?.unsubscribe();
     const location = this.locations().find((loc) => loc.id === locationId);
     if (!location) return;
 
@@ -146,6 +152,7 @@ export class LocationsTable {
       message: `Esta acción eliminará la ubicación "${location.location}" de forma permanente.`,
       iconType: 'warning',
       buttonText: 'Eliminar',
+      disabledText: 'Eliminando',
     });
 
     this.clickSubModal = this.modalActionService.onButtonClick$.subscribe(

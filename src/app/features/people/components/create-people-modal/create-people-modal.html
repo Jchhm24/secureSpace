@@ -69,8 +69,18 @@
       <app-button-component
         [label]="'Crear nueva persona'"
         [ariaLabel]="'Crear nueva persona'"
+        [enabled]="enabled.state()"
+        [enabledLabel]="'Creando Persona'"
         [style.--width]="'100%'"
-      ></app-button-component>
+      >
+        @if (!enabled.state()) {
+          <lucide-icon
+            [img]="icons.loaderCircle"
+            class="animate-spin"
+            [size]="24"
+          ></lucide-icon>
+        }
+      </app-button-component>
     </form>
   </div>
 </dialog>

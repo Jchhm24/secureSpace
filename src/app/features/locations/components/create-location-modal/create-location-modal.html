@@ -36,8 +36,18 @@
       <app-button-component
         [label]="'Crear ubicación'"
         [ariaLabel]="'Crear ubicación'"
+        [enabled]="enabled.state()"
+        [enabledLabel]="'Creando ubicación'"
         [style.--width]="'100%'"
-      ></app-button-component>
+      >
+        @if (!enabled.state()) {
+          <lucide-icon
+            [img]="icons.loaderCircle"
+            class="animate-spin"
+            [size]="24"
+          ></lucide-icon>
+        }
+      </app-button-component>
     </form>
   </div>
 </dialog>

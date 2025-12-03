@@ -101,33 +101,45 @@ export class PeopleTable {
   }
 
   deletePerson(personId: string): void {
-    this.peopleService
-      .deletePerson(personId)
-      .subscribe((response: { success: boolean; message: string }) => {
-        if (response.success) {
-          this.peopleService.getPeople();
-          this.toast.show(response.message, 'success');
-        } else {
-          this.toast.show(response.message, 'error');
-        }
-      });
-  }
-
-  lockUnlockPerson(personId: string): void {
-    this.peopleService
-      .lockUnlockPerson(personId)
-      .subscribe((response: { success: boolean; message: string }) => {
+    this.actionModalService.disable();
+    this.peopleService.deletePerson(personId).subscribe({
+      next: (response: { success: boolean; message: string }) => {
         if (response.success) {
           this.peopleService.getPeople();
           this.toast.show(response.message, 'success');
           this.actionModalService.closeModal();
         } else {
           this.toast.show(response.message, 'error');
+          this.actionModalService.enable();
         }
-      });
+      },
+      error: () => {
+        this.actionModalService.enable();
+      },
+    });
+  }
+
+  lockUnlockPerson(personId: string): void {
+    this.actionModalService.disable();
+    this.peopleService.lockUnlockPerson(personId).subscribe({
+      next: (response: { success: boolean; message: string }) => {
+        if (response.success) {
+          this.peopleService.getPeople();
+          this.toast.show(response.message, 'success');
+          this.actionModalService.closeModal();
+        } else {
+          this.toast.show(response.message, 'error');
+          this.actionModalService.enable();
+        }
+      },
+      error: () => {
+        this.actionModalService.enable();
+      },
+    });
   }
 
   openDeletePersonModal(personId: string): void {
+    this.clickSubModal?.unsubscribe();
     const person = this.peoples().find((p) => p.id === personId);
     if (!person) return;
 
@@ -135,6 +147,7 @@ export class PeopleTable {
       title: '¿Estás seguro de eliminar a esta persona?',
       message: `Esta acción no se puede deshacer. Persona: ${person.name} ${person.lastName}`,
       buttonText: 'Eliminar',
+      disabledText: 'Eliminando',
     });
 
     this.clickSubModal = this.actionModalService.onButtonClick$.subscribe(

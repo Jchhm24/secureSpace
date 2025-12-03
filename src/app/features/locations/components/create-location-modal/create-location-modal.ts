@@ -8,6 +8,8 @@ import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { LucideAngularModule } from 'lucide-angular';
 
+import { useToggle } from '@shared/hooks/use-toggle';
+
 @Component({
   selector: 'app-create-location-modal',
   imports: [
@@ -28,6 +30,8 @@ export class CreateLocationModal {
   private toast = inject(ToastService);
   protected icons = inject(IconService).icons;
 
+  protected enabled = useToggle(true);
+
   protected locationControl = new FormGroup({
     name: new FormControl(''),
   });
@@ -38,17 +42,24 @@ export class CreateLocationModal {
 
   onSubmit(): void {
     this.locationControl.markAllAsTouched();
-    if(this.locationControl.valid){
-      this.locationsService.createLocation(this.locationControl.value.name!).subscribe({
-        next: (response) => {
-          if(response.success){
-            this.toast.show(response.message, 'success');
-            this.closeModal();
-          } else {
-            this.toast.show(response.message, 'error');
-          }
-        }
-      })
+    if (this.locationControl.valid) {
+      this.enabled.toggle();
+      this.locationsService
+        .createLocation(this.locationControl.value.name!)
+        .subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.toast.show(response.message, 'success');
+              this.closeModal();
+            } else {
+              this.toast.show(response.message, 'error');
+            }
+            this.enabled.toggle();
+          },
+          error: () => {
+            this.enabled.toggle();
+          },
+        });
     }
   }
 }

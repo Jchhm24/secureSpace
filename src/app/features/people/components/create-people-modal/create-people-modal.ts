@@ -8,9 +8,17 @@ import { ButtonIcon } from '@shared/components/button-icon/button-icon';
 import { InputComponent } from '@shared/components/input-component/input-component';
 import { LucideAngularModule } from 'lucide-angular';
 
+import { useToggle } from '@shared/hooks/use-toggle';
+
 @Component({
   selector: 'app-create-people-modal',
-  imports: [LucideAngularModule, ButtonIcon, InputComponent,ButtonComponent ,ReactiveFormsModule],
+  imports: [
+    LucideAngularModule,
+    ButtonIcon,
+    InputComponent,
+    ButtonComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './create-people-modal.html',
   styleUrl: './create-people-modal.css',
 })
@@ -21,6 +29,8 @@ export class CreatePeopleModal {
   private peopleService = inject(PeopleService);
   private toast = inject(ToastService);
   protected icons = inject(IconService).icons;
+
+  protected enabled = useToggle(true);
 
   protected personControl = new FormGroup({
     name: new FormControl(''),
@@ -36,33 +46,40 @@ export class CreatePeopleModal {
 
   onSubmit(): void {
     this.personControl.markAllAsTouched();
-    if(this.personControl.valid){
+    if (this.personControl.valid) {
       // check if password and confirmPassword are the same
-      const {password, confirmPassword, ...personData} = this.personControl.value;
-      if(password !== confirmPassword){
+      const { password, confirmPassword, ...personData } =
+        this.personControl.value;
+      if (password !== confirmPassword) {
         this.toast.show('Las contraseñas no coinciden', 'error');
         return;
       }
+
+      this.enabled.toggle();
 
       const newPerson = {
         name: personData.name as string,
         lastName: personData.lastName as string,
         email: personData.email as string,
         password: password as string,
-      }
+      };
 
-      this.peopleService.createPerson(newPerson).subscribe(
-        (success: {success: boolean, message: string}) => {
-          if(success.success){
+      this.peopleService.createPerson(newPerson).subscribe({
+        next: (success: { success: boolean; message: string }) => {
+          if (success.success) {
             this.toast.show(success.message, 'success');
 
             this.personControl.reset();
             this.closeClick.emit();
-
           } else {
             this.toast.show(success.message, 'error');
           }
-        })
+          this.enabled.toggle();
+        },
+        error: () => {
+          this.enabled.toggle();
+        },
+      });
     }
   }
 }
