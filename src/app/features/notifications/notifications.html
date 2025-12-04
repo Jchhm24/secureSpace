@@ -1,16 +1,16 @@
 <article class="flex flex-col gap-2.5" >
   <app-list-notifications
     [title]="'Hoy'"
-    [notifications]="today"
+    [notifications]="groupedNotifications().today"
   ></app-list-notifications>
 
   <app-list-notifications
     [title]="'Ayer'"
-    [notifications]="yesterday"
+    [notifications]="groupedNotifications().yesterday"
   ></app-list-notifications>
 
   <app-list-notifications
     [title]="'Antes'"
-    [notifications]="other"
+    [notifications]="groupedNotifications().other"
   ></app-list-notifications>
 </article>

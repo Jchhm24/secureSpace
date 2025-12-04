@@ -13,11 +13,7 @@ import { ListNotificationsComponent } from './components/list-notifications/list
 export class Notifications {
   private layoutService = inject(LayoutService);
   private notificationService = inject(UserNotificationsService);
-  private groupedNotifications : ListNotifications = this.notificationService.groupedNotifications();
-
-  protected today = this.groupedNotifications.today;
-  protected yesterday = this.groupedNotifications.yesterday;
-  protected other = this.groupedNotifications.other;
+  protected groupedNotifications = this.notificationService.groupedNotifications;
 
   constructor() {
     this.layoutService.setConfig({
