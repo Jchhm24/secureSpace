@@ -63,15 +63,15 @@
               }"
             >
               <lucide-icon [img]="path.icon" [size]="24"></lucide-icon>
-              @if (path.route === "notifications" && countNotifications > 0) {
+              @if (path.route === "notifications" && countNotifications() > 0) {
                 <div
                   class="absolute top-0 right-0 bg-red-500 rounded-full border-2 border-white text-white p-1 size-6 flex flex-col items-center justify-center"
                 >
                   <span class="text-count-notification!">
-                      @if(countNotifications > 9){
+                      @if(countNotifications() > 9){
                         9+
                       }@else{
-                        {{ countNotifications }}
+                        {{ countNotifications() }}
                       }
                   </span>
                 </div>

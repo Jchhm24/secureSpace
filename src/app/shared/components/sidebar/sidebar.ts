@@ -29,7 +29,7 @@ export class Sidebar {
   protected user = inject(UserService).user();
 
   private notificationsService = inject(UserNotificationsService);
-  protected countNotifications = this.notificationsService.countNotifications();
+  protected countNotifications = this.notificationsService.countNotifications;
   protected icons = inject(IconService).icons;
 
   protected paths = [
