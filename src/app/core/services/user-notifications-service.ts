@@ -28,22 +28,17 @@ export class UserNotificationsService {
   );
 
   countNotifications = computed(
-    () => this.notifications().filter((notification) => !notification.read).length,
+    () =>
+      this.notifications().filter((notification) => !notification.read).length,
   );
 
   groupedNotifications = computed<ListNotifications>(() => {
     const notifications = this.notifications();
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
-
-    const isSameDate = (date1: Date, date2: Date) => {
-      return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate()
-      );
-    };
 
     const grouped: ListNotifications = {
       today: [],
@@ -53,14 +48,24 @@ export class UserNotificationsService {
 
     notifications.forEach((notification) => {
       const notificationDate = new Date(notification.date);
-      if (isSameDate(notificationDate, today)) {
+      if (notificationDate >= today) {
         grouped.today.push(notification);
-      } else if (isSameDate(notificationDate, yesterday)) {
+      } else if (notificationDate >= yesterday) {
         grouped.yesterday.push(notification);
       } else {
         grouped.other.push(notification);
       }
     });
+
+    const sortNotifications = (list: Notification[]) => {
+      return list.sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
+    };
+
+    grouped.today = sortNotifications(grouped.today);
+    grouped.yesterday = sortNotifications(grouped.yesterday);
+    grouped.other = sortNotifications(grouped.other);
 
     return grouped;
   });
@@ -112,16 +117,16 @@ export class UserNotificationsService {
   ): Observable<{ success: boolean; message: string }> {
     const token = this.user.getToken();
 
-    const notification = this.notifications().find(n => n.id === id);
+    const notification = this.notifications().find((n) => n.id === id);
 
-    if(notification?.read){
+    if (notification?.read) {
       return of({
         success: true,
-        message: 'La notificación ya esta marcada como leida'
-      })
+        message: 'La notificación ya esta marcada como leida',
+      });
     }
 
-    let message = ''
+    let message = '';
 
     return this.http
       .put(`${this.apiUrl}/notificacion/${id}`, {
@@ -131,9 +136,9 @@ export class UserNotificationsService {
       })
       .pipe(
         tap((response: any) => {
-          message = response?.message || ''
+          message = response?.message || '';
         }),
-        map(() => ({success: true, message})),
+        map(() => ({ success: true, message })),
         catchError((error) => {
           console.error('Error al marcar como leido la notifiación', error);
           return of({ success: false, message: 'Failed to update warehouse' });
@@ -173,20 +178,70 @@ export class UserNotificationsService {
   }
 
   private setupSocketListeners() {
-    // this.socket?.on('connect', () => {
-    //   console.log('Conectado al websocket');
-    // });
+    if (!this.socket) {
+      console.error('El socket no esta disponible');
+      return;
+    }
 
-    this.socket?.on('disconnect', () => {
+    this.socket.on('connect', () => {
+      console.log('Conectado al websocket');
+
+      // Join user room to receive notifications
+      const userId = this.user.getUserId();
+      if (userId) {
+        this.socket?.emit('joinUserRoom', { userId: userId });
+        console.log(`Joined notification room for user: ${userId}`);
+      }
+    });
+
+    this.socket.on('disconnect', () => {
       console.log('Desconectado del websocket');
     });
 
-    this.socket?.on('error', (error) => {
+    this.socket.on('error', (error) => {
       console.error('Error en el websocket', error);
     });
 
-    this.socket?.on('NotificationsFull', (userId: string) => {
-      console.log('Notificaciones completadas para el usuario', userId);
+    this.socket.on('NotificationCreated', (data: any) => {
+      // Update state with new notification
+      const notification = this.formatNotifications(data);
+      this.state.update((current) => {
+        const updated = new Map(current.notifications);
+        updated.set(notification.id, notification);
+        return { notifications: updated };
+      });
+    });
+
+    this.socket.on('NotificationsFull', (notifications: any) => {
+      const newNotifications = new Map<string, Notification>();
+      notifications.forEach((notification: any) => {
+        newNotifications.set(
+          notification.id,
+          this.formatNotifications(notification),
+        );
+      });
+      this.state.update(() => {
+        return { notifications: newNotifications };
+      });
+    });
+
+    this.socket.on('NotificationUpdated', (data: any) => {
+      // Update the notification in state
+      const notification = this.formatNotifications(data);
+      this.state.update((current) => {
+        const updated = new Map(current.notifications);
+        updated.set(notification.id, notification);
+        return { notifications: updated };
+      });
+    });
+
+    this.socket.on('NotificationDelete', (data: any) => {
+      // Remove notification from state
+      this.state.update((current) => {
+        const updated = new Map(current.notifications);
+        updated.delete(data.id);
+        return { notifications: updated };
+      });
     });
   }
 }
