@@ -73,6 +73,20 @@
         "maxAge": "12h",
         "timeout": "5s"
       }
+    },
+    {
+      "name": "api-notifications",
+      "urls": [
+        "https://apispacesegure-0mzh.onrender.com/api/notificaciones",
+        "https://apispacesegure-0mzh.onrender.com/api/notificaciones/*",
+        "https://apispacesegure-0mzh.onrender.com/api/notificacion/*"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 50,
+        "maxAge": "12h",
+        "timeout": "5s"
+      }
     }
   ]
 }

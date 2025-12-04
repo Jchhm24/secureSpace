@@ -3,6 +3,7 @@ import { environment } from '@environment/environment';
 import { UserService } from './user-service';
 import { io, Socket } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
+import { OfflineService } from './offline-service';
 import {
   Notification,
   ListNotifications,
@@ -70,9 +71,25 @@ export class UserNotificationsService {
     return grouped;
   });
 
+  private offlineService = inject(OfflineService);
+
   constructor() {
     this.getNotifications();
-    this.initializeWebSocket();
+
+    // Listen to online/offline status
+    this.offlineService.online$.subscribe((isOnline) => {
+      if (isOnline) {
+        // Reconnect WebSocket when coming back online
+        if (!this.socket?.connected) {
+          this.initializeWebSocket();
+        }
+        // Update last sync time when fetching fresh data
+        this.offlineService.updateLastSyncTime();
+      } else {
+        // Disconnect WebSocket when going offline
+        this.disconnectWebSocket();
+      }
+    });
   }
 
   getNotifications() {
@@ -109,6 +126,14 @@ export class UserNotificationsService {
           );
         });
         this.state.set({ notifications: newNotifications });
+
+        // Only initialize WebSocket if online
+        if (this.offlineService.checkOnlineStatus()) {
+          this.initializeWebSocket();
+        }
+
+        // Update last sync time on successful data fetch
+        this.offlineService.updateLastSyncTime();
       });
   }
 
@@ -164,6 +189,14 @@ export class UserNotificationsService {
       return;
     }
 
+    // Don't initialize WebSocket if offline
+    if (!this.offlineService.checkOnlineStatus()) {
+      console.log('Offline - WebSocket initialization skipped');
+      return;
+    }
+
+    this.disconnectWebSocket();
+
     this.socket = io(this.wsUrl, {
       auth: {
         token: token,
@@ -175,6 +208,13 @@ export class UserNotificationsService {
     });
 
     this.setupSocketListeners();
+  }
+
+  private disconnectWebSocket(): void {
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
   }
 
   private setupSocketListeners() {
