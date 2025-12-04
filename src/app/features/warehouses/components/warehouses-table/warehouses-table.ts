@@ -231,6 +231,7 @@ export class WarehousesTable {
               } else {
                 this.toastService.show(response.message, 'error');
               }
+              this.actionModalService.enable();
             });
         }
       },
